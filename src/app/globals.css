@@ -1,0 +1,100 @@
+@import "tailwindcss";
+/* Pretendard(한글 폰트)는 layout.tsx의 <head> <link>로 분리 로드.
+   외부 @import를 CSS 번들에 두면 한국 모바일망에서 jsdelivr 지연 시
+   스타일 전체 적용이 지연/차단되는 문제가 있어 제거함. */
+
+/* ===== Design Tokens (Tailwind v4 @theme) ===== */
+@theme {
+  /* Brand colors — 레퍼런스(UNBOUND STUDIO) 실측값 */
+  --color-brand-black: #0a0a0a;
+  --color-brand-dark: #111111;
+  --color-brand-gray: #1a1a1a;
+  --color-brand-mid: #2a2a2a;
+  --color-brand-light: #f5f5f0;
+  --color-brand-white: #ffffff;
+  --color-brand-accent: #e63226; /* 오렌지-레드 (실측 지배값) */
+  --color-brand-accent2: #e85d24; /* 보조 오렌지 */
+  --color-brand-muted: #6b6b6b;
+
+  /* Fonts — 영문 Montserrat(제목 800/본문 500), 한글 Paperlogy, 숫자 Roboto */
+  --font-display: var(--font-montserrat), "Paperlogy", sans-serif;
+  --font-body: var(--font-montserrat), "Paperlogy", -apple-system, system-ui, sans-serif;
+  --font-mono: var(--font-montserrat), "Paperlogy", monospace;
+  --font-number: var(--font-roboto), var(--font-montserrat), sans-serif;
+
+  /* Font sizes — 기본 대비 약 +17% (작은~중간 텍스트). line-height는 비율이라 자동 스케일.
+     디스플레이 대형(5xl+)은 이미 크므로 미변경. */
+  --text-xs: 0.8775rem;    /* 0.75 × 1.17 */
+  --text-sm: 1.024rem;     /* 0.875 × 1.17 */
+  --text-base: 1.17rem;    /* 1 × 1.17 */
+  --text-lg: 1.316rem;     /* 1.125 × 1.17 */
+  --text-xl: 1.4625rem;    /* 1.25 × 1.17 */
+  --text-2xl: 1.755rem;    /* 1.5 × 1.17 */
+  --text-3xl: 2.194rem;    /* 1.875 × 1.17 */
+  --text-4xl: 2.633rem;    /* 2.25 × 1.17 */
+
+  /* Letter spacing */
+  --tracking-widest2: 0.3em;
+  --tracking-widest3: 0.5em;
+
+  /* Animations */
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-marquee-slow: marquee 45s linear infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ===== Base ===== */
+:root {
+  --cursor-size: 8px;
+  --cursor-size-hover: 48px;
+}
+
+@media (pointer: fine) {
+  .has-custom-cursor * { cursor: none; }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-brand-black);
+  color: var(--color-brand-white);
+  font-family: var(--font-body);
+  font-weight: 500; /* Montserrat Medium */
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  /* 한글 가독성: 단어(어절) 단위로 줄바꿈 → "대응합니다"가 중간에서 안 잘림 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* 스크롤바 */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: var(--color-brand-accent); border-radius: 2px; }
+
+::selection { background: var(--color-brand-accent); color: #fff; }
+
+/* ===== Utilities ===== */
+@utility section-padding {
+  @apply px-6 md:px-12 lg:px-20 xl:px-28;
+}
+
+@utility label-text {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: var(--tracking-widest2);
+  text-transform: uppercase;
+  color: var(--color-brand-muted);
+}
+
+/* 헤드라인(Montserrat ExtraBold) — 약간 좁은 자간 */
+.font-display {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
