@@ -29,7 +29,12 @@ export function Footer() {
 
         <div className="mt-8 flex flex-col gap-2 border-t border-white/10 pt-4 font-mono text-[12px] uppercase tracking-[0.2em] text-brand-muted md:flex-row md:items-center md:justify-between">
           <p>© {new Date().getFullYear()} UNBOUND STUDIO. ALL RIGHTS RESERVED.</p>
-          <p>Motion · Branding · Post Production</p>
+          <div className="flex items-center gap-4">
+            <Link href="/privacy" className="hover:text-white transition-colors">
+              개인정보 처리방침
+            </Link>
+            <span>Motion · Branding · Post Production</span>
+          </div>
         </div>
       </div>
     </footer>
