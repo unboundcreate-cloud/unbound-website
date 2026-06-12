@@ -92,11 +92,11 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`${montserrat.variable} ${roboto.variable}`}>
       <head>
-        {/* Paperlogy(한글 폰트) — 메인 CSS 번들과 분리해 비차단 로드.
+        {/* Pretendard(한글 폰트) — 메인 CSS 번들과 분리해 비차단 로드.
             로드 지연/실패해도 한글은 시스템 폰트로 자연스럽게 폴백됨. */}
         <link
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy.css"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"
         />
       </head>
       <body className="font-body antialiased">

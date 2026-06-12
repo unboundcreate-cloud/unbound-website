@@ -16,10 +16,10 @@
   --color-brand-accent2: #e85d24; /* 보조 오렌지 */
   --color-brand-muted: #6b6b6b;
 
-  /* Fonts — 영문 Montserrat(제목 800/본문 500), 한글 Paperlogy, 숫자 Roboto */
-  --font-display: var(--font-montserrat), "Paperlogy", sans-serif;
-  --font-body: var(--font-montserrat), "Paperlogy", -apple-system, system-ui, sans-serif;
-  --font-mono: var(--font-montserrat), "Paperlogy", monospace;
+  /* Fonts — 영문 Montserrat(제목 800/본문 500), 한글 Pretendard, 숫자 Roboto */
+  --font-display: var(--font-montserrat), "Pretendard", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: var(--font-montserrat), "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono: var(--font-montserrat), "Pretendard", monospace;
   --font-number: var(--font-roboto), var(--font-montserrat), sans-serif;
 
   /* Font sizes — 기본 대비 약 +17% (작은~중간 텍스트). line-height는 비율이라 자동 스케일.
@@ -97,4 +97,101 @@ body {
 .font-display {
   font-weight: 800;
   letter-spacing: -0.01em;
+}
+
+/* ===== Pretendard 한글 타이포그래피 스케일 ===== */
+/* 한글 텍스트에만 Pretendard 적용 — 영문은 Montserrat 유지 */
+:lang(ko),
+.ko {
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* --- 제목 스케일 (데스크톱 기본) --- */
+.ko-h1 {
+  font-family: "Pretendard", sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+.ko-h2 {
+  font-family: "Pretendard", sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.5px;
+}
+.ko-h3 {
+  font-family: "Pretendard", sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.ko-h4 {
+  font-family: "Pretendard", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* --- 본문 스케일 --- */
+.ko-body-lg {
+  font-family: "Pretendard", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.ko-body {
+  font-family: "Pretendard", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.ko-body-sm {
+  font-family: "Pretendard", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.ko-caption {
+  font-family: "Pretendard", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* --- 반응형: 태블릿 (768px 이하) --- */
+@media (max-width: 768px) {
+  .ko-h1 { font-size: 36px; }
+  .ko-h2 { font-size: 28px; }
+  .ko-h3 { font-size: 24px; }
+  .ko-h4 { font-size: 20px; }
+  .ko-body-lg { font-size: 16px; }
+  .ko-body { font-size: 15px; }
+  .ko-body-sm { font-size: 13px; }
+}
+
+/* --- 반응형: 모바일 (480px 이하) --- */
+@media (max-width: 480px) {
+  .ko-h1 { font-size: 28px; }
+  .ko-h2 { font-size: 22px; }
+  .ko-h3 { font-size: 18px; }
+  .ko-h4 { font-size: 16px; }
+  .ko-body-lg { font-size: 15px; }
+  .ko-body { font-size: 14px; }
+  .ko-body-sm { font-size: 12px; }
+}
+
+/* --- 한글 본문 전역 기본값 ---
+   p, li, span 등 한글이 들어가는 요소에 Pretendard 자동 적용 */
+p, li, span, label, input, textarea, button {
+  font-family: "Pretendard", var(--font-body);
+}
+
+/* 제목 요소 기본 적용 */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  word-break: keep-all;
 }
