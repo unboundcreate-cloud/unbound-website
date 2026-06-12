@@ -5,45 +5,48 @@
 
 /* ===== Design Tokens (Tailwind v4 @theme) ===== */
 @theme {
-  /* Brand colors — 레퍼런스(UNBOUND STUDIO) 실측값 */
+  /* Brand colors */
   --color-brand-black: #0a0a0a;
   --color-brand-dark: #111111;
   --color-brand-gray: #1a1a1a;
   --color-brand-mid: #2a2a2a;
   --color-brand-light: #f5f5f0;
   --color-brand-white: #ffffff;
-  --color-brand-accent: #e63226; /* 오렌지-레드 (실측 지배값) */
-  --color-brand-accent2: #e85d24; /* 보조 오렌지 */
+  --color-brand-accent: #e63226;
+  --color-brand-accent2: #e85d24;
   --color-brand-muted: #6b6b6b;
 
-  /* Fonts — 영문 Montserrat(제목 800/본문 500), 한글 Pretendard, 숫자 Roboto */
-  --font-display: var(--font-montserrat), "Pretendard", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: var(--font-montserrat), "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --font-mono: var(--font-montserrat), "Pretendard", monospace;
-  --font-number: var(--font-roboto), var(--font-montserrat), sans-serif;
+  /* Fonts — 영문 Inter(제목 700-800/본문 400), 한글 Pretendard */
+  --font-display: var(--font-inter), "Pretendard", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:    var(--font-inter), "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono:    var(--font-inter), "Pretendard", ui-monospace, monospace;
 
-  /* Font sizes — 기본 대비 약 +17% (작은~중간 텍스트). line-height는 비율이라 자동 스케일.
-     디스플레이 대형(5xl+)은 이미 크므로 미변경. */
-  --text-xs: 0.8775rem;    /* 0.75 × 1.17 */
-  --text-sm: 1.024rem;     /* 0.875 × 1.17 */
-  --text-base: 1.17rem;    /* 1 × 1.17 */
-  --text-lg: 1.316rem;     /* 1.125 × 1.17 */
-  --text-xl: 1.4625rem;    /* 1.25 × 1.17 */
-  --text-2xl: 1.755rem;    /* 1.5 × 1.17 */
-  --text-3xl: 2.194rem;    /* 1.875 × 1.17 */
-  --text-4xl: 2.633rem;    /* 2.25 × 1.17 */
+  /* Font sizes (rem 기준, 16px = 1rem) */
+  --text-xs:   0.75rem;   /* 12px */
+  --text-sm:   0.875rem;  /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg:   1.125rem;  /* 18px */
+  --text-xl:   1.25rem;   /* 20px */
+  --text-2xl:  1.5rem;    /* 24px */
+  --text-3xl:  2rem;      /* 32px */
+  --text-4xl:  2.75rem;   /* 44px */
+  --text-5xl:  3.5rem;    /* 56px */
+  --text-6xl:  4rem;      /* 64px */
+  --text-7xl:  4.5rem;    /* 72px */
+  --text-8xl:  6rem;      /* 96px */
+  --text-9xl:  8rem;      /* 128px */
 
   /* Letter spacing */
   --tracking-widest2: 0.3em;
   --tracking-widest3: 0.5em;
 
   /* Animations */
-  --animate-marquee: marquee 30s linear infinite;
+  --animate-marquee:      marquee 30s linear infinite;
   --animate-marquee-slow: marquee 45s linear infinite;
 }
 
 @keyframes marquee {
-  0% { transform: translateX(0%); }
+  0%   { transform: translateX(0%); }
   100% { transform: translateX(-50%); }
 }
 
@@ -58,22 +61,124 @@
 }
 
 html {
+  font-size: 16px;
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   background: var(--color-brand-black);
   color: var(--color-brand-white);
   font-family: var(--font-body);
-  font-weight: 500; /* Montserrat Medium */
+  font-size: 1rem;        /* 16px */
+  font-weight: 400;       /* Regular — 가이드 기준 */
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-  /* 한글 가독성: 단어(어절) 단위로 줄바꿈 → "대응합니다"가 중간에서 안 잘림 */
-  word-break: keep-all;
+  word-break: keep-all;   /* 한글 어절 단위 줄바꿈 */
   overflow-wrap: break-word;
 }
 
-/* 스크롤바 */
+/* ===== 타이포그래피 위계 (Inter 영문 + Pretendard 한글 자동 혼합) ===== */
+
+/* --- 제목 계층 (Desktop 기준) --- */
+h1 {
+  font-family: var(--font-display);
+  font-size: 3.5rem;      /* 56px */
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  word-break: keep-all;
+}
+
+h2 {
+  font-family: var(--font-display);
+  font-size: 2.75rem;     /* 44px */
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.5px;
+  word-break: keep-all;
+}
+
+h3 {
+  font-family: var(--font-display);
+  font-size: 2rem;        /* 32px */
+  font-weight: 600;
+  line-height: 1.3;
+  word-break: keep-all;
+}
+
+h4 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;      /* 24px */
+  font-weight: 600;
+  line-height: 1.4;
+  word-break: keep-all;
+}
+
+h5 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;     /* 20px */
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+h6 {
+  font-family: var(--font-display);
+  font-size: 1rem;        /* 16px */
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* --- 본문 --- */
+p {
+  font-size: 1rem;        /* 16px */
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* --- 강조 --- */
+strong, b { font-weight: 600; }
+em, i     { font-style: italic; }
+
+/* --- 버튼/인터랙티브 --- */
+button {
+  font-family: var(--font-body);
+  font-size: 0.875rem;    /* 14px */
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* --- 폼 --- */
+input, textarea, select {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* ===== 반응형 타이포그래피 (태블릿: 768px) ===== */
+@media (max-width: 768px) {
+  h1 { font-size: 2.75rem; }   /* 44px */
+  h2 { font-size: 2.25rem; }   /* 36px */
+  h3 { font-size: 1.75rem; }   /* 28px */
+  h4 { font-size: 1.25rem; }   /* 20px */
+  body { font-size: 0.9375rem; } /* 15px */
+  p    { font-size: 0.9375rem; }
+}
+
+/* ===== 반응형 타이포그래피 (모바일: 480px) ===== */
+@media (max-width: 480px) {
+  h1 { font-size: 2rem;    letter-spacing: 0; } /* 32px */
+  h2 { font-size: 1.75rem; letter-spacing: 0; } /* 28px */
+  h3 { font-size: 1.5rem;  }                    /* 24px */
+  h4 { font-size: 1.125rem; }                   /* 18px */
+  body { font-size: 0.875rem; line-height: 1.5; } /* 14px */
+  p    { font-size: 0.875rem; }
+}
+
+/* ===== 스크롤바 ===== */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: #0a0a0a; }
 ::-webkit-scrollbar-thumb { background: var(--color-brand-accent); border-radius: 2px; }
@@ -85,113 +190,61 @@ body {
   @apply px-6 md:px-12 lg:px-20 xl:px-28;
 }
 
+/* 라벨 텍스트 — 섹션 레이블, 캡션 등 소문자 강조 */
 @utility label-text {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 0.75rem;     /* 12px */
+  font-weight: 500;
   letter-spacing: var(--tracking-widest2);
   text-transform: uppercase;
   color: var(--color-brand-muted);
+  line-height: 1.5;
 }
 
-/* 헤드라인(Montserrat ExtraBold) — 약간 좁은 자간 */
+/* 히어로 대형 디스플레이 제목 — font-display 클래스 보조 */
 .font-display {
+  font-family: var(--font-display);
   font-weight: 800;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
-/* ===== Pretendard 한글 타이포그래피 스케일 ===== */
-/* 한글 텍스트에만 Pretendard 적용 — 영문은 Montserrat 유지 */
-:lang(ko),
-.ko {
-  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  word-break: keep-all;
-  overflow-wrap: break-word;
-}
+/* ===== 한글 전용 Pretendard 타이포그래피 유틸 ===== */
+/* 영문은 Inter, 한글은 Pretendard가 자동 처리되므로
+   아래 클래스는 한글 강조/보정이 필요한 곳에만 선택 사용 */
 
-/* --- 제목 스케일 (데스크톱 기본) --- */
 .ko-h1 {
-  font-family: "Pretendard", sans-serif;
-  font-size: 48px;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.5px;
+  font-family: "Pretendard", var(--font-display);
+  font-size: 3rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.5px;
 }
 .ko-h2 {
-  font-family: "Pretendard", sans-serif;
-  font-size: 36px;
-  font-weight: 700;
-  line-height: 1.3;
-  letter-spacing: -0.5px;
+  font-family: "Pretendard", var(--font-display);
+  font-size: 2.25rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px;
 }
 .ko-h3 {
-  font-family: "Pretendard", sans-serif;
-  font-size: 28px;
-  font-weight: 600;
-  line-height: 1.3;
+  font-family: "Pretendard", var(--font-display);
+  font-size: 1.75rem; font-weight: 600; line-height: 1.3;
 }
 .ko-h4 {
-  font-family: "Pretendard", sans-serif;
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 1.4;
+  font-family: "Pretendard", var(--font-display);
+  font-size: 1.5rem; font-weight: 600; line-height: 1.4;
 }
+.ko-body-lg { font-family: "Pretendard", sans-serif; font-size: 1.125rem; font-weight: 400; line-height: 1.6; }
+.ko-body    { font-family: "Pretendard", sans-serif; font-size: 1rem;     font-weight: 400; line-height: 1.6; }
+.ko-body-sm { font-family: "Pretendard", sans-serif; font-size: 0.875rem; font-weight: 400; line-height: 1.5; }
+.ko-caption { font-family: "Pretendard", sans-serif; font-size: 0.75rem;  font-weight: 400; line-height: 1.5; }
 
-/* --- 본문 스케일 --- */
-.ko-body-lg {
-  font-family: "Pretendard", sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 1.6;
-}
-.ko-body {
-  font-family: "Pretendard", sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.6;
-}
-.ko-body-sm {
-  font-family: "Pretendard", sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.5;
-}
-.ko-caption {
-  font-family: "Pretendard", sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.5;
-}
-
-/* --- 반응형: 태블릿 (768px 이하) --- */
 @media (max-width: 768px) {
-  .ko-h1 { font-size: 36px; }
-  .ko-h2 { font-size: 28px; }
-  .ko-h3 { font-size: 24px; }
-  .ko-h4 { font-size: 20px; }
-  .ko-body-lg { font-size: 16px; }
-  .ko-body { font-size: 15px; }
-  .ko-body-sm { font-size: 13px; }
+  .ko-h1 { font-size: 2.25rem; }
+  .ko-h2 { font-size: 1.75rem; }
+  .ko-h3 { font-size: 1.5rem; }
+  .ko-h4 { font-size: 1.25rem; }
 }
-
-/* --- 반응형: 모바일 (480px 이하) --- */
 @media (max-width: 480px) {
-  .ko-h1 { font-size: 28px; }
-  .ko-h2 { font-size: 22px; }
-  .ko-h3 { font-size: 18px; }
-  .ko-h4 { font-size: 16px; }
-  .ko-body-lg { font-size: 15px; }
-  .ko-body { font-size: 14px; }
-  .ko-body-sm { font-size: 12px; }
-}
-
-/* --- 한글 본문 전역 기본값 ---
-   p, li, span 등 한글이 들어가는 요소에 Pretendard 자동 적용 */
-p, li, span, label, input, textarea, button {
-  font-family: "Pretendard", var(--font-body);
-}
-
-/* 제목 요소 기본 적용 */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
-  word-break: keep-all;
+  .ko-h1 { font-size: 1.75rem; letter-spacing: 0; }
+  .ko-h2 { font-size: 1.375rem; letter-spacing: 0; }
+  .ko-h3 { font-size: 1.125rem; }
+  .ko-h4 { font-size: 1rem; }
+  .ko-body-lg { font-size: 0.9375rem; }
+  .ko-body    { font-size: 0.875rem; }
+  .ko-body-sm { font-size: 0.75rem; }
 }

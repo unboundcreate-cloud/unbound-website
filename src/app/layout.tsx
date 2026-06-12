@@ -1,22 +1,14 @@
 import type { Metadata } from "next";
-import { Montserrat, Roboto } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Chrome } from "@/components/layout/Chrome";
 import { studio } from "@/data/clients";
 
-// 영문 폰트 = Montserrat. 제목은 ExtraBold(800), 본문은 Medium(500)으로 사용.
-const montserrat = Montserrat({
-  weight: ["400", "500", "700", "800"],
+// 영문 폰트 = Inter. 현대적·기하학적 sans-serif, 모션그래픽 스튜디오 분위기에 최적.
+const inter = Inter({
+  weight: ["400", "500", "600", "700", "800"],
   subsets: ["latin"],
-  variable: "--font-montserrat",
-  display: "swap",
-});
-
-// 숫자 폰트 = Roboto.
-const roboto = Roboto({
-  weight: ["400", "500", "700", "900"],
-  subsets: ["latin"],
-  variable: "--font-roboto",
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -62,7 +54,6 @@ export const metadata: Metadata = {
     title: "Unbound Studio | 모션그래픽 크리에이티브 스튜디오",
     description: "경계를 넘는 모션과 영상으로 브랜드의 이야기를 움직입니다.",
   },
-  // 검색엔진 소유확인 (HTML 태그 방식 content 값)
   verification: {
     google: "qyXj9JYwW-lW4VzR-66zIKgkTTzoP5LyV7fKq_x0xns",
     other: {
@@ -71,8 +62,6 @@ export const metadata: Metadata = {
   },
 };
 
-// 구조화 데이터 — 검색엔진에 "이 사이트 = Unbound Studio = 언바운드 스튜디오"임을 명시.
-// 브랜드명 검색·구글 지식패널 인식에 도움.
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -90,10 +79,13 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ko" className={`${montserrat.variable} ${roboto.variable}`}>
+    <html lang="ko" className={inter.variable}>
       <head>
-        {/* Pretendard(한글 폰트) — 메인 CSS 번들과 분리해 비차단 로드.
-            로드 지연/실패해도 한글은 시스템 폰트로 자연스럽게 폴백됨. */}
+        {/* Pretendard(한글 폰트) — 메인 CSS 번들과 분리해 비차단 로드 */}
+        <link
+          rel="preconnect"
+          href="https://cdn.jsdelivr.net"
+        />
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"
