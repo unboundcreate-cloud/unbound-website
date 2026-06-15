@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { useInView } from "framer-motion";
 import { worksOrdered } from "@/data/works";
 import { HomeShowcaseCard } from "./HomeShowcaseCard";
 import { FadeIn } from "@/components/ui/FadeIn";
@@ -15,17 +16,10 @@ const SLUGS = [
   "chunhwa-romance",
 ];
 
-const gridVariants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.11, delayChildren: 0.1 } },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { duration: 0.7 } },
-};
-
 export function HomeShowcase() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-20px" });
+
   const items = SLUGS.map((s) =>
     worksOrdered.find((w) => w.slug === s),
   ).filter((w): w is NonNullable<typeof w> => Boolean(w));
@@ -51,19 +45,23 @@ export function HomeShowcase() {
           </p>
         </FadeIn>
 
-        <motion.div
+        <div
+          ref={ref}
           className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3 md:mt-16 md:gap-6"
-          variants={gridVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-20px" }}
         >
-          {items.map((w) => (
-            <motion.div key={w.id} variants={cardVariants}>
+          {items.map((w, i) => (
+            <div
+              key={w.id}
+              style={{
+                opacity: inView ? 1 : 0,
+                transition: "opacity 0.7s ease",
+                transitionDelay: `${i * 0.11}s`,
+              }}
+            >
               <HomeShowcaseCard work={w} />
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
