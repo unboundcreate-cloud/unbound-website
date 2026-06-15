@@ -23,7 +23,7 @@ export function HomeShowcase() {
 
       <div className="section-padding relative">
         <FadeIn>
-          <h2 className="font-display text-3xl leading-tight text-white md:text-5xl lg:text-6xl">
+          <h2 className="font-display text-3xl leading-tight text-white md:text-4xl lg:text-5xl">
             <SpotlightText>
               Beyond Production —
               <br />

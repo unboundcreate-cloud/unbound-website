@@ -24,7 +24,7 @@ export function HomeAdventure() {
         {ITEMS.map((it, i) => (
           <FadeIn key={it.label} delay={i * 0.15}>
             <div>
-              <h2 className="font-display text-4xl uppercase leading-[0.95] text-white md:text-5xl lg:text-6xl">
+              <h2 className="font-display text-3xl uppercase leading-[0.95] text-white md:text-4xl lg:text-5xl">
                 <SpotlightText>
                   {it.heading[0]}
                   <br />
