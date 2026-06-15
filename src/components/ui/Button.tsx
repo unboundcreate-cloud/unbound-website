@@ -31,9 +31,6 @@ export function Button({
           {children}
           <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-current transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100" />
         </span>
-        <span className="transition-transform duration-300 group-hover:translate-x-1">
-          →
-        </span>
       </span>
     ) : (
       children
