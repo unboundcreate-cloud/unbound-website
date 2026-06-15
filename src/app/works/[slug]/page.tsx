@@ -153,10 +153,7 @@ export default async function WorkDetailPage({
           href={`/works/${next.slug}`}
           className="group font-display text-sm uppercase tracking-[0.2em] text-white/80 hover:text-brand-accent"
         >
-          Next Project{" "}
-          <span className="inline-block transition-transform group-hover:translate-x-1">
-            →
-          </span>
+          Next Project
         </Link>
       </nav>
     </article>
