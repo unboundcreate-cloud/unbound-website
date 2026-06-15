@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CloseButton } from "./CloseButton";
 
 export const metadata: Metadata = {
   title: "개인정보 처리방침 | Unbound Studio",
@@ -165,6 +166,7 @@ const sections = [
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-brand-black text-white">
+      <CloseButton />
       <div className="section-padding py-24 md:py-32">
         {/* 헤더 */}
         <div className="mb-16 border-b border-white/10 pb-12">
