@@ -19,8 +19,8 @@ export function IntroAnimation() {
     }
     sessionStorage.setItem("intro-done", "1");
 
-    const t1 = setTimeout(() => setPhase("exit"), 2800);
-    const t2 = setTimeout(() => setPhase("done"), 3700);
+    const t1 = setTimeout(() => setPhase("exit"), 1800);
+    const t2 = setTimeout(() => setPhase("done"), 2700);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
