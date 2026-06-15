@@ -14,8 +14,17 @@ export default function Home() {
     <>
       <HomeHero />
       <HomeIntro />
-      <HomeImageBreak />
-      <HomeAdventure />
+      {/* 이미지 고정 + 텍스트 위로 올라오는 sticky 효과 */}
+      <div className="relative">
+        <div className="sticky top-0 z-0">
+          <HomeImageBreak />
+        </div>
+        <div className="relative z-10 bg-brand-black">
+          {/* 이미지에서 검은 배경으로 자연스럽게 이어지는 그라디언트 */}
+          <div className="h-16 bg-gradient-to-b from-transparent to-brand-black -mt-16" />
+          <HomeAdventure />
+        </div>
+      </div>
       <HomeShowcase />
       {/* 하단부(배너~로고~Contact)를 하나의 연속 배경으로 묶어 이음새 제거 */}
       <div className="relative overflow-hidden bg-brand-black">
