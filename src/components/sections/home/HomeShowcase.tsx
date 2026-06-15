@@ -20,9 +20,11 @@ const gridVariants = {
   show: { transition: { staggerChildren: 0.11, delayChildren: 0.1 } },
 };
 
+const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
 const cardVariants = {
   hidden: { opacity: 0, y: 40 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.75, ease: EASE } },
 };
 
 export function HomeShowcase() {
