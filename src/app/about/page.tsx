@@ -1,121 +1,282 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { PageHero } from "@/components/ui/PageHero";
 import { FadeIn } from "@/components/ui/FadeIn";
-import { clients, studio } from "@/data/clients";
+import { clients } from "@/data/clients";
 
 export const metadata: Metadata = {
   title: "About | Unbound Studio",
-  description: studio.about,
+  description:
+    "Unbound Studio는 모션그래픽, 브랜드필름, 광고영상을 전문으로 제작하는 크리에이티브 포스트프로덕션 스튜디오입니다.",
 };
+
+const STRENGTHS = [
+  {
+    num: "01",
+    title: "원스톱 제작 시스템",
+    desc: "기획부터 디자인, 제작, 납품까지 하나의 프로세스로 진행하여 효율성과 완성도를 높입니다.",
+  },
+  {
+    num: "02",
+    title: "크리에이티브 중심 접근",
+    desc: "브랜드의 목적과 타깃을 고려한 전략적인 크리에이티브를 제공합니다.",
+  },
+  {
+    num: "03",
+    title: "빠르고 유연한 대응",
+    desc: "프로젝트 상황에 맞춰 신속하고 유연하게 대응합니다.",
+  },
+  {
+    num: "04",
+    title: "디테일 중심 제작",
+    desc: "프레임 하나, 움직임 하나까지 세심하게 완성합니다.",
+  },
+];
+
+const SERVICES = [
+  "모션그래픽",
+  "브랜드필름",
+  "광고영상",
+  "기업홍보영상",
+  "디지털 콘텐츠",
+  "제품 홍보영상",
+  "행사 및 전시 영상",
+  "SNS 콘텐츠",
+];
+
+const PROCESS = [
+  { num: "01", title: "기획", desc: "브랜드와 프로젝트 목표를 분석합니다." },
+  { num: "02", title: "디자인", desc: "콘셉트와 비주얼 방향을 설계합니다." },
+  {
+    num: "03",
+    title: "제작",
+    desc: "모션그래픽, 영상 편집, 후반 작업을 진행합니다.",
+  },
+  { num: "04", title: "납품", desc: "최종 검수 후 최적화하여 전달합니다." },
+];
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-brand-black">
-      <PageHero
-        label={studio.positioning}
-        title={
-          <>
-            Story in
-            <br />
-            every frame
-          </>
-        }
-      />
 
-      {/* 스토리 */}
-      <section className="section-padding py-24 md:py-32">
-        <FadeIn>
-          <p className="label-text mb-6">About Us</p>
-          <p className="text-2xl leading-snug text-white md:text-3xl">
-            {studio.shortName}(언바운드 스튜디오)는 모션그래픽·브랜드필름·광고영상 전문
-            포스트프로덕션 스튜디오입니다.
-          </p>
-        </FadeIn>
-        <FadeIn delay={0.15}>
-          <p className="mt-8 max-w-2xl text-base leading-relaxed text-brand-muted">
-            기획·디자인·제작·납품까지 원스톱으로 제공하며, 클라이언트의 메시지를 가장
-            강렬하게 전달하는 영상을 만듭니다.
-          </p>
-        </FadeIn>
-      </section>
-
-      {/* WHO WE ARE */}
-      <section className="relative overflow-hidden">
+      {/* ─── 01 Hero ─── */}
+      <section className="relative flex min-h-screen items-end overflow-hidden">
         <div className="absolute inset-0">
           <Image
             src="/works/night-blooming-flower.jpg"
             alt=""
             fill
             sizes="100vw"
-            className="object-cover opacity-25 blur-[2px]"
+            priority
+            className="object-cover opacity-25"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-brand-black via-brand-black/80 to-brand-black" />
+          <div className="absolute inset-0 bg-gradient-to-b from-brand-black/60 via-brand-black/20 to-brand-black" />
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-black/60 to-transparent" />
         </div>
 
-        <div className="relative section-padding py-28 md:py-40">
+        <div className="relative w-full section-padding pb-20 pt-48 md:pb-28">
           <FadeIn>
-            <div className="mb-16 flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-              <h2 className="font-display text-5xl uppercase leading-[0.95] text-white md:text-7xl">
-                Creative
-                <br />
-                Video Studio
-              </h2>
-              <p className="font-display text-5xl uppercase leading-none text-white md:text-7xl">
-                Unbound
-              </p>
-            </div>
+            <p className="label-text mb-6 text-brand-accent">
+              Creative Post-Production Studio
+            </p>
+            <h1 className="font-display text-5xl uppercase leading-[0.9] text-white sm:text-6xl md:text-8xl lg:text-9xl xl:text-[10rem]">
+              Unbound
+              <br />
+              Studio
+            </h1>
           </FadeIn>
-
-          <FadeIn delay={0.1}>
-            <p className="label-text mb-5">Who We Are</p>
-            <div className="mb-12 h-px w-full bg-white/15" />
+          <FadeIn delay={0.14}>
+            <p className="mt-8 max-w-2xl text-base leading-relaxed text-white/65 md:text-lg">
+              모션그래픽, 브랜드필름, 광고영상을 전문으로 제작하는
+              크리에이티브 포스트프로덕션 스튜디오입니다.
+            </p>
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/40">
+              기획부터 디자인, 제작, 납품까지 전 과정을 원스톱으로 제공하며,
+              브랜드의 메시지를 가장 효과적으로 전달하는 영상 콘텐츠를 만듭니다.
+            </p>
           </FadeIn>
-
-          <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-20">
-            <FadeIn delay={0.15}>
-              <div className="space-y-10">
-                <h3 className="font-display text-2xl uppercase leading-tight text-white/85 md:text-3xl">
-                  Motion Graphics &amp;
-                  <br />
-                  Post-Production
-                </h3>
-                <h3 className="font-display text-2xl uppercase leading-tight text-white/85 md:text-3xl">
-                  One-Stop,
-                  <br />
-                  Planning to Delivery
-                </h3>
-              </div>
-            </FadeIn>
-            <FadeIn delay={0.25}>
-              <div className="space-y-6 text-base leading-relaxed text-white/70">
-                <p>
-                  Unbound Studio(언바운드 스튜디오)는 모션그래픽과 포스트프로덕션을
-                  중심으로 최고의 영상 콘텐츠를 제작하는 크리에이티브 영상
-                  스튜디오입니다.
-                </p>
-                <p>
-                  우리는 테크와 크리에이티브가 만나는 지점에서 새로운 가능성을
-                  실험합니다. 최첨단 AI 기반 영상 제작부터 모션그래픽, 브랜드필름,
-                  광고 및 영상 VFX, 방송·OTT 드라마 타이틀에 이르기까지 — 우리만의
-                  감각과 새로운 문법으로 영상의 기준을 만들어 갑니다.
-                </p>
-                <p>
-                  우리는 영상의 혁신으로 브랜드와 더 큰 세상을 연결하고, 보는 이의
-                  마음을 움직이는 새로운 경험을 설계합니다.
-                </p>
-                <p>
-                  Unbound Studio는 방송, 엔터테인먼트, 브랜드, 광고 등 다양한
-                  분야에서 기획부터 납품까지 원스톱으로 영상 콘텐츠의 변화를
-                  선도합니다.
-                </p>
-              </div>
-            </FadeIn>
-          </div>
         </div>
       </section>
 
-      {/* Our Client */}
+      {/* ─── 02 Philosophy ─── */}
+      <section className="section-padding py-28 md:py-40">
+        <FadeIn>
+          <p className="label-text mb-14 text-brand-accent">우리의 철학</p>
+        </FadeIn>
+        <div className="grid grid-cols-1 gap-16 md:grid-cols-2 md:gap-20 lg:gap-32">
+          <FadeIn>
+            <h2 className="font-display text-4xl uppercase leading-tight text-white md:text-5xl lg:text-6xl">
+              우리는
+              <br />
+              메시지에서
+              <br />
+              시작합니다.
+            </h2>
+          </FadeIn>
+          <FadeIn delay={0.12}>
+            <div className="space-y-6 text-[15px] leading-loose text-white/60 md:text-base">
+              <p>
+                좋은 영상은 화려한 연출보다 명확한 메시지에서 시작된다고 믿습니다.
+              </p>
+              <p>
+                언바운드 스튜디오는 브랜드의 이야기와 목적을 깊이 이해하고,
+                이를 가장 효과적인 시각 언어로 구현합니다.
+              </p>
+              <p>
+                우리는 단순히 영상을 제작하는 것이 아니라 브랜드와 사람을
+                연결하는 경험을 만듭니다.
+              </p>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      <div className="section-padding">
+        <div className="h-px bg-white/10" />
+      </div>
+
+      {/* ─── 03 Strengths ─── */}
+      <section className="section-padding py-28 md:py-40">
+        <FadeIn>
+          <p className="label-text mb-4 text-brand-accent">언바운드의 강점</p>
+          <h2 className="mb-16 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
+            왜 언바운드
+            <br />
+            스튜디오인가
+          </h2>
+        </FadeIn>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-6">
+          {STRENGTHS.map((s, i) => (
+            <FadeIn key={s.num} delay={i * 0.07}>
+              <div className="border border-white/10 p-8 transition-colors duration-500 hover:border-white/25 md:p-10">
+                <p className="mb-5 font-mono text-[11px] tracking-[0.25em] text-brand-accent">
+                  {s.num}
+                </p>
+                <h3 className="mb-4 font-display text-xl uppercase text-white md:text-2xl">
+                  {s.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-white/50">{s.desc}</p>
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </section>
+
+      <div className="section-padding">
+        <div className="h-px bg-white/10" />
+      </div>
+
+      {/* ─── 04 Services ─── */}
+      <section className="section-padding py-28 md:py-40">
+        <FadeIn>
+          <p className="label-text mb-4 text-brand-accent">주요 제작 분야</p>
+          <h2 className="mb-16 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
+            우리가
+            <br />
+            만드는 콘텐츠
+          </h2>
+        </FadeIn>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:gap-4">
+          {SERVICES.map((s, i) => (
+            <FadeIn key={s} delay={Math.min(i * 0.06, 0.35)}>
+              <div className="group border border-white/10 px-5 py-8 text-center transition-all duration-300 hover:border-white/25 hover:bg-white/5 md:py-10">
+                <p className="text-sm font-medium text-white/55 transition-colors duration-300 group-hover:text-white md:text-base">
+                  {s}
+                </p>
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </section>
+
+      <div className="section-padding">
+        <div className="h-px bg-white/10" />
+      </div>
+
+      {/* ─── 05 Process ─── */}
+      <section className="section-padding py-28 md:py-40">
+        <FadeIn>
+          <p className="label-text mb-4 text-brand-accent">Process</p>
+          <h2 className="mb-20 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
+            제작 프로세스
+          </h2>
+        </FadeIn>
+
+        {/* Desktop: horizontal timeline */}
+        <div className="hidden sm:block">
+          <div className="mb-3 grid grid-cols-4">
+            {PROCESS.map((p) => (
+              <p
+                key={p.num}
+                className="font-mono text-[11px] tracking-[0.25em] text-brand-accent"
+              >
+                {p.num}
+              </p>
+            ))}
+          </div>
+          <div className="relative mb-10 grid grid-cols-4">
+            <div className="absolute inset-x-0 top-[5px] h-px bg-white/15" />
+            {PROCESS.map((p) => (
+              <div key={p.num} className="relative z-10">
+                <div className="h-2.5 w-2.5 rounded-full bg-brand-accent" />
+              </div>
+            ))}
+          </div>
+          <div className="grid grid-cols-4 gap-8">
+            {PROCESS.map((p, i) => (
+              <FadeIn key={p.num} delay={i * 0.1}>
+                <h3 className="mb-3 font-display text-2xl uppercase text-white">
+                  {p.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-white/50">{p.desc}</p>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile: vertical list */}
+        <div className="sm:hidden">
+          {PROCESS.map((p, i) => (
+            <FadeIn key={p.num} delay={i * 0.1}>
+              <div className="border-b border-white/10 py-8 last:border-0">
+                <p className="mb-3 font-mono text-[11px] tracking-[0.25em] text-brand-accent">
+                  {p.num}
+                </p>
+                <h3 className="mb-2 font-display text-2xl uppercase text-white">
+                  {p.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-white/50">{p.desc}</p>
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── 06 Closing ─── */}
+      <section className="relative overflow-hidden py-36 text-center md:py-52">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_50%,rgba(230,50,38,0.07),transparent)]" />
+        <div className="section-padding relative">
+          <FadeIn>
+            <h2 className="mx-auto max-w-4xl font-display text-4xl uppercase leading-tight text-white md:text-5xl lg:text-6xl xl:text-7xl">
+              모든 브랜드에는
+              <br />
+              전하고 싶은
+              <br />
+              이야기가 있습니다.
+            </h2>
+          </FadeIn>
+          <FadeIn delay={0.15}>
+            <p className="mx-auto mt-8 max-w-lg text-sm leading-relaxed text-white/50 md:text-base">
+              언바운드 스튜디오는 그 이야기를 가장 강력한 영상으로 완성합니다.
+            </p>
+          </FadeIn>
+        </div>
+      </section>
+
+      <div className="section-padding">
+        <div className="h-px bg-white/10" />
+      </div>
+
+      {/* ─── 07 Our Client (기존 유지) ─── */}
       <section className="section-padding pb-56 pt-28">
         <FadeIn>
           <div className="mb-32 md:mb-48">
