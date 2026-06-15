@@ -47,22 +47,20 @@ export function ServicesSection({
                 viewport={{ once: true, margin: "-20px" }}
                 transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: (i % 2) * 0.12 }}
               >
-                {/* 이미지 2장 세로 배치 */}
-                <div className="flex flex-col gap-1">
-                  {(service.images ?? []).slice(0, 2).map((img, j) => (
-                    <div
-                      key={j}
-                      className="relative aspect-video overflow-hidden bg-brand-gray"
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={img}
-                        alt={service.title}
-                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                      />
-                    </div>
-                  ))}
-                </div>
+                {/* 이미지 1장 */}
+                {(service.images ?? []).slice(0, 1).map((img, j) => (
+                  <div
+                    key={j}
+                    className="relative aspect-video overflow-hidden bg-brand-gray"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={img}
+                      alt={service.title}
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                    />
+                  </div>
+                ))}
 
                 <h3 className="mt-6 font-display text-2xl uppercase leading-tight text-white md:text-3xl">
                   {service.title}
@@ -73,9 +71,11 @@ export function ServicesSection({
                   </p>
                 )}
                 <div className="mt-4 h-px w-full bg-white/15" />
-                <p className="mt-4 text-sm leading-relaxed text-brand-muted md:text-base">
-                  {service.description}
-                </p>
+                <div className="mt-4 space-y-2 text-sm leading-relaxed text-brand-muted md:text-base">
+                  {service.description.split("\n").map((line, li) => (
+                    <p key={li}>{line}</p>
+                  ))}
+                </div>
               </motion.div>
             ))}
           </div>

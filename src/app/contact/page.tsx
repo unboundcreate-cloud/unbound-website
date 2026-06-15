@@ -24,7 +24,7 @@ export default function ContactPage() {
             <p className="text-sm text-brand-muted md:text-base">
               프로젝트 문의는 언제든지 환영합니다.
             </p>
-            <p className="mt-3 text-sm text-brand-muted md:text-base">
+            <p className="mt-1 text-sm text-brand-muted md:text-base">
               아래 정보로 연락 주시거나 폼을 작성해주세요.
             </p>
           </div>
@@ -36,7 +36,7 @@ export default function ContactPage() {
         <div className="md:col-span-4">
           <div className="space-y-8">
             <div>
-              <p className="label-text mb-1.5">Email</p>
+              <p className="label-text mb-0.5">Email</p>
               <a
                 href={`mailto:${studio.email}`}
                 className="text-lg text-white hover:text-brand-accent"
@@ -45,11 +45,11 @@ export default function ContactPage() {
               </a>
             </div>
             <div>
-              <p className="label-text mb-1.5">Hours</p>
+              <p className="label-text mb-0.5">Hours</p>
               <p className="text-lg text-white">월–금 10:00 – 19:00</p>
             </div>
             <div>
-              <p className="label-text mb-1.5">Social</p>
+              <p className="label-text mb-0.5">Social</p>
               <SocialLinks className="flex gap-5" iconClassName="h-6 w-6" />
             </div>
           </div>

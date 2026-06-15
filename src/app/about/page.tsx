@@ -55,7 +55,7 @@ const PROCESS = [
 
 function RedDot() {
   return (
-    <span className="mt-2 inline-block h-2.5 w-2.5 flex-shrink-0 rounded-full bg-brand-accent" />
+    <span className="inline-block h-2.5 w-2.5 flex-shrink-0 rounded-full bg-brand-accent" />
   );
 }
 
@@ -96,7 +96,7 @@ export default function AboutPage() {
         </FadeIn>
         <div className="grid grid-cols-1 gap-16 md:grid-cols-2 md:gap-20 lg:gap-32">
           <FadeIn>
-            <h2 className="flex items-start gap-3 font-display text-4xl uppercase leading-tight text-white md:text-5xl lg:text-6xl">
+            <h2 className="flex items-center gap-3 font-display text-4xl uppercase leading-tight text-white md:text-5xl lg:text-6xl">
               <RedDot />
               We Start with the Message.
             </h2>
@@ -125,7 +125,7 @@ export default function AboutPage() {
       <section className="section-padding py-28 md:py-40">
         <FadeIn>
           <p className="label-text mb-4 text-brand-accent">Our Strengths</p>
-          <h2 className="mb-16 flex items-start gap-3 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
+          <h2 className="mb-16 flex items-center gap-3 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
             <RedDot />
             Why Unbound Studio
           </h2>
@@ -155,7 +155,7 @@ export default function AboutPage() {
       <section className="section-padding py-28 md:py-40">
         <FadeIn>
           <p className="label-text mb-4 text-brand-accent">Services</p>
-          <h2 className="mb-16 flex items-start gap-3 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
+          <h2 className="mb-16 flex items-center gap-3 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
             <RedDot />
             What We Create
           </h2>
@@ -181,7 +181,7 @@ export default function AboutPage() {
       <section className="section-padding py-28 md:py-40">
         <FadeIn>
           <p className="label-text mb-4 text-brand-accent">Process</p>
-          <h2 className="mb-20 flex items-start gap-3 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
+          <h2 className="mb-20 flex items-center gap-3 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
             <RedDot />
             Production Process
           </h2>

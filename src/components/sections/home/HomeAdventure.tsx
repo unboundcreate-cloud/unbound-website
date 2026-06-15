@@ -5,15 +5,15 @@ import { SpotlightText } from "@/components/ui/SpotlightText";
 const ITEMS = [
   {
     heading: ["Take the", "First Step"],
-    label: "Project",
-    desc: "당신의 이야기를 가장 강렬한 영상으로 담아냅니다.\n프로젝트 문의를 기다립니다.",
-    href: "/contact",
+    label: "About",
+    desc: "우리가 만드는 영상에는 이유가 있습니다.\n언바운드 스튜디오의 철학과 제작 방식, 그리고 우리가 추구하는 가치를 소개합니다.",
+    href: "/about",
   },
   {
     heading: ["In Your", "Adventure"],
-    label: "Works",
-    desc: "Unbound Studio가 만들어온 작품들을 만나보세요.",
-    href: "/works",
+    label: "Services",
+    desc: "기획부터 제작, 후반 작업까지 언바운드 스튜디오의 전문적인 제작 과정을 확인해 보세요.",
+    href: "/services",
   },
 ];
 

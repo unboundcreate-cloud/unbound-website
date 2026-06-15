@@ -16,7 +16,7 @@ export const services: Service[] = [
     subtitle: "기획",
     slug: "planning",
     description:
-      "모든 프로젝트는 깊이 있는 분석에서 출발합니다. 브랜드의 목적과 타겟, 시장 환경을 면밀히 살펴 가장 효과적인 영상 전략을 수립합니다. 핵심 메시지를 중심으로 차별화된 스토리텔링과 비주얼 콘셉트, 구성안을 설계하고 레퍼런스로 방향성을 명확히 합니다. 탄탄한 기획은 이후 모든 제작 단계의 완성도를 결정합니다.",
+      "모든 프로젝트는 깊이 있는 이해에서 시작됩니다.\n브랜드의 목표와 타깃, 시장 환경을 분석하여 가장 효과적인 영상 전략을 설계합니다.\n핵심 메시지를 중심으로 스토리와 비주얼 콘셉트를 구체화하고, 명확한 레퍼런스를 통해 프로젝트의 방향성을 정립합니다.\n탄탄한 기획은 완성도 높은 결과물을 만드는 가장 중요한 출발점입니다.",
     images: ["/works/seven-escape-2.png", "/works/kbs-24h-healthclub-opening.jpg"],
   },
   {
@@ -25,35 +25,35 @@ export const services: Service[] = [
     subtitle: "촬영 · 제작",
     slug: "production",
     description:
-      "기획 의도를 실제 영상으로 옮기는 촬영·제작 전 과정을 책임집니다. 장비와 인력 구성부터 현장 디렉팅, 일정 관리까지 체계적인 프로덕션 운영으로 진행됩니다. 한 장면 한 장면 의도한 그림을 안정적으로 담아내며 현장 변수에도 유연하게 대응합니다. 규모와 형식에 구애받지 않고 어떤 콘셉트든 설득력 있는 화면으로 구현합니다.",
+      "기획된 아이디어를 실제 영상으로 구현하는 단계입니다.\n촬영 장비와 인력 구성부터 현장 운영, 일정 관리까지 체계적으로 진행하며 프로젝트의 완성도를 높입니다.\n장면 하나하나의 의도를 정확하게 담아내고, 현장의 다양한 변수에도 유연하게 대응하여 최적의 결과물을 만들어냅니다.",
     images: ["/works/tvn-please-stop-drinking-opening.jpg", "/works/tvchosun-runforyou-opening.webp"],
   },
   {
     number: "03",
-    title: "Editing",
-    subtitle: "편집 · 종편",
-    slug: "editing",
-    description:
-      "방대한 촬영 소스를 선별하고 리듬감 있게 재구성해 하나의 완성된 영상으로 만듭니다. 컷의 호흡과 전환, 자막, 사운드까지 세밀하게 조율해 메시지의 임팩트를 극대화합니다. 종합 편집(종편) 단계에서 그래픽과 효과, 음향을 통합해 최종 톤을 완성합니다. 끝까지 시선을 붙드는 흐름으로 영상의 몰입감을 끌어올립니다.",
-    images: ["/works/trigger.jpg", "/works/good-detective-2.jpg"],
-  },
-  {
-    number: "04",
-    title: "VFX",
-    subtitle: "2D · Motion Graphic 등",
-    slug: "vfx",
-    description:
-      "2D 합성과 모션그래픽부터 고난도 시각효과까지 폭넓은 VFX를 구현합니다. 실사 푸티지에 그래픽 요소를 자연스럽게 결합하고, 불필요한 요소를 제거하거나 새로운 장면을 더합니다. 실사와 그래픽의 경계를 넘나드는 정교한 작업으로 장면에 생동감과 깊이를 부여합니다. 상상 속 이미지도 설득력 있는 비주얼로 현실화합니다.",
-    images: ["/works/netflix-cyberhell-motiongraphics.jpg", "/works/chunhwa-romance.jpg"],
-  },
-  {
-    number: "05",
     title: "Color Grading",
     subtitle: "색보정",
     slug: "color-grading",
     description:
-      "전문 컬러 그레이딩으로 장면마다의 분위기와 감정을 정교하게 조율합니다. 노출과 화이트밸런스를 정리하는 1차 보정부터 작품의 무드를 결정하는 크리에이티브 그레이딩까지 단계적으로 진행합니다. 톤과 명암, 색의 미세한 차이까지 다듬어 영상 전반에 일관된 룩을 부여합니다. 색은 영상의 완성도와 깊이를 좌우하는 마지막 디테일입니다.",
+      "색은 영상의 분위기와 감정을 결정하는 중요한 요소입니다.\n기본적인 색 균형과 노출 보정부터 작품의 무드를 완성하는 크리에이티브 그레이딩까지 세밀하게 작업합니다.\n톤과 명암, 색감의 디테일까지 정교하게 조율하여 영상 전체에 일관된 퀄리티와 깊이를 더합니다.",
     images: ["/works/night-blooming-flower.jpg", "/works/mbc-she-killed-teaser.jpg"],
+  },
+  {
+    number: "04",
+    title: "VFX / Motion Graphic",
+    subtitle: "2D · 모션그래픽",
+    slug: "vfx",
+    description:
+      "2D 합성과 모션그래픽, 시각효과를 통해 영상의 표현력을 확장합니다.\n그래픽 요소를 자연스럽게 결합하고 필요한 장면을 새롭게 구현하여 더욱 몰입감 있는 화면을 완성합니다.\n실사와 그래픽의 경계를 넘나드는 정교한 작업으로 브랜드의 메시지를 더욱 강렬하게 전달합니다.",
+    images: ["/works/netflix-cyberhell-motiongraphics.jpg", "/works/chunhwa-romance.jpg"],
+  },
+  {
+    number: "05",
+    title: "Editing",
+    subtitle: "편집 · 종합편집",
+    slug: "editing",
+    description:
+      "촬영된 소스를 선별하고 재구성하여 하나의 완성된 스토리로 만들어냅니다.\n컷의 흐름과 템포, 자막, 그래픽, 사운드를 세밀하게 조율하여 메시지의 전달력을 극대화합니다.\n종합편집 단계에서는 모든 요소를 유기적으로 연결해 완성도 높은 결과물을 제공합니다.",
+    images: ["/works/trigger.jpg", "/works/good-detective-2.jpg"],
   },
   {
     number: "06",
@@ -61,7 +61,7 @@ export const services: Service[] = [
     subtitle: "AI 제작",
     slug: "ai-production",
     description:
-      "최신 AI 기술을 제작 전 과정에 접목해 빠른 속도와 새로운 표현을 동시에 실현합니다. AI 기반 이미지·영상 생성과 자동화된 워크플로우로 기존 방식의 한계를 넘어섭니다. 시간과 비용은 줄이면서도 사람의 창의적 디렉션을 더해 완성도를 지킵니다. AI의 효율성과 크리에이티브를 결합한 차세대 영상 솔루션을 제공합니다.",
+      "최신 AI 기술을 활용하여 새로운 제작 방식과 창의적인 비주얼을 제안합니다.\nAI 기반 이미지 및 영상 생성, 자동화 워크플로우를 통해 제작 효율을 높이면서도 높은 완성도를 유지합니다.\n기술과 크리에이티브의 균형을 바탕으로 보다 빠르고 혁신적인 영상 솔루션을 제공합니다.",
     images: ["/works/channela-aizit-opening.jpg", "/works/kiss-sixth-sense.webp"],
   },
 ];
