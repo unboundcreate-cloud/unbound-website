@@ -7,7 +7,7 @@ export function HomeBanner() {
   return (
     <section className="py-28 md:py-40">
       <p
-        className="section-padding text-center text-4xl leading-snug tracking-tight text-white md:text-6xl lg:text-7xl"
+        className="section-padding text-center text-5xl leading-snug tracking-tight text-white md:text-7xl lg:text-8xl"
         style={{ fontFamily: "var(--font-display)", fontWeight: 300 }}
       >
         <CharReveal text={LINE1} charDelay={35} />

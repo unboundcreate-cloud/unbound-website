@@ -65,9 +65,6 @@ export function HomeHero() {
                   Creative Studio
                 </SpotlightText>
               </motion.h1>
-              <p className="mt-4 text-sm leading-relaxed text-white/70 md:whitespace-nowrap md:text-base">
-                최첨단 AI 기술과 모션그래픽으로 영상 제작의 새로운 기준을 제시합니다.
-              </p>
             </div>
 
             <Button href="/works" className="self-start text-white md:self-end">

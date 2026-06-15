@@ -38,13 +38,13 @@ export function HomeShowcase() {
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.15}>
-          <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3 md:mt-16 md:gap-6">
-            {items.map((w) => (
-              <HomeShowcaseCard key={w.id} work={w} />
-            ))}
-          </div>
-        </FadeIn>
+        <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3 md:mt-16 md:gap-6">
+          {items.map((w, i) => (
+            <FadeIn key={w.id} delay={0.1 + i * 0.1}>
+              <HomeShowcaseCard work={w} />
+            </FadeIn>
+          ))}
+        </div>
       </div>
     </section>
   );
