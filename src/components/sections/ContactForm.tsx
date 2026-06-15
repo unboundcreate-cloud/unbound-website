@@ -14,6 +14,12 @@ const SERVICE_TYPES = [
 
 type Status = "idle" | "submitting" | "done";
 
+type PolicyItem = {
+  title: string | null;
+  body?: string | null;
+  list?: string[];
+};
+
 const PRIVACY_TEXT = [
   {
     title: null,
@@ -70,15 +76,13 @@ const MARKETING_TEXT = [
   { title: null, body: "본 동의서는 2026년 6월 기준으로 작성되었습니다." },
 ];
 
-type PolicyContent = typeof PRIVACY_TEXT;
-
 function PolicyModal({
   title,
   content,
   onClose,
 }: {
   title: string;
-  content: PolicyContent;
+  content: PolicyItem[];
   onClose: () => void;
 }) {
   return (
