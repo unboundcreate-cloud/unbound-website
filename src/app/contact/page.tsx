@@ -13,9 +13,9 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-brand-black">
       <PageHero
-        label="Get in touch"
-        title="Contact us!"
-        description="프로젝트 문의는 언제든지 환영합니다. 아래 정보로 연락 주시거나 폼을 작성해주세요."
+        title="Contact us"
+        description="프로젝트 문의는 언제든지 환영합니다.
+아래 정보로 연락 주시거나 폼을 작성해주세요."
       />
 
       <div className="section-padding grid grid-cols-1 gap-16 pb-32 md:grid-cols-12">
@@ -29,17 +29,6 @@ export default function ContactPage() {
                 className="text-lg text-white hover:text-brand-accent"
               >
                 {studio.email}
-              </a>
-            </div>
-            <div>
-              <p className="label-text mb-3">Website</p>
-              <a
-                href={`https://${studio.site}`}
-                target="_blank"
-                rel="noreferrer"
-                className="text-lg text-white hover:text-brand-accent"
-              >
-                {studio.site}
               </a>
             </div>
             <div>

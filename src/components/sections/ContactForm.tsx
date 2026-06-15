@@ -30,6 +30,7 @@ export function ContactForm() {
       next.email = "올바른 이메일 형식이 아닙니다.";
     if (!String(data.get("message") || "").trim())
       next.message = "프로젝트 내용을 입력해주세요.";
+    if (!data.get("privacy")) next.privacy = "개인정보 수집 및 이용에 동의해주세요.";
 
     setErrors(next);
     if (Object.keys(next).length > 0) return;
@@ -127,42 +128,87 @@ export function ContactForm() {
         </div>
         <div>
           <label className={labelClass} htmlFor="budget">
-            예산 범위
+            Budget
           </label>
           <input
             id="budget"
             name="budget"
             className={fieldClass}
-            placeholder="000만원"
+            placeholder="Budget"
           />
         </div>
         <div>
           <label className={labelClass} htmlFor="deadline">
-            마감일
+            Deadline
           </label>
           <input
             id="deadline"
             name="deadline"
-            type="date"
-            className={`${fieldClass} [color-scheme:dark]`}
+            type="text"
+            placeholder="YYYY-MM-DD"
+            className={fieldClass}
           />
         </div>
       </div>
 
       <div>
         <label className={labelClass} htmlFor="message">
-          프로젝트 설명 *
+          Project Description *
         </label>
         <textarea
           id="message"
           name="message"
           rows={4}
           className={`${fieldClass} resize-none`}
-          placeholder="프로젝트에 대해 알려주세요."
+          placeholder="Tell us about your project."
         />
         {errors.message && (
           <p className="mt-1 text-xs text-brand-accent">{errors.message}</p>
         )}
+      </div>
+
+      <div className="flex flex-col gap-4 border-t border-white/10 pt-6">
+        <label className="flex items-start gap-3 cursor-pointer group">
+          <input
+            type="checkbox"
+            name="privacy"
+            className="mt-0.5 h-4 w-4 flex-shrink-0 accent-brand-accent cursor-pointer"
+          />
+          <span className="text-sm text-brand-muted leading-relaxed">
+            <span className="text-white/60 mr-1">(필수)</span>
+            개인정보 수집 및 이용 동의
+            <a
+              href="/privacy"
+              target="_blank"
+              rel="noreferrer"
+              className="ml-2 underline underline-offset-2 text-white/40 hover:text-brand-accent transition-colors text-xs"
+            >
+              전문보기
+            </a>
+          </span>
+        </label>
+        {errors.privacy && (
+          <p className="-mt-2 text-xs text-brand-accent">{errors.privacy}</p>
+        )}
+        <label className="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            name="marketing"
+            className="mt-0.5 h-4 w-4 flex-shrink-0 accent-brand-accent cursor-pointer"
+          />
+          <span className="text-sm text-brand-muted leading-relaxed">
+            <span className="text-white/60 mr-1">(선택)</span>
+            홍보 및 마케팅 정보 수신 동의
+            <a
+              href="/privacy"
+              target="_blank"
+              rel="noreferrer"
+              className="ml-2 underline underline-offset-2 text-white/40 hover:text-brand-accent transition-colors text-xs"
+            >
+              전문보기
+            </a>
+          </span>
+        </label>
       </div>
 
       <div className="flex flex-col gap-3">
@@ -172,7 +218,6 @@ export function ContactForm() {
           className="group inline-flex w-fit items-center gap-3 bg-brand-accent px-10 py-4 font-display text-sm uppercase tracking-[0.2em] text-white transition-colors hover:bg-white hover:text-brand-black disabled:cursor-not-allowed disabled:opacity-50"
         >
           {status === "submitting" ? "전송 중..." : "Send Message"}
-          <span className="transition-transform group-hover:translate-x-1">→</span>
         </button>
         {errors.submit && (
           <p className="text-xs text-brand-accent">{errors.submit}</p>
