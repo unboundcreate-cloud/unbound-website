@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/Button";
+import { LiquidButton } from "@/components/ui/LiquidButton";
 import { FadeIn } from "@/components/ui/FadeIn";
 
 export function HomeContact() {
@@ -14,9 +14,9 @@ export function HomeContact() {
               프로젝트의 시작부터 완성까지, UNBOUND STUDIO가 함께합니다.
             </p>
             <div className="mt-8">
-              <Button href="/contact" variant="solid" className="rounded-full px-10">
+              <LiquidButton href="/contact">
                 문의하기
-              </Button>
+              </LiquidButton>
             </div>
           </div>
           <div className="text-right font-display text-lg uppercase leading-snug text-white/80 sm:text-2xl md:text-3xl lg:text-4xl">
