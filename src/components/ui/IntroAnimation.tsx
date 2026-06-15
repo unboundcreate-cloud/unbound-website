@@ -9,32 +9,33 @@ type Phase = "show" | "exit" | "done";
 export function IntroAnimation() {
   const [phase, setPhase] = useState<Phase>("show");
 
-  // 0 → 120 으로 애니메이션, gradient stop에 직접 사용
-  const radius = useMotionValue(0);
-  const maskImage = useTransform(
-    radius,
-    (v) =>
-      `radial-gradient(circle at 50% 50%, black ${Math.max(0, v - 14)}%, transparent ${v + 14}%)`
+  // 0 → 110 으로 증가. 30% 소프트 존으로 경계 완전히 흐림
+  const r = useMotionValue(0);
+  const mask = useTransform(
+    r,
+    (v) => `radial-gradient(circle at 50% 50%, black ${v}%, transparent ${v + 30}%)`
   );
 
   useEffect(() => {
     if (sessionStorage.getItem("intro-done")) { setPhase("done"); return; }
     sessionStorage.setItem("intro-done", "1");
 
-    // 딜레이 후 원을 서서히 확장
     const t = setTimeout(() => {
-      animate(radius, 120, { duration: 1.6, ease: [0.16, 1, 0.3, 1] });
-    }, 300);
+      animate(r, 110, {
+        duration: 2.2,
+        ease: [0.25, 0.1, 0.25, 1], // cubic ease-in-out — 유기적인 느낌
+      });
+    }, 250);
 
-    const exitTimer = setTimeout(() => setPhase("exit"), 2800);
-    const doneTimer = setTimeout(() => setPhase("done"), 3700);
+    const exitTimer = setTimeout(() => setPhase("exit"), 3200);
+    const doneTimer = setTimeout(() => setPhase("done"), 4100);
 
     return () => { clearTimeout(t); clearTimeout(exitTimer); clearTimeout(doneTimer); };
-  }, [radius]);
+  }, [r]);
 
   useEffect(() => {
-    if (phase !== "done") { document.body.style.overflow = "hidden"; }
-    else { document.body.style.overflow = ""; }
+    if (phase !== "done") document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "";
     return () => { document.body.style.overflow = ""; };
   }, [phase]);
 
@@ -49,25 +50,25 @@ export function IntroAnimation() {
     >
       <div className="w-[min(62vw,580px)]">
         <div className="relative">
-          {/* 희미한 아웃라인 레이어 */}
+          {/* 배경 아웃라인 — 로고 위치 암시 */}
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.08 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            animate={{ opacity: 0.07 }}
+            transition={{ duration: 0.3 }}
           >
             <Logo variant="white" height={92} className="h-auto w-full" />
           </motion.div>
 
-          {/* 경계가 부드러운 원형 마스크로 로고 드러냄 */}
-          <motion.div
+          {/* 소프트 원형 마스크로 로고를 드러냄 */}
+          <div
             className="absolute inset-0"
             style={{
-              WebkitMaskImage: maskImage,
-              maskImage: maskImage,
-            } as React.CSSProperties}
+              WebkitMaskImage: mask as unknown as string,
+              maskImage: mask as unknown as string,
+            }}
           >
             <Logo variant="white" height={92} className="h-auto w-full" />
-          </motion.div>
+          </div>
         </div>
       </div>
     </motion.div>
