@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { clients } from "@/data/clients";
 
@@ -66,20 +65,7 @@ export default function AboutPage() {
 
       {/* ─── 01 Hero ─── */}
       <section className="relative flex min-h-screen items-end overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="/works/night-blooming-flower.jpg"
-            alt=""
-            fill
-            sizes="100vw"
-            priority
-            className="object-cover opacity-25"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-brand-black/60 via-brand-black/20 to-brand-black" />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-black/60 to-transparent" />
-        </div>
-
-        <div className="relative w-full section-padding pb-20 pt-48 md:pb-28">
+        <div className="w-full section-padding pb-20 pt-48 md:pb-28">
           <FadeIn>
             <p className="label-text mb-6 text-brand-accent">
               Creative Post-Production Studio
