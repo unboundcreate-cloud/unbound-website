@@ -47,8 +47,8 @@ export function IntroAnimation() {
           {/* 메인 로고: 페이드인 + 살짝 줌인 */}
           <motion.div
             className="absolute inset-0"
-            initial={{ opacity: 0, scale: 1.06 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           >
             <Logo variant="white" height={92} className="h-auto w-full" />
