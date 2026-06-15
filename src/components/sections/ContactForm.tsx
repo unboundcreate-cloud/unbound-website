@@ -16,7 +16,7 @@ type Status = "idle" | "submitting" | "done";
 
 function FieldWrap({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative">
+    <div className="relative border-b border-white/20">
       {children}
       <span className="pointer-events-none absolute bottom-0 left-0 h-px w-0 bg-brand-accent transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] peer-focus:w-full" />
     </div>
@@ -70,7 +70,7 @@ export function ContactForm() {
   };
 
   const fieldClass =
-    "peer w-full border-b border-white/20 bg-transparent py-3 text-white placeholder:text-brand-muted/60 focus:outline-none";
+    "peer w-full bg-transparent py-3 text-white placeholder:text-brand-muted/60 focus:outline-none";
   const labelClass =
     "font-mono text-[12px] uppercase tracking-[0.2em] text-brand-muted";
 
