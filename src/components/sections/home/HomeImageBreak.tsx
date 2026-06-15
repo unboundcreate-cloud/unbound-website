@@ -6,7 +6,7 @@ export function HomeImageBreak() {
   return (
     <section
       aria-hidden
-      className="relative h-[28vh] min-h-[220px] w-full bg-cover bg-center bg-no-repeat md:h-[35vh]"
+      className="relative h-[42vh] min-h-[320px] w-full bg-cover bg-center bg-no-repeat md:h-[52vh]"
       style={{ backgroundImage: `url(${IMAGE})` }}
     >
       <div className="absolute inset-0 bg-black/30" />
