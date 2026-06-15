@@ -5,7 +5,7 @@ const LINE2 = "영상 제작 전문 스튜디오입니다.";
 
 export function HomeBanner() {
   return (
-    <section className="py-32 md:py-40">
+    <section className="py-28 md:py-40">
       <p
         className="section-padding text-center text-4xl leading-snug tracking-tight text-white md:text-6xl lg:text-7xl"
         style={{ fontFamily: "var(--font-display)", fontWeight: 300 }}

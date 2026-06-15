@@ -3,7 +3,7 @@ import { FadeIn } from "@/components/ui/FadeIn";
 
 export function HomeContact() {
   return (
-    <section className="py-40 md:py-56">
+    <section className="py-28 md:py-40">
       <FadeIn>
         <div className="section-padding flex flex-col gap-12 md:flex-row md:items-end md:justify-between">
           <div>

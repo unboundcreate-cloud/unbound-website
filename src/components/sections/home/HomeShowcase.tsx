@@ -18,7 +18,7 @@ export function HomeShowcase() {
   ).filter((w): w is NonNullable<typeof w> => Boolean(w));
 
   return (
-    <section className="relative overflow-hidden bg-brand-black py-16 md:py-20">
+    <section className="relative overflow-hidden bg-brand-black py-24 md:py-32">
       <div className="pointer-events-none absolute -top-1/4 right-0 h-[60vh] w-[70vw] bg-[radial-gradient(circle,rgba(230,50,38,0.16),transparent_70%)]" />
 
       <div className="section-padding relative">

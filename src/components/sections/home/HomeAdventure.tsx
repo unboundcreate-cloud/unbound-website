@@ -20,7 +20,7 @@ const ITEMS = [
 export function HomeAdventure() {
   return (
     <section className="bg-brand-black">
-      <div className="section-padding grid grid-cols-1 gap-14 py-56 md:grid-cols-2 md:gap-24 md:py-[28rem]">
+      <div className="section-padding grid grid-cols-1 gap-14 py-32 md:grid-cols-2 md:gap-24 md:py-52">
         {ITEMS.map((it, i) => (
           <FadeIn key={it.label} delay={i * 0.15}>
             <div>
