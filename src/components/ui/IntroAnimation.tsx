@@ -60,15 +60,15 @@ export function IntroAnimation() {
           </motion.div>
 
           {/* 소프트 원형 마스크로 로고를 드러냄 */}
-          <div
+          <motion.div
             className="absolute inset-0"
             style={{
-              WebkitMaskImage: mask as unknown as string,
-              maskImage: mask as unknown as string,
-            }}
+              WebkitMaskImage: mask,
+              maskImage: mask,
+            } as React.CSSProperties}
           >
             <Logo variant="white" height={92} className="h-auto w-full" />
-          </div>
+          </motion.div>
         </div>
       </div>
     </motion.div>
