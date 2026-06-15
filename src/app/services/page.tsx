@@ -14,7 +14,7 @@ export default function ServicesPage() {
       <PageHero
         label="What We Do"
         title="Services"
-        description="기획부터 디자인, 모션그래픽, 영상 브랜딩까지 — 영상 제작의 모든 단계를 책임지는 Unbound Studio의 전문 서비스입니다."
+        description={"기획부터 디자인, 모션그래픽, 영상 브랜딩까지 —\n영상 제작의 모든 단계를 책임지는 Unbound Studio의 전문 서비스입니다."}
       />
       <ServicesSection hideLabel variant="showcase" />
     </div>

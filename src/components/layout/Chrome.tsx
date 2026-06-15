@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { Header } from "@/components/layout/Header";
@@ -12,6 +13,11 @@ import { IntroAnimation } from "@/components/ui/IntroAnimation";
 // /admin 영역에서는 렌더하지 않아 관리자 UI와 겹치지 않게 함.
 export function Chrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+
+  // 페이지 이동 시 맨 위로 스크롤
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+  }, [pathname]);
 
   if (pathname?.startsWith("/admin") || pathname?.startsWith("/sandbox")) {
     return <>{children}</>;

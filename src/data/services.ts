@@ -30,21 +30,21 @@ export const services: Service[] = [
   },
   {
     number: "03",
-    title: "Color Grading",
-    subtitle: "색보정",
-    slug: "color-grading",
-    description:
-      "색은 영상의 분위기와 감정을 결정하는 중요한 요소입니다.\n기본적인 색 균형과 노출 보정부터 작품의 무드를 완성하는 크리에이티브 그레이딩까지 세밀하게 작업합니다.\n톤과 명암, 색감의 디테일까지 정교하게 조율하여 영상 전체에 일관된 퀄리티와 깊이를 더합니다.",
-    images: ["/works/night-blooming-flower.jpg", "/works/mbc-she-killed-teaser.jpg"],
-  },
-  {
-    number: "04",
     title: "VFX / Motion Graphic",
     subtitle: "2D · 모션그래픽",
     slug: "vfx",
     description:
       "2D 합성과 모션그래픽, 시각효과를 통해 영상의 표현력을 확장합니다.\n그래픽 요소를 자연스럽게 결합하고 필요한 장면을 새롭게 구현하여 더욱 몰입감 있는 화면을 완성합니다.\n실사와 그래픽의 경계를 넘나드는 정교한 작업으로 브랜드의 메시지를 더욱 강렬하게 전달합니다.",
     images: ["/works/netflix-cyberhell-motiongraphics.jpg", "/works/chunhwa-romance.jpg"],
+  },
+  {
+    number: "04",
+    title: "Color Grading",
+    subtitle: "색보정",
+    slug: "color-grading",
+    description:
+      "색은 영상의 분위기와 감정을 결정하는 중요한 요소입니다.\n기본적인 색 균형과 노출 보정부터 작품의 무드를 완성하는 크리에이티브 그레이딩까지 세밀하게 작업합니다.\n톤과 명암, 색감의 디테일까지 정교하게 조율하여 영상 전체에 일관된 퀄리티와 깊이를 더합니다.",
+    images: ["/works/night-blooming-flower.jpg", "/works/mbc-she-killed-teaser.jpg"],
   },
   {
     number: "05",

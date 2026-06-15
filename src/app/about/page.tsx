@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { clients } from "@/data/clients";
+import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 
 export const metadata: Metadata = {
   title: "About | Unbound Studio",
@@ -42,16 +43,6 @@ const SERVICES = [
   "SNS 콘텐츠",
 ];
 
-const PROCESS = [
-  { num: "01", title: "기획", desc: "브랜드와 프로젝트 목표를 분석합니다." },
-  { num: "02", title: "디자인", desc: "콘셉트와 비주얼 방향을 설계합니다." },
-  {
-    num: "03",
-    title: "제작",
-    desc: "모션그래픽, 영상 편집, 후반 작업을 진행합니다.",
-  },
-  { num: "04", title: "납품", desc: "최종 검수 후 최적화하여 전달합니다." },
-];
 
 function RedDot() {
   return (
@@ -187,54 +178,7 @@ export default function AboutPage() {
           </h2>
         </FadeIn>
 
-        {/* Desktop: horizontal timeline */}
-        <div className="hidden sm:block">
-          <div className="mb-3 grid grid-cols-4">
-            {PROCESS.map((p) => (
-              <p
-                key={p.num}
-                className="font-mono text-[11px] tracking-[0.25em] text-brand-accent"
-              >
-                {p.num}
-              </p>
-            ))}
-          </div>
-          <div className="relative mb-10 grid grid-cols-4">
-            <div className="absolute inset-x-0 top-[5px] h-px bg-white/15" />
-            {PROCESS.map((p) => (
-              <div key={p.num} className="relative z-10">
-                <div className="h-2.5 w-2.5 rounded-full bg-brand-accent" />
-              </div>
-            ))}
-          </div>
-          <div className="grid grid-cols-4 gap-8">
-            {PROCESS.map((p, i) => (
-              <FadeIn key={p.num} delay={i * 0.1}>
-                <h3 className="mb-3 font-display text-2xl uppercase text-white">
-                  {p.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-white/50">{p.desc}</p>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-
-        {/* Mobile: vertical list */}
-        <div className="sm:hidden">
-          {PROCESS.map((p, i) => (
-            <FadeIn key={p.num} delay={i * 0.1}>
-              <div className="border-b border-white/10 py-8 last:border-0">
-                <p className="mb-3 font-mono text-[11px] tracking-[0.25em] text-brand-accent">
-                  {p.num}
-                </p>
-                <h3 className="mb-2 font-display text-2xl uppercase text-white">
-                  {p.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-white/50">{p.desc}</p>
-              </div>
-            </FadeIn>
-          ))}
-        </div>
+        <ProcessTimeline />
       </section>
 
       {/* ─── 06 Closing ─── */}
@@ -243,11 +187,9 @@ export default function AboutPage() {
         <div className="section-padding relative">
           <FadeIn>
             <h2 className="mx-auto max-w-4xl font-display text-4xl uppercase leading-tight text-white md:text-5xl lg:text-6xl xl:text-7xl">
-              모든 브랜드에는
+              모든 브랜드에는 전하고 싶은
               <br />
-              전하고 싶은
-              <br />
-              이야기가 있습니다.
+              자신만의 이야기가 있습니다.
             </h2>
           </FadeIn>
           <FadeIn delay={0.15}>

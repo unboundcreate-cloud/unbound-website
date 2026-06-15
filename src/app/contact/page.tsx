@@ -35,30 +35,36 @@ export default function ContactPage() {
         {/* 연락처 정보 */}
         <div className="md:col-span-4">
           <div className="space-y-8">
-            <div>
-              <p className="label-text mb-0.5">Email</p>
-              <a
-                href={`mailto:${studio.email}`}
-                className="text-lg text-white hover:text-brand-accent"
-              >
-                {studio.email}
-              </a>
-            </div>
-            <div>
-              <p className="label-text mb-0.5">Hours</p>
-              <p className="text-lg text-white">월–금 10:00 – 19:00</p>
-            </div>
-            <div>
-              <p className="label-text mb-0.5">Social</p>
-              <SocialLinks className="flex gap-5" iconClassName="h-6 w-6" />
-            </div>
+            <FadeIn delay={0.18}>
+              <div>
+                <p className="label-text mb-0.5">Email</p>
+                <a
+                  href={`mailto:${studio.email}`}
+                  className="text-lg text-white hover:text-brand-accent"
+                >
+                  {studio.email}
+                </a>
+              </div>
+            </FadeIn>
+            <FadeIn delay={0.26}>
+              <div>
+                <p className="label-text mb-0.5">Hours</p>
+                <p className="text-lg text-white">월–금 10:00 – 19:00</p>
+              </div>
+            </FadeIn>
+            <FadeIn delay={0.34}>
+              <div>
+                <p className="label-text mb-0.5">Social</p>
+                <SocialLinks className="flex gap-5" iconClassName="h-6 w-6" />
+              </div>
+            </FadeIn>
           </div>
         </div>
 
         {/* 폼 */}
-        <div className="md:col-span-8 md:pl-8">
+        <FadeIn delay={0.22} className="md:col-span-8 md:pl-8">
           <ContactForm />
-        </div>
+        </FadeIn>
       </div>
     </div>
   );

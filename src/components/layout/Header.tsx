@@ -43,7 +43,12 @@ export function Header() {
         <div className="section-padding flex h-16 items-center justify-between md:h-20">
           <Link
             href="/"
-            onClick={() => setOpen(false)}
+            onClick={(e) => {
+              e.preventDefault();
+              setOpen(false);
+              sessionStorage.removeItem("intro-done");
+              window.location.href = "/";
+            }}
             aria-label="Unbound Studio 홈"
           >
             <Logo variant="white" height={20} />
