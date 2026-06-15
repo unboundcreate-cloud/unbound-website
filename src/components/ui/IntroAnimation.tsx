@@ -43,12 +43,12 @@ export function IntroAnimation() {
             <Logo variant="white" height={92} className="h-auto w-full" />
           </motion.div>
 
-          {/* 채움 레이어 — 중앙에서 원이 퍼지며 로고가 꽉 채워짐 (LiquidButton 방식) */}
+          {/* 채움 레이어 — 좌에서 우로 부드럽게 스윕 */}
           <motion.div
             className="absolute inset-0"
-            initial={{ clipPath: "circle(0% at 50% 50%)" }}
-            animate={{ clipPath: "circle(200% at 50% 50%)" }}
-            transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
+            initial={{ clipPath: "inset(0 100% 0 0)" }}
+            animate={{ clipPath: "inset(0 0% 0 0)" }}
+            transition={{ duration: 1.4, ease: [0.76, 0, 0.24, 1], delay: 0.3 }}
           >
             <Logo variant="white" height={92} className="h-auto w-full" />
           </motion.div>
