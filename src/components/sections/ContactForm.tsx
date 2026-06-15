@@ -250,7 +250,7 @@ export function ContactForm() {
         </label>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col items-start gap-3">
         <LiquidButton type="submit" disabled={status === "submitting"}>
           {status === "submitting" ? "전송 중..." : "Send Message"}
         </LiquidButton>
