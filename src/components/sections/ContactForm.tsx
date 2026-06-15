@@ -150,7 +150,7 @@ export function ContactForm() {
         </div>
         <div>
           <label className={labelClass} htmlFor="budget">
-            Budget
+            예산
           </label>
           <FieldWrap>
             <input
@@ -163,7 +163,7 @@ export function ContactForm() {
         </div>
         <div>
           <label className={labelClass} htmlFor="deadline">
-            Deadline
+            마감일
           </label>
           <FieldWrap>
             <input
@@ -178,7 +178,7 @@ export function ContactForm() {
 
       <div>
         <label className={labelClass} htmlFor="message">
-          Project Description *
+          프로젝트 설명 *
         </label>
         <FieldWrap>
           <textarea
