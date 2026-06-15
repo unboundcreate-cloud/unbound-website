@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ContactForm } from "@/components/sections/ContactForm";
 import { SocialLinks } from "@/components/ui/SocialLinks";
 import { FadeIn } from "@/components/ui/FadeIn";
+import { SpotlightText } from "@/components/ui/SpotlightText";
 import { studio } from "@/data/clients";
 
 export const metadata: Metadata = {
@@ -15,8 +16,8 @@ export default function ContactPage() {
       {/* 헤더 — PageHero 대신 인라인으로 간격 직접 제어 */}
       <header className="section-padding pb-10 pt-36 md:pt-44">
         <FadeIn>
-          <h1 className="font-display text-5xl uppercase leading-[0.85] sm:text-6xl md:text-8xl lg:text-9xl">
-            Contact us
+          <h1 className="font-display text-5xl uppercase leading-[0.85] text-white sm:text-6xl md:text-8xl lg:text-9xl">
+            <SpotlightText>Contact us</SpotlightText>
           </h1>
         </FadeIn>
         <FadeIn delay={0.12}>

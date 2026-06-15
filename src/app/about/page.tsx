@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { clients } from "@/data/clients";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
+import { SpotlightText } from "@/components/ui/SpotlightText";
 
 export const metadata: Metadata = {
   title: "About | Unbound Studio",
@@ -62,9 +63,11 @@ export default function AboutPage() {
               Creative Post-Production Studio
             </p>
             <h1 className="font-display text-5xl uppercase leading-[0.9] text-white sm:text-6xl md:text-8xl lg:text-9xl xl:text-[10rem]">
-              Unbound
-              <br />
-              Studio
+              <SpotlightText>
+                Unbound
+                <br />
+                Studio
+              </SpotlightText>
             </h1>
           </FadeIn>
           <FadeIn delay={0.14}>
@@ -89,7 +92,7 @@ export default function AboutPage() {
           <FadeIn>
             <h2 className="flex items-center gap-3 font-display text-4xl uppercase leading-tight text-white md:text-5xl lg:text-6xl">
               <RedDot />
-              We Start with the Message.
+              <SpotlightText>We Start with the Message.</SpotlightText>
             </h2>
           </FadeIn>
           <FadeIn delay={0.12}>
@@ -118,7 +121,7 @@ export default function AboutPage() {
           <p className="label-text mb-4 text-brand-accent">Our Strengths</p>
           <h2 className="mb-16 flex items-center gap-3 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
             <RedDot />
-            Why Unbound Studio
+            <SpotlightText>Why Unbound Studio</SpotlightText>
           </h2>
         </FadeIn>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-6">
@@ -148,7 +151,7 @@ export default function AboutPage() {
           <p className="label-text mb-4 text-brand-accent">Services</p>
           <h2 className="mb-16 flex items-center gap-3 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
             <RedDot />
-            What We Create
+            <SpotlightText>What We Create</SpotlightText>
           </h2>
         </FadeIn>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:gap-4">
@@ -174,7 +177,7 @@ export default function AboutPage() {
           <p className="label-text mb-4 text-brand-accent">Process</p>
           <h2 className="mb-20 flex items-center gap-3 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
             <RedDot />
-            Production Process
+            <SpotlightText>Production Process</SpotlightText>
           </h2>
         </FadeIn>
 
@@ -187,9 +190,11 @@ export default function AboutPage() {
         <div className="section-padding relative">
           <FadeIn>
             <h2 className="mx-auto max-w-4xl font-display text-4xl uppercase leading-tight text-white md:text-5xl lg:text-6xl xl:text-7xl">
-              모든 브랜드에는 전하고 싶은
-              <br />
-              자신만의 이야기가 있습니다.
+              <SpotlightText>
+                모든 브랜드에는 전하고 싶은
+                <br />
+                자신만의 이야기가 있습니다.
+              </SpotlightText>
             </h2>
           </FadeIn>
           <FadeIn delay={0.15}>
@@ -210,7 +215,7 @@ export default function AboutPage() {
           <div className="mb-32 md:mb-48">
             <h2 className="flex items-center gap-3 font-display text-4xl uppercase leading-none text-white md:text-5xl">
               <span className="inline-block h-2.5 w-2.5 rounded-full bg-brand-accent" />
-              Our Client
+              <SpotlightText>Our Client</SpotlightText>
             </h2>
             <p className="mt-3 text-sm text-brand-muted md:text-base">
               Unbound Studio와 인연을 이어가는 주요 클라이언트입니다.
