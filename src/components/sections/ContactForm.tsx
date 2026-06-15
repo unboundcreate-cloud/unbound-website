@@ -170,6 +170,7 @@ export function ContactForm() {
               id="deadline"
               name="deadline"
               type="date"
+              defaultValue={new Date().toLocaleDateString("en-CA")}
               className={`${fieldClass} [color-scheme:dark]`}
             />
           </FieldWrap>
