@@ -54,6 +54,12 @@ const PROCESS = [
   { num: "04", title: "납품", desc: "최종 검수 후 최적화하여 전달합니다." },
 ];
 
+function RedDot() {
+  return (
+    <span className="mt-2 inline-block h-2.5 w-2.5 flex-shrink-0 rounded-full bg-brand-accent" />
+  );
+}
+
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-brand-black">
@@ -100,23 +106,18 @@ export default function AboutPage() {
       {/* ─── 02 Philosophy ─── */}
       <section className="section-padding py-28 md:py-40">
         <FadeIn>
-          <p className="label-text mb-14 text-brand-accent">우리의 철학</p>
+          <p className="label-text mb-14 text-brand-accent">Our Philosophy</p>
         </FadeIn>
         <div className="grid grid-cols-1 gap-16 md:grid-cols-2 md:gap-20 lg:gap-32">
           <FadeIn>
-            <h2 className="font-display text-4xl uppercase leading-tight text-white md:text-5xl lg:text-6xl">
-              우리는
-              <br />
-              메시지에서
-              <br />
-              시작합니다.
+            <h2 className="flex items-start gap-3 font-display text-4xl uppercase leading-tight text-white md:text-5xl lg:text-6xl">
+              <RedDot />
+              We Start with the Message.
             </h2>
           </FadeIn>
           <FadeIn delay={0.12}>
             <div className="space-y-6 text-[15px] leading-loose text-white/60 md:text-base">
-              <p>
-                좋은 영상은 화려한 연출보다 명확한 메시지에서 시작된다고 믿습니다.
-              </p>
+              <p>좋은 영상은 화려한 연출보다 명확한 메시지에서 시작된다고 믿습니다.</p>
               <p>
                 언바운드 스튜디오는 브랜드의 이야기와 목적을 깊이 이해하고,
                 이를 가장 효과적인 시각 언어로 구현합니다.
@@ -137,11 +138,10 @@ export default function AboutPage() {
       {/* ─── 03 Strengths ─── */}
       <section className="section-padding py-28 md:py-40">
         <FadeIn>
-          <p className="label-text mb-4 text-brand-accent">언바운드의 강점</p>
-          <h2 className="mb-16 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
-            왜 언바운드
-            <br />
-            스튜디오인가
+          <p className="label-text mb-4 text-brand-accent">Our Strengths</p>
+          <h2 className="mb-16 flex items-start gap-3 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
+            <RedDot />
+            Why Unbound Studio
           </h2>
         </FadeIn>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-6">
@@ -168,11 +168,10 @@ export default function AboutPage() {
       {/* ─── 04 Services ─── */}
       <section className="section-padding py-28 md:py-40">
         <FadeIn>
-          <p className="label-text mb-4 text-brand-accent">주요 제작 분야</p>
-          <h2 className="mb-16 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
-            우리가
-            <br />
-            만드는 콘텐츠
+          <p className="label-text mb-4 text-brand-accent">Services</p>
+          <h2 className="mb-16 flex items-start gap-3 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
+            <RedDot />
+            What We Create
           </h2>
         </FadeIn>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:gap-4">
@@ -196,8 +195,9 @@ export default function AboutPage() {
       <section className="section-padding py-28 md:py-40">
         <FadeIn>
           <p className="label-text mb-4 text-brand-accent">Process</p>
-          <h2 className="mb-20 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
-            제작 프로세스
+          <h2 className="mb-20 flex items-start gap-3 font-display text-4xl uppercase leading-tight text-white md:text-5xl">
+            <RedDot />
+            Production Process
           </h2>
         </FadeIn>
 
