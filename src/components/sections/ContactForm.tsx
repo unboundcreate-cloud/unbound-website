@@ -14,6 +14,21 @@ const SERVICE_TYPES = [
 
 type Status = "idle" | "submitting" | "done";
 
+const PRIVACY_TEXT = [
+  {
+    title: null,
+    body: `언바운드 스튜디오(이하 '회사')는 「개인정보보호법」 제15조에 따라 아래와 같이 개인정보를 수집·이용합니다.`,
+  },
+  { title: "수집 목적", body: "프로젝트 문의 처리 및 견적 안내, 서비스 제공 및 계약 이행" },
+  { title: "수집 항목", body: "이름, 이메일, 연락처, 회사명, 직책, 프로젝트 내용" },
+  { title: "보유 및 이용 기간", body: "문의 처리 완료 후 3년간 보관\n※ 관계 법령에 의해 보존이 필요한 경우 해당 기간 동안 보관합니다." },
+  {
+    title: "동의 거부 권리 및 불이익",
+    body: "개인정보 수집·이용에 동의하지 않으실 수 있습니다.\n단, 동의를 거부하실 경우 문의 접수 및 서비스 제공이 제한될 수 있습니다.",
+  },
+  { title: null, body: "본 동의서는 2026년 6월 기준으로 작성되었습니다." },
+];
+
 const MARKETING_TEXT = [
   {
     title: null,
@@ -55,6 +70,124 @@ const MARKETING_TEXT = [
   { title: null, body: "본 동의서는 2026년 6월 기준으로 작성되었습니다." },
 ];
 
+type PolicyContent = typeof PRIVACY_TEXT;
+
+function PolicyModal({
+  title,
+  content,
+  onClose,
+}: {
+  title: string;
+  content: PolicyContent;
+  onClose: () => void;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-[9998] flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      {/* 배경 오버레이 */}
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+
+      {/* 모달 본체 */}
+      <div
+        className="relative z-10 flex max-h-[80vh] w-full max-w-lg flex-col rounded-lg border border-white/10 bg-[#111] shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* 헤더 */}
+        <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+          <h3 className="text-sm font-medium tracking-wide text-white">{title}</h3>
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-7 w-7 items-center justify-center rounded text-white/40 transition-colors hover:text-white"
+            aria-label="닫기"
+          >
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4">
+              <path d="M1 1l12 12M13 1L1 13" />
+            </svg>
+          </button>
+        </div>
+
+        {/* 본문 */}
+        <div className="overflow-y-auto px-6 py-5 text-xs leading-relaxed text-white/50">
+          {content.map((item, i) => (
+            <div key={i} className="mb-4">
+              {item.title && (
+                <p className="mb-1 font-semibold text-white/70">{item.title}</p>
+              )}
+              {item.body && (
+                <p className="whitespace-pre-line">{item.body}</p>
+              )}
+              {"list" in item && item.list && (
+                <ul className="mt-1 space-y-0.5 pl-3">
+                  {item.list.map((li, j) => (
+                    <li key={j} className="before:mr-1 before:content-['·']">{li}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* 푸터 */}
+        <div className="border-t border-white/10 px-6 py-4">
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-full rounded bg-white/5 py-2.5 text-sm text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+          >
+            확인
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CheckboxRow({
+  name,
+  label,
+  badge,
+  onViewFull,
+}: {
+  name: string;
+  label: string;
+  badge: string;
+  onViewFull: () => void;
+}) {
+  return (
+    <label className="flex cursor-pointer items-start gap-3">
+      <span className="relative mt-0.5 inline-flex h-5 w-5 flex-shrink-0">
+        <input
+          type="checkbox"
+          name={name}
+          className="peer absolute inset-0 z-10 cursor-pointer opacity-0"
+        />
+        <span className="h-5 w-5 rounded-sm border border-white/30 transition-all duration-300 peer-checked:border-brand-accent peer-checked:bg-brand-accent" />
+        <svg
+          className="pointer-events-none absolute inset-0 m-auto h-3 w-3 scale-50 text-white opacity-0 transition-all duration-200 peer-checked:scale-100 peer-checked:opacity-100"
+          viewBox="0 0 12 12" fill="none" stroke="currentColor"
+          strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+        >
+          <path d="M2 6l3 3 5-5" />
+        </svg>
+      </span>
+      <span className="text-sm leading-relaxed text-brand-muted">
+        <span className="mr-1 text-white/60">{badge}</span>
+        {label}
+        <button
+          type="button"
+          onClick={(e) => { e.preventDefault(); onViewFull(); }}
+          className="ml-2 text-xs text-white/40 underline underline-offset-2 transition-colors hover:text-brand-accent"
+        >
+          전문보기
+        </button>
+      </span>
+    </label>
+  );
+}
+
 function FieldWrap({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative border-b border-white/20">
@@ -67,7 +200,7 @@ function FieldWrap({ children }: { children: React.ReactNode }) {
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [marketingOpen, setMarketingOpen] = useState(false);
+  const [modal, setModal] = useState<"privacy" | "marketing" | null>(null);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -130,215 +263,124 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="space-y-8">
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-        <div>
-          <label className={labelClass} htmlFor="name">
-            이름 *
-          </label>
-          <FieldWrap>
-            <input id="name" name="name" className={fieldClass} placeholder="Name" />
-          </FieldWrap>
-          {errors.name && (
-            <p className="mt-1 text-xs text-brand-accent">{errors.name}</p>
-          )}
-        </div>
-        <div>
-          <label className={labelClass} htmlFor="company">
-            회사명
-          </label>
-          <FieldWrap>
-            <input id="company" name="company" className={fieldClass} placeholder="Company" />
-          </FieldWrap>
-        </div>
-        <div>
-          <label className={labelClass} htmlFor="position">
-            직책 및 부서명
-          </label>
-          <FieldWrap>
-            <input id="position" name="position" className={fieldClass} placeholder="Organization Name / Position" />
-          </FieldWrap>
-        </div>
-        <div>
-          <label className={labelClass} htmlFor="email">
-            이메일 *
-          </label>
-          <FieldWrap>
-            <input id="email" name="email" type="email" className={fieldClass} placeholder="you@email.com" />
-          </FieldWrap>
-          {errors.email && (
-            <p className="mt-1 text-xs text-brand-accent">{errors.email}</p>
-          )}
-        </div>
-        <div>
-          <label className={labelClass} htmlFor="phone">
-            연락처
-          </label>
-          <FieldWrap>
-            <input id="phone" name="phone" className={fieldClass} placeholder="Phone number" />
-          </FieldWrap>
-        </div>
-        <div>
-          <label className={labelClass} htmlFor="service">
-            서비스 유형
-          </label>
-          <FieldWrap>
-            <select id="service" name="service" className={`${fieldClass} [&>option]:bg-brand-dark`}>
-              {SERVICE_TYPES.map((s) => (
-                <option key={s}>{s}</option>
-              ))}
-            </select>
-          </FieldWrap>
-        </div>
-        <div>
-          <label className={labelClass} htmlFor="budget">
-            예산
-          </label>
-          <FieldWrap>
-            <input
-              id="budget"
-              name="budget"
-              className={fieldClass}
-              placeholder="Budget"
-            />
-          </FieldWrap>
-        </div>
-        <div>
-          <label className={labelClass} htmlFor="deadline">
-            마감일
-          </label>
-          <FieldWrap>
-            <input
-              id="deadline"
-              name="deadline"
-              type="date"
-              defaultValue={new Date().toLocaleDateString("en-CA")}
-              onClick={(e) => {
-                try {
-                  (e.currentTarget as HTMLInputElement).showPicker();
-                } catch {}
-              }}
-              className={`${fieldClass} cursor-pointer [color-scheme:dark]`}
-            />
-          </FieldWrap>
-        </div>
-      </div>
+    <>
+      {modal === "privacy" && (
+        <PolicyModal
+          title="개인정보 수집 및 이용 동의 (필수)"
+          content={PRIVACY_TEXT}
+          onClose={() => setModal(null)}
+        />
+      )}
+      {modal === "marketing" && (
+        <PolicyModal
+          title="홍보 및 마케팅 정보 수신 동의 (선택)"
+          content={MARKETING_TEXT}
+          onClose={() => setModal(null)}
+        />
+      )}
 
-      <div>
-        <label className={labelClass} htmlFor="message">
-          프로젝트 설명 *
-        </label>
-        <FieldWrap>
-          <textarea
-            id="message"
-            name="message"
-            rows={4}
-            className={`${fieldClass} resize-none`}
-            placeholder="Tell us about your project."
-          />
-        </FieldWrap>
-        {errors.message && (
-          <p className="mt-1 text-xs text-brand-accent">{errors.message}</p>
-        )}
-      </div>
-
-      <div className="flex flex-col gap-4 border-t border-white/10 pt-6">
-        <label className="flex cursor-pointer items-start gap-3">
-          <span className="relative mt-0.5 inline-flex h-5 w-5 flex-shrink-0">
-            <input
-              type="checkbox"
-              name="privacy"
-              className="peer absolute inset-0 z-10 cursor-pointer opacity-0"
-            />
-            <span className="h-5 w-5 rounded-sm border border-white/30 transition-all duration-300 peer-checked:border-brand-accent peer-checked:bg-brand-accent" />
-            <svg
-              className="pointer-events-none absolute inset-0 m-auto h-3 w-3 scale-50 text-white opacity-0 transition-all duration-200 peer-checked:scale-100 peer-checked:opacity-100"
-              viewBox="0 0 12 12" fill="none" stroke="currentColor"
-              strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-            >
-              <path d="M2 6l3 3 5-5" />
-            </svg>
-          </span>
-          <span className="text-sm leading-relaxed text-brand-muted">
-            <span className="mr-1 text-white/60">(필수)</span>
-            개인정보 수집 및 이용 동의
-            <a href="/privacy" target="_blank" rel="noreferrer"
-              className="ml-2 text-xs text-white/40 underline underline-offset-2 transition-colors hover:text-brand-accent">
-              전문보기
-            </a>
-          </span>
-        </label>
-        {errors.privacy && (
-          <p className="-mt-2 text-xs text-brand-accent">{errors.privacy}</p>
-        )}
-        <div>
-          <label className="flex cursor-pointer items-start gap-3">
-            <span className="relative mt-0.5 inline-flex h-5 w-5 flex-shrink-0">
+      <form onSubmit={onSubmit} noValidate className="space-y-8">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+          <div>
+            <label className={labelClass} htmlFor="name">이름 *</label>
+            <FieldWrap>
+              <input id="name" name="name" className={fieldClass} placeholder="Name" />
+            </FieldWrap>
+            {errors.name && <p className="mt-1 text-xs text-brand-accent">{errors.name}</p>}
+          </div>
+          <div>
+            <label className={labelClass} htmlFor="company">회사명</label>
+            <FieldWrap>
+              <input id="company" name="company" className={fieldClass} placeholder="Company" />
+            </FieldWrap>
+          </div>
+          <div>
+            <label className={labelClass} htmlFor="position">직책 및 부서명</label>
+            <FieldWrap>
+              <input id="position" name="position" className={fieldClass} placeholder="Organization Name / Position" />
+            </FieldWrap>
+          </div>
+          <div>
+            <label className={labelClass} htmlFor="email">이메일 *</label>
+            <FieldWrap>
+              <input id="email" name="email" type="email" className={fieldClass} placeholder="you@email.com" />
+            </FieldWrap>
+            {errors.email && <p className="mt-1 text-xs text-brand-accent">{errors.email}</p>}
+          </div>
+          <div>
+            <label className={labelClass} htmlFor="phone">연락처</label>
+            <FieldWrap>
+              <input id="phone" name="phone" className={fieldClass} placeholder="Phone number" />
+            </FieldWrap>
+          </div>
+          <div>
+            <label className={labelClass} htmlFor="service">서비스 유형</label>
+            <FieldWrap>
+              <select id="service" name="service" className={`${fieldClass} [&>option]:bg-brand-dark`}>
+                {SERVICE_TYPES.map((s) => (
+                  <option key={s}>{s}</option>
+                ))}
+              </select>
+            </FieldWrap>
+          </div>
+          <div>
+            <label className={labelClass} htmlFor="budget">예산</label>
+            <FieldWrap>
+              <input id="budget" name="budget" className={fieldClass} placeholder="Budget" />
+            </FieldWrap>
+          </div>
+          <div>
+            <label className={labelClass} htmlFor="deadline">마감일</label>
+            <FieldWrap>
               <input
-                type="checkbox"
-                name="marketing"
-                className="peer absolute inset-0 z-10 cursor-pointer opacity-0"
+                id="deadline" name="deadline" type="date"
+                defaultValue={new Date().toLocaleDateString("en-CA")}
+                onClick={(e) => { try { (e.currentTarget as HTMLInputElement).showPicker(); } catch {} }}
+                className={`${fieldClass} cursor-pointer [color-scheme:dark]`}
               />
-              <span className="h-5 w-5 rounded-sm border border-white/30 transition-all duration-300 peer-checked:border-brand-accent peer-checked:bg-brand-accent" />
-              <svg
-                className="pointer-events-none absolute inset-0 m-auto h-3 w-3 scale-50 text-white opacity-0 transition-all duration-200 peer-checked:scale-100 peer-checked:opacity-100"
-                viewBox="0 0 12 12" fill="none" stroke="currentColor"
-                strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-              >
-                <path d="M2 6l3 3 5-5" />
-              </svg>
-            </span>
-            <span className="text-sm leading-relaxed text-brand-muted">
-              <span className="mr-1 text-white/60">(선택)</span>
-              홍보 및 마케팅 정보 수신 동의
-              <button
-                type="button"
-                onClick={() => setMarketingOpen((o) => !o)}
-                className="ml-2 text-xs text-white/40 underline underline-offset-2 transition-colors hover:text-brand-accent"
-              >
-                {marketingOpen ? "접기" : "전문보기"}
-              </button>
-            </span>
-          </label>
+            </FieldWrap>
+          </div>
+        </div>
 
-          {/* 전문 내용 아코디언 */}
-          {marketingOpen && (
-            <div className="ml-8 mt-3 max-h-64 overflow-y-auto rounded border border-white/10 p-4 text-xs leading-relaxed text-white/45 scrollbar-thin">
-              <p className="mb-4 font-semibold text-white/70">
-                홍보 및 마케팅 정보 수신 동의 (선택)
-              </p>
-              {MARKETING_TEXT.map((item, i) => (
-                <div key={i} className="mb-3">
-                  {item.title && (
-                    <p className="mb-1 font-medium text-white/60">{item.title}</p>
-                  )}
-                  {item.body && (
-                    <p className="whitespace-pre-line">{item.body}</p>
-                  )}
-                  {item.list && (
-                    <ul className="mt-1 space-y-0.5 pl-3">
-                      {item.list.map((li, j) => (
-                        <li key={j} className="before:mr-1 before:content-['·']">
-                          {li}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ))}
-            </div>
+        <div>
+          <label className={labelClass} htmlFor="message">프로젝트 설명 *</label>
+          <FieldWrap>
+            <textarea
+              id="message" name="message" rows={4}
+              className={`${fieldClass} resize-none`}
+              placeholder="Tell us about your project."
+            />
+          </FieldWrap>
+          {errors.message && <p className="mt-1 text-xs text-brand-accent">{errors.message}</p>}
+        </div>
+
+        <div className="flex flex-col gap-4 border-t border-white/10 pt-6">
+          <CheckboxRow
+            name="privacy"
+            badge="(필수)"
+            label="개인정보 수집 및 이용 동의"
+            onViewFull={() => setModal("privacy")}
+          />
+          {errors.privacy && (
+            <p className="-mt-2 text-xs text-brand-accent">{errors.privacy}</p>
+          )}
+          <CheckboxRow
+            name="marketing"
+            badge="(선택)"
+            label="홍보 및 마케팅 정보 수신 동의"
+            onViewFull={() => setModal("marketing")}
+          />
+        </div>
+
+        <div className="flex flex-col items-start gap-3">
+          <LiquidButton type="submit" disabled={status === "submitting"}>
+            {status === "submitting" ? "전송 중..." : "Send Message"}
+          </LiquidButton>
+          {errors.submit && (
+            <p className="text-xs text-brand-accent">{errors.submit}</p>
           )}
         </div>
-      </div>
-
-      <div className="flex flex-col items-start gap-3">
-        <LiquidButton type="submit" disabled={status === "submitting"}>
-          {status === "submitting" ? "전송 중..." : "Send Message"}
-        </LiquidButton>
-        {errors.submit && (
-          <p className="text-xs text-brand-accent">{errors.submit}</p>
-        )}
-      </div>
-    </form>
+      </form>
+    </>
   );
 }
