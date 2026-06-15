@@ -34,8 +34,8 @@ export default function Home() {
         </div>
         <div className="relative">
           <HomeBanner />
-          <HomeContact />
           <HomeClients />
+          <HomeContact />
         </div>
       </div>
     </>
