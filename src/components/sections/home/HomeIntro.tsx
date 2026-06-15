@@ -2,7 +2,7 @@
 export function HomeIntro() {
   return (
     <section className="section-padding bg-brand-black py-28 md:py-56">
-      <div className="mx-auto flex max-w-4xl flex-col gap-6 md:flex-row md:items-start md:gap-10">
+      <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-16">
         <p className="shrink-0 font-display text-2xl uppercase leading-tight tracking-tight text-white md:text-3xl">
           Unbound
           <br />

@@ -20,7 +20,7 @@ const ITEMS = [
 export function HomeAdventure() {
   return (
     <section className="bg-brand-black">
-      <div className="mx-auto grid max-w-5xl grid-cols-1 gap-14 px-6 py-56 md:grid-cols-2 md:gap-16 md:py-[28rem]">
+      <div className="section-padding grid grid-cols-1 gap-14 py-56 md:grid-cols-2 md:gap-24 md:py-[28rem]">
         {ITEMS.map((it) => (
           <div key={it.label}>
             <h2 className="font-display text-4xl uppercase leading-[0.95] text-white md:text-5xl lg:text-6xl">
