@@ -144,9 +144,8 @@ export function ContactForm() {
           <input
             id="deadline"
             name="deadline"
-            type="text"
-            placeholder="YYYY-MM-DD"
-            className={fieldClass}
+            type="date"
+            className={`${fieldClass} [color-scheme:dark]`}
           />
         </div>
       </div>
