@@ -16,8 +16,9 @@ export function IntroAnimation() {
     }
     sessionStorage.setItem("intro-done", "1");
 
-    const exitTimer = setTimeout(() => setPhase("exit"), 3000);
-    const doneTimer = setTimeout(() => setPhase("done"), 3900);
+    // 로고 올라오기(~1.9s) + 잠시 대기(0.8s) → exit
+    const exitTimer = setTimeout(() => setPhase("exit"), 2700);
+    const doneTimer = setTimeout(() => setPhase("done"), 3600);
     return () => {
       clearTimeout(exitTimer);
       clearTimeout(doneTimer);
@@ -48,35 +49,19 @@ export function IntroAnimation() {
           : { duration: 0 }
       }
     >
-      <div className="relative flex items-center justify-center">
-        {/* 로고 중심에서 빛이 둥글게 퍼지는 bloom */}
+      {/*
+        overflow-hidden 컨테이너가 클리핑 마스크 역할.
+        내부 로고가 y: "100%"(아래 숨겨진 상태)에서 y: 0(제자리)으로 올라오며
+        마치 커튼 뒤에서 나오듯 드러남.
+      */}
+      <div className="w-[min(62vw,580px)] overflow-hidden">
         <motion.div
-          aria-hidden
-          className="pointer-events-none absolute rounded-full bg-white"
-          style={{ width: "min(62vw, 580px)", height: "6rem", filter: "blur(72px)" }}
-          initial={{ opacity: 0, scaleX: 0.2, scaleY: 0.5 }}
-          animate={{
-            opacity: [0, 0.35, 0.18, 0],
-            scaleX: [0.2, 1.1, 1.6, 2.2],
-            scaleY: [0.5, 1.0, 1.4, 2.0],
-          }}
+          initial={{ y: "100%" }}
+          animate={{ y: 0 }}
           transition={{
-            duration: 2.6,
-            times: [0, 0.25, 0.6, 1],
-            ease: "easeOut",
-            delay: 0.3,
-          }}
-        />
-
-        {/* 로고 — blur 녹아들듯 서서히 선명하게 */}
-        <motion.div
-          className="relative w-[min(62vw,580px)]"
-          initial={{ opacity: 0, filter: "blur(18px)", scale: 1.07 }}
-          animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
-          transition={{
-            duration: 2.0,
-            ease: [0.16, 1, 0.3, 1],
-            delay: 0.35,
+            duration: 1.5,
+            ease: [0.76, 0, 0.24, 1],
+            delay: 0.4,
           }}
         >
           <Logo variant="white" height={92} className="h-auto w-full" />
