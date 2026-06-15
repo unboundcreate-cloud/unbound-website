@@ -1,7 +1,7 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef, useCallback } from "react";
 
-/** 마우스 올린 영역만 브랜드 컬러 원형 스포트라이트로 강조하는 텍스트 래퍼 */
+/** 마우스 위치에 작은 원형 스포트라이트로 브랜드 컬러가 부드럽게 드러나는 텍스트 래퍼 */
 export function SpotlightText({
   children,
   className,
@@ -9,33 +9,49 @@ export function SpotlightText({
   children: React.ReactNode;
   className?: string;
 }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
-  const [active, setActive] = useState(false);
+  const containerRef = useRef<HTMLSpanElement>(null);
+  const overlayRef = useRef<HTMLSpanElement>(null);
+
+  const onMouseMove = useCallback((e: React.MouseEvent) => {
+    const rect = containerRef.current?.getBoundingClientRect();
+    const overlay = overlayRef.current;
+    if (!rect || !overlay) return;
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    // DOM 직접 조작 → React re-render 없이 매 프레임 부드럽게 추적
+    overlay.style.clipPath = `circle(55px at ${x}px ${y}px)`;
+  }, []);
+
+  const onMouseEnter = useCallback(() => {
+    if (overlayRef.current) overlayRef.current.style.opacity = "1";
+  }, []);
+
+  const onMouseLeave = useCallback(() => {
+    if (overlayRef.current) overlayRef.current.style.opacity = "0";
+  }, []);
 
   return (
     <span
-      ref={ref}
+      ref={containerRef}
       className={className}
       style={{ display: "block", position: "relative" }}
-      onMouseMove={(e) => {
-        const rect = ref.current?.getBoundingClientRect();
-        if (!rect) return;
-        setPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-      }}
-      onMouseEnter={() => setActive(true)}
-      onMouseLeave={() => setActive(false)}
+      onMouseMove={onMouseMove}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       {children}
-      {active && (
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 text-brand-accent"
-          style={{ clipPath: `circle(130px at ${pos.x}px ${pos.y}px)` }}
-        >
-          {children}
-        </span>
-      )}
+      <span
+        ref={overlayRef}
+        aria-hidden
+        className="pointer-events-none absolute inset-0 text-brand-accent"
+        style={{
+          opacity: 0,
+          clipPath: "circle(0px at 0px 0px)",
+          transition: "opacity 0.25s ease",
+        }}
+      >
+        {children}
+      </span>
     </span>
   );
 }
