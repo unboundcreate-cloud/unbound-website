@@ -10,30 +10,17 @@ export function IntroAnimation() {
   const [phase, setPhase] = useState<Phase>("show");
 
   useEffect(() => {
-    if (sessionStorage.getItem("intro-done")) {
-      setPhase("done");
-      return;
-    }
+    if (sessionStorage.getItem("intro-done")) { setPhase("done"); return; }
     sessionStorage.setItem("intro-done", "1");
-
-    // 로고 올라오기(~1.9s) + 잠시 대기(0.8s) → exit
-    const exitTimer = setTimeout(() => setPhase("exit"), 2700);
-    const doneTimer = setTimeout(() => setPhase("done"), 3600);
-    return () => {
-      clearTimeout(exitTimer);
-      clearTimeout(doneTimer);
-    };
+    const exitTimer = setTimeout(() => setPhase("exit"), 2800);
+    const doneTimer = setTimeout(() => setPhase("done"), 3700);
+    return () => { clearTimeout(exitTimer); clearTimeout(doneTimer); };
   }, []);
 
   useEffect(() => {
-    if (phase !== "done") {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
+    if (phase !== "done") { document.body.style.overflow = "hidden"; }
+    else { document.body.style.overflow = ""; }
+    return () => { document.body.style.overflow = ""; };
   }, [phase]);
 
   if (phase === "done") return null;
@@ -43,29 +30,29 @@ export function IntroAnimation() {
       key="intro"
       className="fixed inset-0 z-[9999] flex items-center justify-center bg-brand-black"
       animate={phase === "exit" ? { y: "-100%" } : { y: 0 }}
-      transition={
-        phase === "exit"
-          ? { duration: 0.9, ease: [0.76, 0, 0.24, 1] }
-          : { duration: 0 }
-      }
+      transition={phase === "exit" ? { duration: 0.9, ease: [0.76, 0, 0.24, 1] } : { duration: 0 }}
     >
-      {/*
-        overflow-hidden 컨테이너가 클리핑 마스크 역할.
-        내부 로고가 y: "100%"(아래 숨겨진 상태)에서 y: 0(제자리)으로 올라오며
-        마치 커튼 뒤에서 나오듯 드러남.
-      */}
-      <div className="w-[min(62vw,580px)] overflow-hidden">
-        <motion.div
-          initial={{ y: "100%" }}
-          animate={{ y: 0 }}
-          transition={{
-            duration: 1.5,
-            ease: [0.76, 0, 0.24, 1],
-            delay: 0.4,
-          }}
-        >
-          <Logo variant="white" height={92} className="h-auto w-full" />
-        </motion.div>
+      <div className="w-[min(62vw,580px)]">
+        <div className="relative">
+          {/* 아웃라인 레이어 — 아주 희미하게 보여 "선만 있는" 느낌 */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.1 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+          >
+            <Logo variant="white" height={92} className="h-auto w-full" />
+          </motion.div>
+
+          {/* 채움 레이어 — 중앙에서 원이 퍼지며 로고가 꽉 채워짐 (LiquidButton 방식) */}
+          <motion.div
+            className="absolute inset-0"
+            initial={{ clipPath: "circle(0% at 50% 50%)" }}
+            animate={{ clipPath: "circle(200% at 50% 50%)" }}
+            transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
+          >
+            <Logo variant="white" height={92} className="h-auto w-full" />
+          </motion.div>
+        </div>
       </div>
     </motion.div>
   );
