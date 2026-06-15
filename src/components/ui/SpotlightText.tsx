@@ -2,9 +2,8 @@
 import { useRef, useEffect } from "react";
 
 /**
- * 커서가 텍스트에 가까워질수록 작은 원형 스포트라이트가 자라나며 나타나고,
- * 멀어지면 줄어들며 사라지는 효과.
- * 텍스트를 두 번 렌더링하지 않아 아웃라인 번짐이 없음.
+ * 마우스 위치에 부드러운 타원형 글로우가 따라오며
+ * 브랜드 컬러가 녹아드는 효과. RAF lerp로 스프링 물리감 구현.
  */
 export function SpotlightText({
   children,
@@ -16,41 +15,33 @@ export function SpotlightText({
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    const PROXIMITY = 160; // 텍스트에서 이 거리부터 원이 자라기 시작
-    const MAX_RADIUS = 26; // 커서 기본 크기(~20px)보다 살짝 큰 반지름
+    const el = ref.current;
+    if (!el) return;
 
-    const handleMove = (e: MouseEvent) => {
-      const el = ref.current;
-      if (!el) return;
+    // 상태를 ref 객체 하나로 관리 (React re-render 없음)
+    const s = {
+      cx: 0, cy: 0,      // 현재(lerped) 위치
+      tx: 0, ty: 0,      // 목표 위치
+      size: 0,           // 현재 글로우 크기 비율 (0~1)
+      targetSize: 0,
+      rafId: 0,
+      entered: false,
+    };
 
-      const rect = el.getBoundingClientRect();
-      const cx = e.clientX;
-      const cy = e.clientY;
+    const LERP_POS  = 0.09;   // 위치 추적 속도 (낮을수록 부드럽고 느림)
+    const LERP_SIZE = 0.07;   // 크기 변화 속도
+    const MAX_W = 320;         // 글로우 최대 가로 반지름(px)
+    const MAX_H = 240;         // 글로우 최대 세로 반지름(px)
 
-      // 커서에서 텍스트 박스 가장 가까운 점까지 거리
-      const dx = Math.max(rect.left - cx, 0, cx - rect.right);
-      const dy = Math.max(rect.top - cy, 0, cy - rect.bottom);
-      const dist = Math.sqrt(dx * dx + dy * dy);
-
-      if (dist > PROXIMITY) {
-        el.style.removeProperty("background-image");
-        el.style.removeProperty("-webkit-background-clip");
-        el.style.removeProperty("background-clip");
-        el.style.removeProperty("-webkit-text-fill-color");
-        el.style.removeProperty("color");
-        return;
-      }
-
-      // 가까울수록 커짐 (0~1)
-      const t = 1 - dist / PROXIMITY;
-      const radius = Math.round(MAX_RADIUS * t);
-      const relX = Math.round(cx - rect.left);
-      const relY = Math.round(cy - rect.top);
-
-      // 빨간 점 → 흰색으로 자연스럽게 페이드, background-clip으로 텍스트에만 적용
+    const applyStyle = () => {
+      const w = Math.round(s.size * MAX_W);
+      const h = Math.round(s.size * MAX_H);
+      const x = Math.round(s.cx);
+      const y = Math.round(s.cy);
+      // 중심→ 브랜드 레드, 가장자리→ 흰색으로 부드럽게 페이드
       el.style.setProperty(
         "background-image",
-        `radial-gradient(circle ${radius}px at ${relX}px ${relY}px, #e63226 0%, #ffffff ${radius + 14}px)`
+        `radial-gradient(ellipse ${w}px ${h}px at ${x}px ${y}px, #e63226 0%, #ffffff 72%)`
       );
       el.style.setProperty("-webkit-background-clip", "text");
       el.style.setProperty("background-clip", "text");
@@ -58,17 +49,64 @@ export function SpotlightText({
       el.style.color = "transparent";
     };
 
-    window.addEventListener("mousemove", handleMove, { passive: true });
-    return () => {
-      window.removeEventListener("mousemove", handleMove);
-      // 언마운트 시 스타일 초기화
-      const el = ref.current;
-      if (!el) return;
+    const clearStyle = () => {
       el.style.removeProperty("background-image");
       el.style.removeProperty("-webkit-background-clip");
       el.style.removeProperty("background-clip");
       el.style.removeProperty("-webkit-text-fill-color");
       el.style.removeProperty("color");
+    };
+
+    const tick = () => {
+      // 위치 lerp
+      s.cx += (s.tx - s.cx) * LERP_POS;
+      s.cy += (s.ty - s.cy) * LERP_POS;
+      // 크기 lerp
+      s.size += (s.targetSize - s.size) * LERP_SIZE;
+
+      if (s.size > 0.003) {
+        applyStyle();
+        s.rafId = requestAnimationFrame(tick);
+      } else {
+        clearStyle();
+        s.rafId = 0;
+      }
+    };
+
+    const startRaf = () => {
+      if (!s.rafId) s.rafId = requestAnimationFrame(tick);
+    };
+
+    const onMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      if (!s.entered) {
+        // 처음 진입 시 위치 스냅 (왼쪽 상단에서 슬라이드되는 이상한 시작 방지)
+        s.cx = x; s.cy = y;
+        s.entered = true;
+      }
+      s.tx = x;
+      s.ty = y;
+      s.targetSize = 1;
+      startRaf();
+    };
+
+    const onLeave = () => {
+      s.targetSize = 0;
+      s.entered = false;
+      startRaf();
+    };
+
+    el.addEventListener("mousemove", onMove, { passive: true });
+    el.addEventListener("mouseleave", onLeave);
+
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseleave", onLeave);
+      cancelAnimationFrame(s.rafId);
+      clearStyle();
     };
   }, []);
 
