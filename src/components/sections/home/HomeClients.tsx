@@ -5,7 +5,7 @@ const REPEAT = 6;
 export function HomeClients() {
   return (
     <section className="bg-transparent py-12 md:py-16">
-      <div className="relative overflow-hidden">
+      <div className="marquee-fade relative overflow-hidden">
         <div className="flex w-max animate-[marquee_90s_linear_infinite] items-center">
           {Array.from({ length: REPEAT }).map((_, i) => (
             // eslint-disable-next-line @next/next/no-img-element
