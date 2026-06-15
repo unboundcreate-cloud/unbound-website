@@ -171,7 +171,12 @@ export function ContactForm() {
               name="deadline"
               type="date"
               defaultValue={new Date().toLocaleDateString("en-CA")}
-              className={`${fieldClass} [color-scheme:dark]`}
+              onClick={(e) => {
+                try {
+                  (e.currentTarget as HTMLInputElement).showPicker();
+                } catch {}
+              }}
+              className={`${fieldClass} cursor-pointer [color-scheme:dark]`}
             />
           </FieldWrap>
         </div>

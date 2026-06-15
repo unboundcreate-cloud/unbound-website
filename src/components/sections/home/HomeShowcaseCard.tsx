@@ -21,7 +21,7 @@ export function HomeShowcaseCard({ work }: { work: Work }) {
       href={`/works/${work.slug}`}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className="group relative aspect-video w-full overflow-hidden rounded-lg bg-brand-gray"
+      className="group block relative aspect-video w-full overflow-hidden rounded-lg bg-brand-gray"
     >
       <Image
         src={work.thumbnailUrl}
