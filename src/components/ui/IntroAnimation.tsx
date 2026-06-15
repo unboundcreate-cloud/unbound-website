@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "@/components/ui/Logo";
 
 type Phase = "show" | "exit" | "done";
@@ -9,29 +9,14 @@ type Phase = "show" | "exit" | "done";
 export function IntroAnimation() {
   const [phase, setPhase] = useState<Phase>("show");
 
-  // 0 → 110 으로 증가. 30% 소프트 존으로 경계 완전히 흐림
-  const r = useMotionValue(0);
-  const mask = useTransform(
-    r,
-    (v) => `radial-gradient(circle at 50% 50%, black ${v}%, transparent ${v + 30}%)`
-  );
-
   useEffect(() => {
     if (sessionStorage.getItem("intro-done")) { setPhase("done"); return; }
     sessionStorage.setItem("intro-done", "1");
 
-    const t = setTimeout(() => {
-      animate(r, 110, {
-        duration: 2.2,
-        ease: [0.25, 0.1, 0.25, 1], // cubic ease-in-out — 유기적인 느낌
-      });
-    }, 250);
-
-    const exitTimer = setTimeout(() => setPhase("exit"), 3200);
-    const doneTimer = setTimeout(() => setPhase("done"), 4100);
-
-    return () => { clearTimeout(t); clearTimeout(exitTimer); clearTimeout(doneTimer); };
-  }, [r]);
+    const exitTimer = setTimeout(() => setPhase("exit"), 2800);
+    const doneTimer = setTimeout(() => setPhase("done"), 3700);
+    return () => { clearTimeout(exitTimer); clearTimeout(doneTimer); };
+  }, []);
 
   useEffect(() => {
     if (phase !== "done") document.body.style.overflow = "hidden";
@@ -42,35 +27,27 @@ export function IntroAnimation() {
   if (phase === "done") return null;
 
   return (
-    <motion.div
-      key="intro"
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-brand-black"
-      animate={phase === "exit" ? { y: "-100%" } : { y: 0 }}
-      transition={phase === "exit" ? { duration: 0.9, ease: [0.76, 0, 0.24, 1] } : { duration: 0 }}
-    >
-      <div className="w-[min(62vw,580px)]">
-        <div className="relative">
-          {/* 배경 아웃라인 — 로고 위치 암시 */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.07 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Logo variant="white" height={92} className="h-auto w-full" />
-          </motion.div>
-
-          {/* 소프트 원형 마스크로 로고를 드러냄 */}
-          <motion.div
-            className="absolute inset-0"
-            style={{
-              WebkitMaskImage: mask,
-              maskImage: mask,
-            } as React.CSSProperties}
-          >
-            <Logo variant="white" height={92} className="h-auto w-full" />
-          </motion.div>
-        </div>
-      </div>
-    </motion.div>
+    <AnimatePresence>
+      <motion.div
+        key="intro-overlay"
+        className="fixed inset-0 z-[9999] flex items-center justify-center bg-brand-black"
+        animate={phase === "exit" ? { y: "-100%" } : { y: 0 }}
+        transition={phase === "exit" ? { duration: 0.9, ease: [0.76, 0, 0.24, 1] } : { duration: 0 }}
+      >
+        {/* 로고: 블러에서 선명하게 서서히 등장 */}
+        <motion.div
+          className="w-[min(62vw,580px)]"
+          initial={{ opacity: 0, filter: "blur(48px)", scale: 1.08 }}
+          animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+          transition={{
+            duration: 2.0,
+            ease: [0.16, 1, 0.3, 1],
+            delay: 0.25,
+          }}
+        >
+          <Logo variant="white" height={92} className="h-auto w-full" />
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
