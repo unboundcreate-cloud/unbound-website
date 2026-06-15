@@ -64,15 +64,6 @@ export const services: Service[] = [
       "최신 AI 기술을 제작 전 과정에 접목해 빠른 속도와 새로운 표현을 동시에 실현합니다. AI 기반 이미지·영상 생성과 자동화된 워크플로우로 기존 방식의 한계를 넘어섭니다. 시간과 비용은 줄이면서도 사람의 창의적 디렉션을 더해 완성도를 지킵니다. AI의 효율성과 크리에이티브를 결합한 차세대 영상 솔루션을 제공합니다.",
     images: ["/works/channela-aizit-opening.jpg", "/works/kiss-sixth-sense.webp"],
   },
-  {
-    number: "07",
-    title: "QC & Publish",
-    subtitle: "납품",
-    slug: "delivery",
-    description:
-      "최종 품질 검수(QC)로 색·사운드·자막·싱크의 오류를 꼼꼼히 점검합니다. 방송·디지털·SNS 등 채널별 규격과 코덱에 맞춰 포맷을 최적화해 안정적으로 납품합니다. 필요에 따라 다양한 해상도·비율·길이의 버전으로 변환해 콘텐츠 활용도를 높입니다. 마지막 순간까지 완성도를 책임지고 전달합니다.",
-    images: ["/works/hellolife-flower-smile-opening.jpg", "/works/mildangbaek.png"],
-  },
 ];
 
 // 홈 'What We Do' 미리보기용 — 원래 핵심 서비스 4종 (/services 페이지와 별개)

@@ -42,10 +42,10 @@ export function ServicesSection({
             {services.map((service, i) => (
               <motion.div
                 key={`${service.title}-${i}`}
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 44 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.6, delay: (i % 2) * 0.1 }}
+                viewport={{ once: true, margin: "-20px" }}
+                transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: (i % 2) * 0.12 }}
               >
                 {/* 이미지 2장 세로 배치 */}
                 <div className="flex flex-col gap-1">
@@ -84,10 +84,10 @@ export function ServicesSection({
             {services.map((service, i) => (
               <motion.div
                 key={`${service.title}-${i}`}
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 44 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
+                viewport={{ once: true, margin: "-20px" }}
+                transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: (i % 4) * 0.1 }}
                 className="group border-t border-white/15 pt-6"
               >
                 <p className="mb-6 font-number text-xs tracking-[0.2em] text-brand-accent">

@@ -55,10 +55,15 @@ export function WorksGallery({
               <motion.div
                 key={work.id}
                 layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 36 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-20px" }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.4, delay: (i % 3) * 0.05 }}
+                transition={{
+                  duration: 0.7,
+                  ease: [0.16, 1, 0.3, 1],
+                  delay: (i % 3) * 0.09,
+                }}
               >
                 <WorkCard work={work} ratio="aspect-[16/9]" />
               </motion.div>
