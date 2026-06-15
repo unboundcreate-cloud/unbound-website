@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LiquidButton } from "@/components/ui/LiquidButton";
 
 const SERVICE_TYPES = [
@@ -89,6 +89,7 @@ function PolicyModal({
     <div
       className="fixed inset-0 z-[9998] flex items-center justify-center p-4"
       onClick={onClose}
+      onWheel={(e) => e.stopPropagation()}
     >
       {/* 배경 오버레이 */}
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
@@ -205,6 +206,11 @@ export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [modal, setModal] = useState<"privacy" | "marketing" | null>(null);
+
+  useEffect(() => {
+    document.body.style.overflow = modal ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [modal]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
