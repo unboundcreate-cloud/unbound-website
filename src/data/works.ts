@@ -1,4 +1,4 @@
-export type WorkCategory = "drama" | "promo" | "b2b";
+export type WorkCategory = "drama" | "promo" | "b2b" | "ai" | "public";
 
 export interface Work {
   id: string;
@@ -34,8 +34,8 @@ export const works: Work[] = [
     slug: "channela-aizit-opening",
     title: "예능 'Ai지트' Opening Title",
     client: "채널A",
-    category: "drama",
-    categoryLabel: "드라마 & 예능",
+    category: "ai",
+    categoryLabel: "AI",
     year: "2025",
     duration: "15s",
     period: "1주",
@@ -53,8 +53,8 @@ export const works: Work[] = [
     slug: "macrogen-myeonghwa-ai",
     title: "명화 Ai편 '들판에서 찾은 작은 순간들'",
     client: "마크로젠 (Macrogen)",
-    category: "promo",
-    categoryLabel: "광고 & 홍보",
+    category: "ai",
+    categoryLabel: "AI",
     year: "2025",
     duration: "30s",
     period: "1주 미만",
@@ -90,8 +90,8 @@ export const works: Work[] = [
     slug: "kdhc-recruit-2026",
     title: "한국지역난방공사 2026 신입사원 모집 Recruitment Video",
     client: "한국지역난방공사",
-    category: "promo",
-    categoryLabel: "광고 & 홍보",
+    category: "public",
+    categoryLabel: "공공 / 기관",
     year: "2025",
     duration: "1m 30s",
     period: "2주",
@@ -227,23 +227,6 @@ export const works: Work[] = [
     featured: false,
   },
   {
-    id: "12",
-    slug: "kt-enterprise-wis-interview",
-    title: "B2B 숏폼 KT Enterprise 'WIS' 인터뷰",
-    client: "KT Enterprise",
-    category: "b2b",
-    categoryLabel: "B2B",
-    year: "2024",
-    duration: "60s",
-    period: "프로젝트별 상이",
-    role: "기획 / 제작",
-    ...yt("AqXf1IaSjSQ"),
-    description:
-      "KT Enterprise WIS 인터뷰 숏폼. CONVERS, Karcher 등과 함께 진행한 B2B 숏폼 시리즈의 일부입니다.",
-    tags: ["B2B", "숏폼", "인터뷰"],
-    featured: false,
-  },
-  {
     id: "13",
     slug: "hanwha-lifeplus-nyc",
     title: "숏폼 한화 라이프플러스 뉴욕 'Artist Invitation Event'",
@@ -376,8 +359,8 @@ export const works: Work[] = [
     slug: "mildangbaek",
     title: "예능 '밀당백'",
     client: "국방홍보원",
-    category: "drama",
-    categoryLabel: "드라마 & 예능",
+    category: "public",
+    categoryLabel: "공공 / 기관",
     year: "",
     duration: "",
     period: "",

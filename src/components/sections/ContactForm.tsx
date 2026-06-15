@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { LiquidButton } from "@/components/ui/LiquidButton";
 
 const SERVICE_TYPES = [
   "Motion Graphic",
@@ -12,6 +13,15 @@ const SERVICE_TYPES = [
 ];
 
 type Status = "idle" | "submitting" | "done";
+
+function FieldWrap({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="relative">
+      {children}
+      <span className="pointer-events-none absolute bottom-0 left-0 h-px w-0 bg-brand-accent transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] peer-focus:w-full" />
+    </div>
+  );
+}
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
@@ -60,7 +70,7 @@ export function ContactForm() {
   };
 
   const fieldClass =
-    "w-full border-b border-white/20 bg-transparent py-3 text-white placeholder:text-brand-muted/60 focus:border-brand-accent focus:outline-none transition-colors";
+    "peer w-full border-b border-white/20 bg-transparent py-3 text-white placeholder:text-brand-muted/60 focus:outline-none";
   const labelClass =
     "font-mono text-[12px] uppercase tracking-[0.2em] text-brand-muted";
 
@@ -84,7 +94,9 @@ export function ContactForm() {
           <label className={labelClass} htmlFor="name">
             이름 *
           </label>
-          <input id="name" name="name" className={fieldClass} placeholder="Name" />
+          <FieldWrap>
+            <input id="name" name="name" className={fieldClass} placeholder="Name" />
+          </FieldWrap>
           {errors.name && (
             <p className="mt-1 text-xs text-brand-accent">{errors.name}</p>
           )}
@@ -93,19 +105,25 @@ export function ContactForm() {
           <label className={labelClass} htmlFor="company">
             회사명
           </label>
-          <input id="company" name="company" className={fieldClass} placeholder="Company" />
+          <FieldWrap>
+            <input id="company" name="company" className={fieldClass} placeholder="Company" />
+          </FieldWrap>
         </div>
         <div>
           <label className={labelClass} htmlFor="position">
             직책 및 부서명
           </label>
-          <input id="position" name="position" className={fieldClass} placeholder="Organization Name / Position" />
+          <FieldWrap>
+            <input id="position" name="position" className={fieldClass} placeholder="Organization Name / Position" />
+          </FieldWrap>
         </div>
         <div>
           <label className={labelClass} htmlFor="email">
             이메일 *
           </label>
-          <input id="email" name="email" type="email" className={fieldClass} placeholder="you@email.com" />
+          <FieldWrap>
+            <input id="email" name="email" type="email" className={fieldClass} placeholder="you@email.com" />
+          </FieldWrap>
           {errors.email && (
             <p className="mt-1 text-xs text-brand-accent">{errors.email}</p>
           )}
@@ -114,39 +132,47 @@ export function ContactForm() {
           <label className={labelClass} htmlFor="phone">
             연락처
           </label>
-          <input id="phone" name="phone" className={fieldClass} placeholder="Phone number" />
+          <FieldWrap>
+            <input id="phone" name="phone" className={fieldClass} placeholder="Phone number" />
+          </FieldWrap>
         </div>
         <div>
           <label className={labelClass} htmlFor="service">
             서비스 유형
           </label>
-          <select id="service" name="service" className={`${fieldClass} [&>option]:bg-brand-dark`}>
-            {SERVICE_TYPES.map((s) => (
-              <option key={s}>{s}</option>
-            ))}
-          </select>
+          <FieldWrap>
+            <select id="service" name="service" className={`${fieldClass} [&>option]:bg-brand-dark`}>
+              {SERVICE_TYPES.map((s) => (
+                <option key={s}>{s}</option>
+              ))}
+            </select>
+          </FieldWrap>
         </div>
         <div>
           <label className={labelClass} htmlFor="budget">
             Budget
           </label>
-          <input
-            id="budget"
-            name="budget"
-            className={fieldClass}
-            placeholder="Budget"
-          />
+          <FieldWrap>
+            <input
+              id="budget"
+              name="budget"
+              className={fieldClass}
+              placeholder="Budget"
+            />
+          </FieldWrap>
         </div>
         <div>
           <label className={labelClass} htmlFor="deadline">
             Deadline
           </label>
-          <input
-            id="deadline"
-            name="deadline"
-            type="date"
-            className={`${fieldClass} [color-scheme:dark]`}
-          />
+          <FieldWrap>
+            <input
+              id="deadline"
+              name="deadline"
+              type="date"
+              className={`${fieldClass} [color-scheme:dark]`}
+            />
+          </FieldWrap>
         </div>
       </div>
 
@@ -154,33 +180,35 @@ export function ContactForm() {
         <label className={labelClass} htmlFor="message">
           Project Description *
         </label>
-        <textarea
-          id="message"
-          name="message"
-          rows={4}
-          className={`${fieldClass} resize-none`}
-          placeholder="Tell us about your project."
-        />
+        <FieldWrap>
+          <textarea
+            id="message"
+            name="message"
+            rows={4}
+            className={`${fieldClass} resize-none`}
+            placeholder="Tell us about your project."
+          />
+        </FieldWrap>
         {errors.message && (
           <p className="mt-1 text-xs text-brand-accent">{errors.message}</p>
         )}
       </div>
 
       <div className="flex flex-col gap-4 border-t border-white/10 pt-6">
-        <label className="flex items-start gap-3 cursor-pointer group">
+        <label className="flex cursor-pointer items-start gap-3">
           <input
             type="checkbox"
             name="privacy"
-            className="mt-0.5 h-4 w-4 flex-shrink-0 accent-brand-accent cursor-pointer"
+            className="mt-0.5 h-4 w-4 flex-shrink-0 cursor-pointer accent-brand-accent"
           />
-          <span className="text-sm text-brand-muted leading-relaxed">
-            <span className="text-white/60 mr-1">(필수)</span>
+          <span className="text-sm leading-relaxed text-brand-muted">
+            <span className="mr-1 text-white/60">(필수)</span>
             개인정보 수집 및 이용 동의
             <a
               href="/privacy"
               target="_blank"
               rel="noreferrer"
-              className="ml-2 underline underline-offset-2 text-white/40 hover:text-brand-accent transition-colors text-xs"
+              className="ml-2 text-xs text-white/40 underline underline-offset-2 transition-colors hover:text-brand-accent"
             >
               전문보기
             </a>
@@ -189,20 +217,20 @@ export function ContactForm() {
         {errors.privacy && (
           <p className="-mt-2 text-xs text-brand-accent">{errors.privacy}</p>
         )}
-        <label className="flex items-start gap-3 cursor-pointer">
+        <label className="flex cursor-pointer items-start gap-3">
           <input
             type="checkbox"
             name="marketing"
-            className="mt-0.5 h-4 w-4 flex-shrink-0 accent-brand-accent cursor-pointer"
+            className="mt-0.5 h-4 w-4 flex-shrink-0 cursor-pointer accent-brand-accent"
           />
-          <span className="text-sm text-brand-muted leading-relaxed">
-            <span className="text-white/60 mr-1">(선택)</span>
+          <span className="text-sm leading-relaxed text-brand-muted">
+            <span className="mr-1 text-white/60">(선택)</span>
             홍보 및 마케팅 정보 수신 동의
             <a
               href="/privacy"
               target="_blank"
               rel="noreferrer"
-              className="ml-2 underline underline-offset-2 text-white/40 hover:text-brand-accent transition-colors text-xs"
+              className="ml-2 text-xs text-white/40 underline underline-offset-2 transition-colors hover:text-brand-accent"
             >
               전문보기
             </a>
@@ -211,13 +239,9 @@ export function ContactForm() {
       </div>
 
       <div className="flex flex-col gap-3">
-        <button
-          type="submit"
-          disabled={status === "submitting"}
-          className="group inline-flex w-fit items-center gap-3 bg-brand-accent px-10 py-4 font-display text-sm uppercase tracking-[0.2em] text-white transition-colors hover:bg-white hover:text-brand-black disabled:cursor-not-allowed disabled:opacity-50"
-        >
+        <LiquidButton type="submit" disabled={status === "submitting"}>
           {status === "submitting" ? "전송 중..." : "Send Message"}
-        </button>
+        </LiquidButton>
         {errors.submit && (
           <p className="text-xs text-brand-accent">{errors.submit}</p>
         )}

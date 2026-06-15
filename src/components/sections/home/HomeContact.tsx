@@ -20,7 +20,7 @@ export function HomeContact() {
             </div>
           </div>
           <div className="text-right font-display text-lg uppercase leading-snug text-white/80 sm:text-2xl md:text-3xl lg:text-4xl">
-            <p>당신의 브랜드를 움직이는 영상,</p>
+            <p>당신의 브랜드를 움직이는 영상</p>
             <p>지금 Unbound Studio와 시작하세요.</p>
           </div>
         </div>

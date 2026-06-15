@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { worksOrdered } from "@/data/works";
 import { HomeShowcaseCard } from "./HomeShowcaseCard";
 import { FadeIn } from "@/components/ui/FadeIn";
@@ -11,6 +14,16 @@ const SLUGS = [
   "good-detective-2",
   "chunhwa-romance",
 ];
+
+const gridVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.11, delayChildren: 0.1 } },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] } },
+};
 
 export function HomeShowcase() {
   const items = SLUGS.map((s) =>
@@ -38,13 +51,19 @@ export function HomeShowcase() {
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.15}>
-          <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3 md:mt-16 md:gap-6">
-            {items.map((w) => (
-              <HomeShowcaseCard key={w.id} work={w} />
-            ))}
-          </div>
-        </FadeIn>
+        <motion.div
+          className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3 md:mt-16 md:gap-6"
+          variants={gridVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-20px" }}
+        >
+          {items.map((w) => (
+            <motion.div key={w.id} variants={cardVariants}>
+              <HomeShowcaseCard work={w} />
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

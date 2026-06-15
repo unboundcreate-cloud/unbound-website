@@ -3,15 +3,25 @@ import Link from "next/link";
 import { useRef } from "react";
 
 interface LiquidButtonProps {
-  href: string;
+  href?: string;
   children: React.ReactNode;
   className?: string;
+  type?: "button" | "submit";
+  disabled?: boolean;
+  onClick?: () => void;
 }
 
-export function LiquidButton({ href, children, className = "" }: LiquidButtonProps) {
+export function LiquidButton({
+  href,
+  children,
+  className = "",
+  type = "button",
+  disabled,
+  onClick,
+}: LiquidButtonProps) {
   const circleRef = useRef<HTMLSpanElement>(null);
 
-  const setPos = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const setPos = (e: React.MouseEvent<HTMLElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const c = circleRef.current;
     if (!c) return;
@@ -19,23 +29,16 @@ export function LiquidButton({ href, children, className = "" }: LiquidButtonPro
     c.style.top  = `${e.clientY - rect.top}px`;
   };
 
-  const onEnter = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const onEnter = (e: React.MouseEvent<HTMLElement>) => {
     setPos(e);
     circleRef.current?.style.setProperty("transform", "translate(-50%,-50%) scale(1)");
   };
-  const onMove  = (e: React.MouseEvent<HTMLAnchorElement>) => setPos(e);
+  const onMove  = (e: React.MouseEvent<HTMLElement>) => setPos(e);
   const onLeave = () =>
     circleRef.current?.style.setProperty("transform", "translate(-50%,-50%) scale(0)");
 
-  return (
-    <Link
-      href={href}
-      onMouseEnter={onEnter}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      className={`group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-brand-accent px-10 py-4 font-display text-sm uppercase tracking-[0.2em] text-white ${className}`}
-    >
-      {/* 마우스 위치에서 확장되는 흰 원 */}
+  const inner = (
+    <>
       <span
         ref={circleRef}
         aria-hidden
@@ -44,12 +47,42 @@ export function LiquidButton({ href, children, className = "" }: LiquidButtonPro
           left: "50%",
           top: "50%",
           transform: "translate(-50%,-50%) scale(0)",
-          transition: "transform 0.55s cubic-bezier(0.16,1,0.3,1)",
+          transition: "transform 0.75s cubic-bezier(0.16,1,0.3,1)",
         }}
       />
-      <span className="relative z-10 transition-colors duration-300 group-hover:text-brand-accent">
+      <span className="relative z-10 transition-colors duration-700 group-hover:text-brand-accent">
         {children}
       </span>
-    </Link>
+    </>
+  );
+
+  const baseClass = `group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-brand-accent px-10 py-4 font-display text-sm uppercase tracking-[0.2em] text-white ${className}`;
+
+  if (href) {
+    return (
+      <Link
+        href={href}
+        onMouseEnter={onEnter}
+        onMouseMove={onMove}
+        onMouseLeave={onLeave}
+        className={baseClass}
+      >
+        {inner}
+      </Link>
+    );
+  }
+
+  return (
+    <button
+      type={type}
+      disabled={disabled}
+      onClick={onClick}
+      onMouseEnter={onEnter}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      className={`${baseClass} disabled:cursor-not-allowed disabled:opacity-50`}
+    >
+      {inner}
+    </button>
   );
 }

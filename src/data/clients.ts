@@ -65,8 +65,6 @@ export const clients: Client[] = [
   },
   { name: "한화 라이프플러스", logo: "/clients/lifeplus.png" },
   { name: "Dr.Jart+", logo: "/clients/drjart.png" },
-  { name: "XERF", logo: "/clients/xerf.png" },
-  { name: "봉명동네커피", logo: "/clients/bongmyeong.png" },
 ];
 
 export interface Stat {
