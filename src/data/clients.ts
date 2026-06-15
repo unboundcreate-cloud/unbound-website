@@ -7,64 +7,27 @@ export interface Client {
 }
 
 export const clients: Client[] = [
-  { name: "KBS", logo: "/clients/kbs.png" },
-  { name: "MBC", logo: "/clients/mbc-v2.png" },
-  {
-    name: "SBS",
-    logo: "/clients/sbs.png",
-    imgClass: "max-h-[32px] max-w-full md:max-h-[49px]",
-  },
-  {
-    name: "TV조선",
-    logo: "/clients/tvchosun-v3.png",
-    imgClass: "max-h-[63px] max-w-full md:max-h-[98px]",
-  },
-  {
-    name: "tvN",
-    logo: "/clients/tvn.png",
-    imgClass: "max-h-[32px] max-w-full md:max-h-[49px]",
-  },
-  { name: "채널A", logo: "/clients/channela.png" },
-  {
-    name: "Disney+",
-    logo: "/clients/disney-plus.png",
-    imgClass: "max-h-[59px] max-w-full md:max-h-[91px]",
-  },
-  {
-    name: "Netflix",
-    logo: "/clients/netflix.png",
-    imgClass: "max-h-[59px] max-w-full md:max-h-[91px]",
-  },
-  {
-    name: "SK Signet",
-    logo: "/clients/sk-signet.png",
-    imgClass: "max-h-[59px] max-w-full md:max-h-[91px]",
-  },
-  {
-    name: "KT Enterprise",
-    logo: "/clients/kt-enterprise.png",
-    imgClass: "max-h-[59px] max-w-full md:max-h-[91px]",
-  },
-  {
-    name: "한국지역난방공사",
-    logo: "/clients/kdhc-v2.png",
-    imgClass: "max-h-[59px] max-w-full md:max-h-[91px]",
-  },
-  {
-    name: "Macrogen",
-    logo: "/clients/macrogen.png",
-    imgClass: "max-h-[59px] max-w-full md:max-h-[91px]",
-  },
-  { name: "Kärcher", logo: "/clients/karcher.png" },
-  { name: "CONVERSE", logo: "/clients/converse.png" },
-  { name: "Dassault Systèmes", logo: "/clients/dassault.png" },
-  {
-    name: "dsm-firmenich",
-    logo: "/clients/dsm-firmenich.png",
-    imgClass: "max-h-[96px] max-w-full md:max-h-[150px]",
-  },
-  { name: "한화 라이프플러스", logo: "/clients/lifeplus.png" },
-  { name: "Dr.Jart+", logo: "/clients/drjart.png" },
+  // Row 1
+  { name: "KBS",              logo: "/clients/kbs.png" },
+  { name: "MBC",              logo: "/clients/mbc-v2.png" },
+  { name: "SBS",              logo: "/clients/sbs.png" },
+  { name: "Disney+",          logo: "/clients/disney-plus.png" },
+  { name: "tvN",              logo: "/clients/tvn.png" },
+  { name: "채널A",             logo: "/clients/channela.png" },
+  // Row 2
+  { name: "Netflix",          logo: "/clients/netflix.png" },
+  { name: "CONVERSE",         logo: "/clients/converse.png" },
+  { name: "Dassault Systèmes",logo: "/clients/dassault.png" },
+  { name: "SK Signet",        logo: "/clients/sk-signet.png" },
+  { name: "KT Enterprise",    logo: "/clients/kt-enterprise.png" },
+  { name: "한국지역난방공사",    logo: "/clients/kdhc-v2.png" },
+  // Row 3
+  { name: "Kärcher",          logo: "/clients/karcher.png" },
+  { name: "Macrogen",         logo: "/clients/macrogen.png" },
+  { name: "dsm-firmenich",    logo: "/clients/dsm-firmenich.png" },
+  { name: "한화 라이프플러스",   logo: "/clients/lifeplus.png" },
+  { name: "Dr.Jart+",         logo: "/clients/drjart.png" },
+  { name: "XERF",             logo: "/clients/xerf.png" },
 ];
 
 export interface Stat {
