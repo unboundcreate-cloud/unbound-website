@@ -196,20 +196,26 @@ export function ContactForm() {
 
       <div className="flex flex-col gap-4 border-t border-white/10 pt-6">
         <label className="flex cursor-pointer items-start gap-3">
-          <input
-            type="checkbox"
-            name="privacy"
-            className="mt-0.5 h-4 w-4 flex-shrink-0 cursor-pointer accent-brand-accent"
-          />
+          <span className="relative mt-0.5 inline-flex h-5 w-5 flex-shrink-0">
+            <input
+              type="checkbox"
+              name="privacy"
+              className="peer absolute inset-0 z-10 cursor-pointer opacity-0"
+            />
+            <span className="h-5 w-5 rounded-sm border border-white/30 transition-all duration-300 peer-checked:border-brand-accent peer-checked:bg-brand-accent" />
+            <svg
+              className="pointer-events-none absolute inset-0 m-auto h-3 w-3 scale-50 text-white opacity-0 transition-all duration-200 peer-checked:scale-100 peer-checked:opacity-100"
+              viewBox="0 0 12 12" fill="none" stroke="currentColor"
+              strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+            >
+              <path d="M2 6l3 3 5-5" />
+            </svg>
+          </span>
           <span className="text-sm leading-relaxed text-brand-muted">
             <span className="mr-1 text-white/60">(필수)</span>
             개인정보 수집 및 이용 동의
-            <a
-              href="/privacy"
-              target="_blank"
-              rel="noreferrer"
-              className="ml-2 text-xs text-white/40 underline underline-offset-2 transition-colors hover:text-brand-accent"
-            >
+            <a href="/privacy" target="_blank" rel="noreferrer"
+              className="ml-2 text-xs text-white/40 underline underline-offset-2 transition-colors hover:text-brand-accent">
               전문보기
             </a>
           </span>
@@ -218,20 +224,26 @@ export function ContactForm() {
           <p className="-mt-2 text-xs text-brand-accent">{errors.privacy}</p>
         )}
         <label className="flex cursor-pointer items-start gap-3">
-          <input
-            type="checkbox"
-            name="marketing"
-            className="mt-0.5 h-4 w-4 flex-shrink-0 cursor-pointer accent-brand-accent"
-          />
+          <span className="relative mt-0.5 inline-flex h-5 w-5 flex-shrink-0">
+            <input
+              type="checkbox"
+              name="marketing"
+              className="peer absolute inset-0 z-10 cursor-pointer opacity-0"
+            />
+            <span className="h-5 w-5 rounded-sm border border-white/30 transition-all duration-300 peer-checked:border-brand-accent peer-checked:bg-brand-accent" />
+            <svg
+              className="pointer-events-none absolute inset-0 m-auto h-3 w-3 scale-50 text-white opacity-0 transition-all duration-200 peer-checked:scale-100 peer-checked:opacity-100"
+              viewBox="0 0 12 12" fill="none" stroke="currentColor"
+              strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+            >
+              <path d="M2 6l3 3 5-5" />
+            </svg>
+          </span>
           <span className="text-sm leading-relaxed text-brand-muted">
             <span className="mr-1 text-white/60">(선택)</span>
             홍보 및 마케팅 정보 수신 동의
-            <a
-              href="/privacy"
-              target="_blank"
-              rel="noreferrer"
-              className="ml-2 text-xs text-white/40 underline underline-offset-2 transition-colors hover:text-brand-accent"
-            >
+            <a href="/privacy" target="_blank" rel="noreferrer"
+              className="ml-2 text-xs text-white/40 underline underline-offset-2 transition-colors hover:text-brand-accent">
               전문보기
             </a>
           </span>
