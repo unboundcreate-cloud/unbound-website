@@ -6,13 +6,13 @@ const ITEMS = [
   {
     heading: ["Take the", "First Step"],
     label: "Project",
-    desc: "당신의 이야기를 가장 강렬한 영상으로 —\n프로젝트 문의를 기다립니다.",
+    desc: "당신의 이야기를 가장 강렬한 영상으로 담아냅니다.\n프로젝트 문의를 기다립니다.",
     href: "/contact",
   },
   {
     heading: ["In Your", "Adventure"],
     label: "Works",
-    desc: "Unbound가 만들어온 작품들을 만나보세요.",
+    desc: "Unbound Studio가 만들어온 작품들을 만나보세요.",
     href: "/works",
   },
 ];
