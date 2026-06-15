@@ -8,7 +8,7 @@ export function HomeIntro() {
           <br />
           Studio
         </p>
-        <div className="space-y-5 text-base leading-relaxed text-white/70 md:text-lg">
+        <div className="space-y-6 text-2xl leading-snug text-white/70 md:text-3xl">
           <p className="text-white">
             Unbound Studio는 모션 그래픽과 포스트 프로덕션을 중심으로 최고의 영상 콘텐츠를 제작하는 크리에이티브 영상 스튜디오입니다.
           </p>
