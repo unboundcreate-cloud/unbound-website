@@ -1,5 +1,6 @@
 import { google } from "@ai-sdk/google";
 import { streamText } from "ai";
+import { appendChatLog } from "@/lib/chat-store";
 
 const SYSTEM_PROMPT = `당신은 Unbound Studio의 AI 어시스턴트입니다.
 
@@ -22,12 +23,16 @@ Unbound Studio는 모션그래픽, 브랜드필름, 광고영상을 전문으로
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
+  const userMsg = (messages.at(-1)?.content as string) ?? "";
 
   const result = streamText({
     model: google("gemini-2.0-flash"),
     system: SYSTEM_PROMPT,
     messages,
     maxTokens: 400,
+    async onFinish({ text }) {
+      if (userMsg) await appendChatLog(userMsg, text);
+    },
   });
 
   return result.toDataStreamResponse();
