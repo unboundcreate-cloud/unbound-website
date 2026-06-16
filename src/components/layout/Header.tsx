@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { studio } from "@/data/clients";
 import { Logo } from "@/components/ui/Logo";
-import { ScrambleText } from "@/components/ui/ScrambleText";
 import { MagneticWrapper } from "@/components/ui/MagneticWrapper";
 
 const NAV = [
@@ -103,7 +102,7 @@ export function Header() {
                     className="group flex items-baseline gap-4 font-display uppercase leading-[0.95] text-white transition-colors hover:text-brand-accent"
                   >
                     <span className="text-[14vw] transition-transform duration-300 group-hover:translate-x-4 md:text-[7vw]">
-                      <ScrambleText>{item.label}</ScrambleText>
+                      {item.label}
                     </span>
                   </Link>
                 </motion.div>
