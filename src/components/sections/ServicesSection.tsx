@@ -46,6 +46,7 @@ export function ServicesSection({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-20px" }}
                 transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: (i % 2) * 0.12 }}
+                className="group"
               >
                 {/* 이미지 1장 */}
                 {(service.images ?? []).slice(0, 1).map((img, j) => (
@@ -71,13 +72,7 @@ export function ServicesSection({
                   </p>
                 )}
                 <div className="relative mt-4 h-px w-full bg-white/15">
-                  <motion.div
-                    className="absolute inset-y-0 left-0 bg-brand-accent"
-                    initial={{ width: 0 }}
-                    whileInView={{ width: "100%" }}
-                    viewport={{ once: true, margin: "-60px" }}
-                    transition={{ duration: 1.2, ease: [0.25, 1, 0.25, 1], delay: (i % 2) * 0.12 }}
-                  />
+                  <div className="absolute inset-y-0 left-0 w-0 bg-brand-accent transition-[width] duration-[1200ms] ease-[cubic-bezier(0.25,1,0.25,1)] [@media(hover:hover)]:group-hover:w-full" />
                 </div>
                 <div className="mt-4 space-y-2 text-sm leading-relaxed text-brand-muted md:text-base">
                   {service.description.split("\n").map((line, li) => (
