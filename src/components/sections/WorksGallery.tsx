@@ -105,20 +105,19 @@ export function WorksGallery({
       </div>
 
       <div className="section-padding">
-        <motion.div
-          layout
-          className="grid grid-cols-1 gap-1 sm:grid-cols-2 lg:grid-cols-3"
-        >
-          <AnimatePresence mode="popLayout">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active}
+            className="grid grid-cols-1 gap-1 sm:grid-cols-2 lg:grid-cols-3"
+            exit={{ opacity: 0, y: 50, transition: { duration: 0.45, ease: [0.4, 0, 1, 1] } }}
+          >
             {filtered.map((work, i) => (
               <motion.div
                 key={work.id}
-                layout
-                initial={{ opacity: 0, y: 60 }}
+                initial={{ opacity: 0, y: 70 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20, transition: { duration: 0.25, ease: "easeIn" } }}
                 transition={{
-                  duration: 0.85,
+                  duration: 0.9,
                   ease: [0.25, 1, 0.25, 1],
                   delay: Math.min(i * 0.07, 0.42),
                 }}
@@ -126,8 +125,8 @@ export function WorksGallery({
                 <WorkCard work={work} ratio="aspect-[16/9]" />
               </motion.div>
             ))}
-          </AnimatePresence>
-        </motion.div>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </>
   );
