@@ -48,10 +48,9 @@ export default async function WorksPage() {
                 <td className="px-4 py-3">
                   {work.thumbnailUrl ? (
                     <img
-                      src={work.thumbnailUrl.startsWith("http") ? work.thumbnailUrl : work.thumbnailUrl}
+                      src={work.thumbnailUrl}
                       alt={work.title}
                       className="h-10 w-16 rounded object-cover bg-white/10"
-                      onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                     />
                   ) : (
                     <div className="h-10 w-16 rounded bg-white/10" />
