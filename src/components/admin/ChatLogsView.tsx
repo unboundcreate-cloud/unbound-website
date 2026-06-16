@@ -15,6 +15,96 @@ function fmt(ts: number) {
   });
 }
 
+function PasswordModal({ onClose }: { onClose: () => void }) {
+  const [pw, setPw] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [status, setStatus] = useState<"idle" | "saving" | "done" | "error">("idle");
+  const [msg, setMsg] = useState("");
+  const router = useRouter();
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (pw !== confirm) { setMsg("비밀번호가 일치하지 않습니다."); return; }
+    setStatus("saving");
+    const res = await fetch("/api/admin/password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: pw }),
+    });
+    const json = await res.json().catch(() => ({}));
+    if (res.ok) {
+      setStatus("done");
+      setTimeout(async () => {
+        await fetch("/api/admin/logout", { method: "POST" });
+        router.push("/admin/login");
+        router.refresh();
+      }, 1200);
+    } else {
+      setStatus("error");
+      setMsg(json.error || "변경 실패");
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+      <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#111] p-8 shadow-2xl">
+        <h2 className="mb-6 font-display text-lg uppercase tracking-widest text-white">
+          비밀번호 변경
+        </h2>
+
+        {status === "done" ? (
+          <p className="text-sm text-green-400">
+            변경됐습니다. 다시 로그인해주세요...
+          </p>
+        ) : (
+          <form onSubmit={submit} className="space-y-4">
+            <div>
+              <label className="mb-1.5 block text-xs text-white/40">새 비밀번호</label>
+              <input
+                type="password"
+                value={pw}
+                onChange={(e) => setPw(e.target.value)}
+                placeholder="6자 이상"
+                autoFocus
+                className="w-full border-b border-white/20 bg-transparent py-2.5 text-sm text-white placeholder:text-white/25 focus:border-brand-accent focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs text-white/40">확인</label>
+              <input
+                type="password"
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                placeholder="다시 입력"
+                className="w-full border-b border-white/20 bg-transparent py-2.5 text-sm text-white placeholder:text-white/25 focus:border-brand-accent focus:outline-none"
+              />
+            </div>
+
+            {msg && <p className="text-xs text-brand-accent">{msg}</p>}
+
+            <div className="flex gap-3 pt-2">
+              <button
+                type="submit"
+                disabled={status === "saving" || !pw}
+                className="flex-1 bg-brand-accent py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-85 disabled:opacity-40"
+              >
+                {status === "saving" ? "저장 중..." : "변경"}
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 border border-white/15 py-2.5 text-sm text-white/50 transition-colors hover:text-white"
+              >
+                취소
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function ChatLogsView({
   logs: initial,
   ready,
@@ -24,6 +114,7 @@ export function ChatLogsView({
 }) {
   const [logs, setLogs] = useState(initial);
   const [clearing, setClearing] = useState(false);
+  const [pwModal, setPwModal] = useState(false);
   const router = useRouter();
 
   const clear = async () => {
@@ -42,6 +133,8 @@ export function ChatLogsView({
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
+      {pwModal && <PasswordModal onClose={() => setPwModal(false)} />}
+
       <header className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-[#0a0a0a]/95 px-6 py-4 backdrop-blur">
         <div className="flex items-center gap-3">
           <span className="h-2 w-2 rounded-full bg-brand-accent" />
@@ -59,6 +152,12 @@ export function ChatLogsView({
             className="text-xs text-white/40 transition-colors hover:text-red-400 disabled:opacity-30"
           >
             {clearing ? "삭제 중..." : "전체 삭제"}
+          </button>
+          <button
+            onClick={() => setPwModal(true)}
+            className="text-xs text-white/40 transition-colors hover:text-white"
+          >
+            비밀번호 변경
           </button>
           <button
             onClick={logout}
