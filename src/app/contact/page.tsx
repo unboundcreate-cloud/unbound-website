@@ -50,7 +50,7 @@ export default function ContactPage() {
             <FadeIn delay={0.26}>
               <div>
                 <p className="label-text mb-0.5">Hours</p>
-                <p className="text-lg text-white">월–금 10:00 – 19:00</p>
+                <p className="text-lg text-white transition-colors hover:text-brand-accent">월–금 10:00 – 19:00</p>
               </div>
             </FadeIn>
             <FadeIn delay={0.34}>
