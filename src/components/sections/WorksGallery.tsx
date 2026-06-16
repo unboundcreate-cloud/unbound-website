@@ -114,14 +114,13 @@ export function WorksGallery({
               <motion.div
                 key={work.id}
                 layout
-                initial={{ opacity: 0, y: 36 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-20px" }}
-                exit={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, y: 60 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20, transition: { duration: 0.25, ease: "easeIn" } }}
                 transition={{
-                  duration: 0.7,
-                  ease: [0.16, 1, 0.3, 1],
-                  delay: Math.min(i * 0.06, 0.45),
+                  duration: 0.85,
+                  ease: [0.25, 1, 0.25, 1],
+                  delay: Math.min(i * 0.07, 0.42),
                 }}
               >
                 <WorkCard work={work} ratio="aspect-[16/9]" />
