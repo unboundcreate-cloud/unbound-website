@@ -15,65 +15,119 @@ const SERVICE_TYPES = [
 type Status = "idle" | "submitting" | "done";
 
 type PolicyItem = {
-  title: string | null;
+  level?: "section";
+  title?: string | null;
   body?: string | null;
   list?: string[];
+  separator?: boolean;
 };
 
-const PRIVACY_TEXT = [
+const PRIVACY_TEXT: PolicyItem[] = [
   {
-    title: null,
-    body: `언바운드 스튜디오(이하 '회사')는 「개인정보보호법」 제15조에 따라 아래와 같이 개인정보를 수집·이용합니다.`,
+    body: `Unbound Studio(이하 "회사")는 「개인정보 보호법」 등 관련 법령에 따라 이용자의 개인정보를 보호하고, 개인정보와 관련한 고충을 신속하고 원활하게 처리하기 위하여 다음과 같은 개인정보처리방침을 수립·공개합니다.`,
   },
-  { title: "수집 목적", body: "프로젝트 문의 처리 및 견적 안내, 서비스 제공 및 계약 이행" },
-  { title: "수집 항목", body: "이름, 이메일, 연락처, 회사명, 직책, 프로젝트 내용" },
-  { title: "보유 및 이용 기간", body: "문의 처리 완료 후 3년간 보관\n※ 관계 법령에 의해 보존이 필요한 경우 해당 기간 동안 보관합니다." },
-  {
-    title: "동의 거부 권리 및 불이익",
-    body: "개인정보 수집·이용에 동의하지 않으실 수 있습니다.\n단, 동의를 거부하실 경우 문의 접수 및 서비스 제공이 제한될 수 있습니다.",
-  },
-  { title: null, body: "본 동의서는 2026년 6월 기준으로 작성되었습니다." },
+  { separator: true },
+  { level: "section", title: "제1조 (개인정보의 처리 목적)" },
+  { body: "회사는 다음의 목적을 위하여 개인정보를 처리하며, 아래 목적 이외의 용도로는 이용하지 않습니다." },
+  { title: "1. 문의 접수 및 상담" },
+  { list: ["프로젝트 문의 및 상담 응대", "견적 요청 확인 및 회신", "서비스 제공 가능 여부 검토", "계약 진행을 위한 연락 및 안내"] },
+  { title: "2. 고객 관리" },
+  { list: ["문의 내역 관리", "고객 요청사항 처리", "서비스 개선 및 운영 관리"] },
+  { separator: true },
+  { level: "section", title: "제2조 (처리하는 개인정보 항목)" },
+  { body: "회사는 문의 접수 시 다음의 개인정보를 수집할 수 있습니다." },
+  { title: "필수항목" },
+  { list: ["성명", "회사명(또는 브랜드명)", "이메일 주소", "연락처", "문의 내용"] },
+  { title: "자동 수집 항목" },
+  { body: "웹사이트 이용 과정에서 다음 정보가 자동으로 수집될 수 있습니다." },
+  { list: ["IP 주소", "쿠키(Cookie)", "방문 일시", "브라우저 정보", "서비스 이용 기록"] },
+  { separator: true },
+  { level: "section", title: "제3조 (개인정보의 보유 및 이용 기간)" },
+  { body: "회사는 개인정보 수집 및 이용 목적이 달성된 후에는 해당 정보를 지체 없이 파기합니다.\n\n다만, 관계 법령에 따라 보존이 필요한 경우에는 해당 법령에서 정한 기간 동안 보관합니다." },
+  { list: ["문의 및 상담 기록: 접수일로부터 3년", "소비자 불만 및 분쟁처리 기록: 3년", "기타 관련 법령에 따른 보존 기간"] },
+  { separator: true },
+  { level: "section", title: "제4조 (개인정보의 제3자 제공)" },
+  { body: "회사는 이용자의 개인정보를 원칙적으로 외부에 제공하지 않습니다.\n\n다만, 다음의 경우에는 예외로 합니다." },
+  { list: ["이용자가 사전에 동의한 경우", "법령에 특별한 규정이 있는 경우", "수사기관 등 관계기관의 적법한 요청이 있는 경우"] },
+  { separator: true },
+  { level: "section", title: "제5조 (개인정보의 파기)" },
+  { body: "회사는 개인정보 보유기간의 경과 또는 처리목적 달성 시 지체 없이 개인정보를 파기합니다." },
+  { title: "파기 방법" },
+  { list: ["전자적 파일: 복구 및 재생이 불가능한 방법으로 영구 삭제", "종이 문서: 분쇄 또는 소각"] },
+  { separator: true },
+  { level: "section", title: "제6조 (개인정보의 안전성 확보 조치)" },
+  { body: "회사는 개인정보 보호를 위하여 다음과 같은 조치를 시행하고 있습니다." },
+  { title: "관리적 조치" },
+  { list: ["개인정보 취급자 최소화", "내부 관리계획 수립 및 운영"] },
+  { title: "기술적 조치" },
+  { list: ["접근 권한 관리", "보안 프로그램 운영", "개인정보 저장 및 전송 시 보호 조치"] },
+  { title: "물리적 조치" },
+  { list: ["개인정보 보관 장소 접근 통제"] },
+  { separator: true },
+  { level: "section", title: "제7조 (쿠키의 사용)" },
+  { body: "회사는 웹사이트 이용 환경 개선을 위해 쿠키를 사용할 수 있습니다.\n\n이용자는 웹 브라우저 설정을 통해 쿠키 저장을 거부할 수 있으나, 일부 서비스 이용에 제한이 있을 수 있습니다." },
+  { separator: true },
+  { level: "section", title: "제8조 (이용자의 권리)" },
+  { body: "이용자는 언제든지 자신의 개인정보에 대해 다음 권리를 행사할 수 있습니다." },
+  { list: ["개인정보 열람", "개인정보 정정", "개인정보 삭제", "개인정보 처리정지 요청"] },
+  { body: "관련 요청은 아래 연락처를 통해 접수할 수 있으며, 회사는 지체 없이 조치합니다." },
+  { separator: true },
+  { level: "section", title: "제9조 (개인정보 보호 문의)" },
+  { body: "회사는 개인정보 처리와 관련한 문의, 불만 처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호 관련 연락처를 운영합니다." },
+  { title: "개인정보 보호 문의" },
+  { list: ["상호 : Unbound Studio", "이메일 : create@unboundstudio.co.kr", "연락처 : 070-8080-2827"] },
+  { body: "정보주체는 회사의 서비스를 이용하시면서 발생한 모든 개인정보 보호 관련 문의, 불만 처리, 피해구제 등에 관한 사항을 위 연락처로 문의하실 수 있습니다. 회사는 정보주체의 문의에 대해 지체 없이 답변 및 처리하겠습니다." },
+  { separator: true },
+  { level: "section", title: "제10조 (권익침해 구제 방법)" },
+  { body: "정보주체는 개인정보 침해에 대한 신고나 상담이 필요한 경우 아래 기관에 문의할 수 있습니다." },
+  { title: "개인정보침해신고센터" },
+  { list: ["홈페이지 : privacy.kisa.or.kr", "전화 : (국번없이) 118"] },
+  { title: "개인정보분쟁조정위원회" },
+  { list: ["홈페이지 : www.kopico.go.kr", "전화 : (국번없이) 1833-6972"] },
+  { title: "대검찰청" },
+  { list: ["홈페이지 : www.spo.go.kr"] },
+  { title: "경찰청 사이버범죄 신고시스템" },
+  { list: ["홈페이지 : ecrm.police.go.kr"] },
+  { separator: true },
+  { level: "section", title: "제11조 (개인정보처리방침 시행일)" },
+  { body: "본 개인정보처리방침은 2025년 6월 16일부터 시행됩니다." },
 ];
 
-const MARKETING_TEXT = [
+const MARKETING_TEXT: PolicyItem[] = [
   {
-    title: null,
-    body: `언바운드 스튜디오(이하 '회사')는 「개인정보보호법」 제22조 및 「정보통신망 이용촉진 및 정보보호 등에 관한 법률」 제50조에 따라 아래와 같이 홍보 및 마케팅 목적의 개인정보 수집·이용 및 광고성 정보 수신에 대한 동의를 받고 있습니다.`,
+    body: `Unbound Studio는 서비스, 이벤트, 프로모션, 뉴스레터 및 다양한 혜택 정보를 제공하기 위하여 아래와 같이 광고성 정보를 발송할 수 있습니다.`,
   },
+  { separator: true },
+  { level: "section", title: "1. 수집 및 이용 항목" },
+  { list: ["성명", "이메일 주소", "연락처"] },
+  { separator: true },
+  { level: "section", title: "2. 이용 목적" },
   {
-    title: "제1조 (수집 및 이용 목적)",
-    body: null,
     list: [
-      "신규 서비스 및 영상 제작 패키지 안내",
-      "프로모션 및 할인 이벤트 정보 제공",
-      "포트폴리오 업데이트 및 제작 사례 소개",
-      "업계 트렌드 및 영상 제작 관련 유용한 정보 제공",
-      "맞춤형 견적 및 컨설팅 안내",
+      "Unbound Studio의 서비스 및 프로젝트 소식 안내",
+      "이벤트, 프로모션 및 혜택 정보 제공",
+      "뉴스레터 발송",
+      "신규 서비스 및 콘텐츠 안내",
+      "고객 맞춤형 마케팅 정보 제공",
     ],
   },
-  { title: "제2조 (수집 항목)", body: "이름, 이메일 주소, 연락처(전화번호)" },
+  { separator: true },
+  { level: "section", title: "3. 전송 방법" },
+  { list: ["이메일(E-mail)", "문자메시지(SMS/LMS)", "전화", "기타 전자적 전송매체"] },
+  { separator: true },
+  { level: "section", title: "4. 보유 및 이용 기간" },
+  { body: "동의일로부터 동의 철회 시까지" },
+  { separator: true },
+  { level: "section", title: "5. 동의 거부 권리 및 불이익" },
   {
-    title: "제3조 (보유 및 이용 기간)",
-    body: "동의 철회 시까지\n※ 수신 동의 철회 요청 시 즉시 해당 정보를 삭제 처리합니다.",
+    body: "귀하는 홍보 및 마케팅 정보 수신에 대한 동의를 거부할 권리가 있습니다.\n\n다만, 동의를 거부하더라도 프로젝트 문의, 상담, 견적 요청 등 기본적인 서비스 이용에는 어떠한 제한도 없습니다.",
   },
-  { title: "제4조 (발송 채널)", body: "이메일, 문자(SMS), 카카오톡 알림톡" },
-  {
-    title: "제5조 (광고성 정보 전송 시간)",
-    body: "「정보통신망법」 제50조 제3항에 따라 오후 9시부터 다음 날 오전 8시까지는 별도의 사전 동의 없이 광고성 정보를 전송하지 않습니다.",
-  },
-  {
-    title: "제6조 (동의 거부 권리 및 불이익 안내)",
-    body: "본 동의는 선택 사항으로, 동의하지 않으셔도 서비스 이용에 어떠한 불이익도 없습니다.\n단, 동의하지 않으실 경우 각종 혜택 및 이벤트 정보를 제공받으실 수 없습니다.",
-  },
-  {
-    title: "제7조 (동의 철회 방법)",
-    body: "수신 동의는 언제든지 아래 연락처를 통해 철회하실 수 있으며, 철회 즉시 마케팅 발송이 중단됩니다.\n📧 create@unboundstudio.co.kr\n📞 070-8080-2827",
-  },
-  {
-    title: "제8조 (관련 법령)",
-    body: "본 동의는 아래 법령에 근거합니다.\n「개인정보보호법」 제15조, 제22조\n「정보통신망 이용촉진 및 정보보호 등에 관한 법률」 제50조",
-  },
-  { title: null, body: "본 동의서는 2026년 6월 기준으로 작성되었습니다." },
+  { separator: true },
+  { level: "section", title: "6. 동의 철회" },
+  { body: "수신 동의 후에도 언제든지 아래 연락처를 통해 동의를 철회할 수 있습니다." },
+  { list: ["이메일 : create@unboundstudio.co.kr", "연락처 : 070-8080-2827"] },
+  { separator: true },
+  { body: "※ 본 동의는 선택 사항이며, 동의하지 않아도 서비스 이용에는 제한이 없습니다." },
 ];
 
 function PolicyModal({
@@ -116,23 +170,33 @@ function PolicyModal({
 
         {/* 본문 */}
         <div className="overflow-y-auto px-6 py-5 text-xs leading-relaxed text-white/50">
-          {content.map((item, i) => (
-            <div key={i} className="mb-4">
-              {item.title && (
-                <p className="mb-1 font-semibold text-white/70">{item.title}</p>
-              )}
-              {item.body && (
-                <p className="whitespace-pre-line">{item.body}</p>
-              )}
-              {"list" in item && item.list && (
-                <ul className="mt-1 space-y-0.5 pl-3">
-                  {item.list.map((li, j) => (
-                    <li key={j} className="before:mr-1 before:content-['·']">{li}</li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          ))}
+          {content.map((item, i) => {
+            if (item.separator) {
+              return <hr key={i} className="my-4 border-white/10" />;
+            }
+            return (
+              <div key={i} className="mb-3">
+                {item.level === "section" && item.title && (
+                  <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.06em] text-white/80">
+                    {item.title}
+                  </p>
+                )}
+                {!item.level && item.title && (
+                  <p className="mb-1 font-semibold text-white/65">{item.title}</p>
+                )}
+                {item.body && (
+                  <p className="whitespace-pre-line">{item.body}</p>
+                )}
+                {item.list && (
+                  <ul className="mt-1 space-y-0.5 pl-3">
+                    {item.list.map((li, j) => (
+                      <li key={j} className="before:mr-1 before:content-['·']">{li}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            );
+          })}
         </div>
 
         {/* 푸터 */}
@@ -276,7 +340,7 @@ export function ContactForm() {
     <>
       {modal === "privacy" && (
         <PolicyModal
-          title="개인정보 수집 및 이용 동의 (필수)"
+          title="개인정보처리방침"
           content={PRIVACY_TEXT}
           onClose={() => setModal(null)}
         />
