@@ -1,4 +1,4 @@
-import { anthropic } from "@ai-sdk/anthropic";
+import { google } from "@ai-sdk/google";
 import { streamText } from "ai";
 
 const SYSTEM_PROMPT = `당신은 Unbound Studio의 AI 어시스턴트입니다.
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
   const { messages } = await req.json();
 
   const result = streamText({
-    model: anthropic("claude-haiku-4-5-20251001"),
+    model: google("gemini-2.0-flash"),
     system: SYSTEM_PROMPT,
     messages,
     maxTokens: 400,
