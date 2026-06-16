@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-
-const LETTERS = "UNBOUND".split("");
+import { Logo } from "@/components/ui/Logo";
 
 export function IntroAnimation() {
   const [phase, setPhase] = useState<"show" | "exit" | "done">("show");
@@ -43,52 +42,39 @@ export function IntroAnimation() {
     >
       <div className="flex flex-col items-center">
         {/* 상단 레드 라인 */}
-        <div className="relative mb-7 h-px w-[min(360px,60vw)] bg-white/10">
+        <div className="relative mb-8 h-px w-[min(380px,62vw)] bg-white/10">
           <motion.div
             className="absolute inset-y-0 left-0 h-full bg-brand-accent"
             initial={{ width: "0%" }}
             animate={{ width: "100%" }}
-            transition={{ duration: 0.55, ease: [0.76, 0, 0.24, 1], delay: 0.08 }}
+            transition={{ duration: 0.55, ease: [0.76, 0, 0.24, 1], delay: 0.1 }}
           />
         </div>
 
-        {/* UNBOUND — 글자 한 자씩 아래서 위로 슬라이드 */}
-        <div className="flex">
-          {LETTERS.map((char, i) => (
-            <div key={i} className="overflow-hidden">
-              <motion.span
-                className="block font-display text-[clamp(2.8rem,9vw,7.5rem)] uppercase leading-none tracking-[-0.02em] text-white"
-                initial={{ y: "110%" }}
-                animate={{ y: 0 }}
-                transition={{
-                  duration: 0.72,
-                  ease: [0.76, 0, 0.24, 1],
-                  delay: 0.16 + i * 0.055,
-                }}
-              >
-                {char}
-              </motion.span>
+        {/* 로고 */}
+        <div className="w-[min(380px,62vw)]">
+          <div className="relative">
+            <div style={{ opacity: 0.08 }}>
+              <Logo variant="white" height={92} className="h-auto w-full" />
             </div>
-          ))}
+            <motion.div
+              className="absolute inset-0"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+            >
+              <Logo variant="white" height={92} className="h-auto w-full" />
+            </motion.div>
+          </div>
         </div>
 
-        {/* STUDIO 서브타이틀 */}
-        <motion.p
-          className="mt-3 font-mono text-[clamp(0.5rem,1.6vw,0.75rem)] uppercase tracking-[0.5em] text-white/35"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, ease: "easeOut", delay: 0.7 }}
-        >
-          Studio
-        </motion.p>
-
         {/* 하단 레드 라인 */}
-        <div className="relative mt-7 h-px w-[min(360px,60vw)] bg-white/10">
+        <div className="relative mt-8 h-px w-[min(380px,62vw)] bg-white/10">
           <motion.div
             className="absolute inset-y-0 left-0 h-full bg-brand-accent"
             initial={{ width: "0%" }}
             animate={{ width: "100%" }}
-            transition={{ duration: 0.55, ease: [0.76, 0, 0.24, 1], delay: 0.76 }}
+            transition={{ duration: 0.55, ease: [0.76, 0, 0.24, 1], delay: 0.7 }}
           />
         </div>
       </div>
