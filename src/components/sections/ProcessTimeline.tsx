@@ -13,10 +13,10 @@ const PROCESS = [
 export function ProcessTimeline() {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
-  // 빨간 선이 채워지는 비율 (0~100%)
+  // 빨간 선이 hovered 점까지만 채워지는 비율
   const fillPct =
     hoveredIdx !== null
-      ? Math.round(((hoveredIdx + 1) / PROCESS.length) * 100)
+      ? Math.round((hoveredIdx / PROCESS.length) * 100)
       : 0;
 
   return (
@@ -52,7 +52,7 @@ export function ProcessTimeline() {
                   className="h-2.5 w-2.5 rounded-full transition-colors duration-300"
                   style={{
                     backgroundColor:
-                      hoveredIdx !== null && i <= hoveredIdx
+                      hoveredIdx !== null && i === hoveredIdx
                         ? "var(--color-brand-accent)"
                         : "rgba(255,255,255,0.25)",
                   }}
@@ -75,7 +75,7 @@ export function ProcessTimeline() {
                   className="mb-3 font-display text-2xl uppercase transition-colors duration-300"
                   style={{
                     color:
-                      hoveredIdx !== null && i <= hoveredIdx
+                      hoveredIdx !== null && i === hoveredIdx
                         ? "var(--color-brand-accent)"
                         : "#ffffff",
                   }}
