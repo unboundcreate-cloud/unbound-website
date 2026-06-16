@@ -111,9 +111,12 @@ export function ChatLogsView({ logs: initial, ready }: { logs: ChatEntry[]; read
         <div className="mb-6 rounded-lg border border-yellow-700/40 bg-yellow-900/15 px-4 py-3 text-sm text-yellow-300">
           Upstash Redis가 연결되지 않았습니다.{" "}
           <span className="opacity-70">
-            Vercel → Settings → Environment Variables에서{" "}
-            <code className="font-mono">UPSTASH_REDIS_REST_URL</code>과{" "}
-            <code className="font-mono">UPSTASH_REDIS_REST_TOKEN</code>을 추가하세요.
+            Vercel Storage(KV) 연동 시:{" "}
+            <code className="font-mono">KV_REST_API_URL</code> /{" "}
+            <code className="font-mono">KV_REST_API_TOKEN</code>
+            {" "}— 직접 추가 시:{" "}
+            <code className="font-mono">UPSTASH_REDIS_REST_URL</code> /{" "}
+            <code className="font-mono">UPSTASH_REDIS_REST_TOKEN</code>
           </span>
         </div>
       )}
