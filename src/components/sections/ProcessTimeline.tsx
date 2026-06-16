@@ -40,7 +40,7 @@ export function ProcessTimeline() {
             className="absolute left-0 top-[5px] h-px bg-brand-accent"
             style={{
               width: `${fillPct}%`,
-              transition: "width 0.45s cubic-bezier(0.16,1,0.3,1)",
+              transition: "width 1.2s cubic-bezier(0.37,0,0.63,1)",
             }}
           />
           {/* 점 */}
