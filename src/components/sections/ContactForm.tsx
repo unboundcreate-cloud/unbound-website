@@ -269,7 +269,7 @@ function FieldWrap({ children }: { children: React.ReactNode }) {
   return (
     <div className="group relative border-b border-white/20">
       {children}
-      <span className="pointer-events-none absolute bottom-0 left-0 h-px w-0 bg-brand-accent transition-[width] duration-[1200ms] ease-[cubic-bezier(0.25,1,0.25,1)] [@media(hover:hover)]:group-hover:w-full peer-focus:w-full" />
+      <span className="pointer-events-none absolute bottom-0 left-0 h-px w-0 bg-brand-accent transition-[width] duration-[1200ms] ease-[cubic-bezier(0.37,0,0.63,1)] [@media(hover:hover)]:group-hover:w-full peer-focus:w-full" />
     </div>
   );
 }

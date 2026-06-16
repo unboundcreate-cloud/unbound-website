@@ -32,7 +32,7 @@ export function HomeAdventure() {
                 </SpotlightText>
               </h2>
               <div className="relative mt-8 h-px w-full bg-white/25">
-                <div className="absolute inset-y-0 left-0 w-0 bg-brand-accent transition-[width] duration-[1200ms] ease-[cubic-bezier(0.25,1,0.25,1)] [@media(hover:hover)]:group-hover/card:w-full" />
+                <div className="absolute inset-y-0 left-0 w-0 bg-brand-accent transition-[width] duration-[1200ms] ease-[cubic-bezier(0.37,0,0.63,1)] [@media(hover:hover)]:group-hover/card:w-full" />
               </div>
               <Link href={it.href} className="group/link mt-6 block">
                 <p className="flex items-center gap-2 font-mono text-sm uppercase tracking-[0.25em] text-white transition-colors group-hover/link:text-brand-accent">
