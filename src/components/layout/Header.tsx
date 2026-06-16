@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { studio } from "@/data/clients";
 import { Logo } from "@/components/ui/Logo";
+import { ScrambleText } from "@/components/ui/ScrambleText";
+import { MagneticWrapper } from "@/components/ui/MagneticWrapper";
 
 const NAV = [
   { label: "Works", href: "/works" },
@@ -54,10 +56,11 @@ export function Header() {
             <Logo variant="white" height={20} />
           </Link>
 
+          <MagneticWrapper className="relative z-50">
           <button
             aria-label="Toggle menu"
             onClick={() => setOpen((o) => !o)}
-            className="relative z-50 flex h-8 w-8 flex-col items-center justify-center gap-[5px]"
+            className="flex h-8 w-8 flex-col items-center justify-center gap-[5px]"
           >
             <motion.span
               animate={open ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
@@ -73,6 +76,7 @@ export function Header() {
               className="block h-px w-7 bg-white"
             />
           </button>
+          </MagneticWrapper>
         </div>
       </header>
 
@@ -99,7 +103,7 @@ export function Header() {
                     className="group flex items-baseline gap-4 font-display uppercase leading-[0.95] text-white transition-colors hover:text-brand-accent"
                   >
                     <span className="text-[14vw] transition-transform duration-300 group-hover:translate-x-4 md:text-[7vw]">
-                      {item.label}
+                      <ScrambleText>{item.label}</ScrambleText>
                     </span>
                   </Link>
                 </motion.div>

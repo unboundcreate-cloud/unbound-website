@@ -8,6 +8,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import { IntroAnimation } from "@/components/ui/IntroAnimation";
+import { ScrollProgress } from "@/components/ui/ScrollProgress";
 
 export function Chrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -61,6 +62,7 @@ export function Chrome({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="has-custom-cursor">
+      <ScrollProgress />
       {pathname === "/" && <IntroAnimation />}
 
       {/* 이탈 커튼 — 위에서 내려와 덮은 뒤 navigate */}

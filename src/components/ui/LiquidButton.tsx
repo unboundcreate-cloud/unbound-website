@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useRef } from "react";
+import { motion, useSpring } from "framer-motion";
 
 interface LiquidButtonProps {
   href?: string;
@@ -20,6 +21,8 @@ export function LiquidButton({
   onClick,
 }: LiquidButtonProps) {
   const circleRef = useRef<HTMLSpanElement>(null);
+  const x = useSpring(0, { stiffness: 200, damping: 25, mass: 0.15 });
+  const y = useSpring(0, { stiffness: 200, damping: 25, mass: 0.15 });
 
   const setPos = (e: React.MouseEvent<HTMLElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -29,13 +32,26 @@ export function LiquidButton({
     c.style.top  = `${e.clientY - rect.top}px`;
   };
 
+  const setMag = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    x.set((e.clientX - (rect.left + rect.width / 2)) * 0.3);
+    y.set((e.clientY - (rect.top + rect.height / 2)) * 0.3);
+  };
+
   const onEnter = (e: React.MouseEvent<HTMLElement>) => {
     setPos(e);
     circleRef.current?.style.setProperty("transform", "translate(-50%,-50%) scale(1)");
+    setMag(e);
   };
-  const onMove  = (e: React.MouseEvent<HTMLElement>) => setPos(e);
-  const onLeave = () =>
+  const onMove = (e: React.MouseEvent<HTMLElement>) => {
+    setPos(e);
+    setMag(e);
+  };
+  const onLeave = () => {
     circleRef.current?.style.setProperty("transform", "translate(-50%,-50%) scale(0)");
+    x.set(0);
+    y.set(0);
+  };
 
   const inner = (
     <>
@@ -60,29 +76,33 @@ export function LiquidButton({
 
   if (href) {
     return (
-      <Link
-        href={href}
-        onMouseEnter={onEnter}
-        onMouseMove={onMove}
-        onMouseLeave={onLeave}
-        className={baseClass}
-      >
-        {inner}
-      </Link>
+      <motion.div style={{ x, y, display: "inline-flex" }}>
+        <Link
+          href={href}
+          onMouseEnter={onEnter}
+          onMouseMove={onMove}
+          onMouseLeave={onLeave}
+          className={baseClass}
+        >
+          {inner}
+        </Link>
+      </motion.div>
     );
   }
 
   return (
-    <button
-      type={type}
-      disabled={disabled}
-      onClick={onClick}
-      onMouseEnter={onEnter}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      className={`${baseClass} disabled:cursor-not-allowed disabled:opacity-50`}
-    >
-      {inner}
-    </button>
+    <motion.div style={{ x, y, display: "inline-flex" }}>
+      <button
+        type={type}
+        disabled={disabled}
+        onClick={onClick}
+        onMouseEnter={onEnter}
+        onMouseMove={onMove}
+        onMouseLeave={onLeave}
+        className={`${baseClass} disabled:cursor-not-allowed disabled:opacity-50`}
+      >
+        {inner}
+      </button>
+    </motion.div>
   );
 }

@@ -3,6 +3,7 @@ import { FadeIn } from "@/components/ui/FadeIn";
 import { clients } from "@/data/clients";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { SpotlightText } from "@/components/ui/SpotlightText";
+import { StatsSection } from "@/components/sections/StatsSection";
 
 export const metadata: Metadata = {
   title: "About | Unbound Studio",
@@ -82,6 +83,8 @@ export default function AboutPage() {
           </FadeIn>
         </div>
       </section>
+
+      <StatsSection />
 
       {/* ─── 02 Philosophy ─── */}
       <section className="section-padding py-28 md:py-40">
