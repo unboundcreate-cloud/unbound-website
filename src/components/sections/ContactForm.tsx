@@ -134,10 +134,12 @@ function PolicyModal({
   title,
   content,
   onClose,
+  onConfirm,
 }: {
   title: string;
   content: PolicyItem[];
   onClose: () => void;
+  onConfirm: () => void;
 }) {
   return (
     <div
@@ -203,7 +205,7 @@ function PolicyModal({
         <div className="border-t border-white/10 px-6 py-4">
           <button
             type="button"
-            onClick={onClose}
+            onClick={() => { onConfirm(); onClose(); }}
             className="w-full rounded bg-white/5 py-2.5 text-sm text-white/70 transition-colors hover:bg-white/10 hover:text-white"
           >
             확인
@@ -218,11 +220,15 @@ function CheckboxRow({
   name,
   label,
   badge,
+  checked,
+  onChange,
   onViewFull,
 }: {
   name: string;
   label: string;
   badge: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
   onViewFull: () => void;
 }) {
   return (
@@ -231,6 +237,8 @@ function CheckboxRow({
         <input
           type="checkbox"
           name={name}
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
           className="peer absolute inset-0 z-10 cursor-pointer opacity-0"
         />
         <span className="h-5 w-5 rounded-sm border border-white/30 transition-all duration-300 peer-checked:border-brand-accent peer-checked:bg-brand-accent" />
@@ -270,6 +278,8 @@ export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [modal, setModal] = useState<"privacy" | "marketing" | null>(null);
+  const [privacyChecked, setPrivacyChecked] = useState(false);
+  const [marketingChecked, setMarketingChecked] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = modal ? "hidden" : "";
@@ -289,7 +299,7 @@ export function ContactForm() {
       next.email = "올바른 이메일 형식이 아닙니다.";
     if (!String(data.get("message") || "").trim())
       next.message = "프로젝트 내용을 입력해주세요.";
-    if (!data.get("privacy")) next.privacy = "개인정보 수집 및 이용에 동의해주세요.";
+    if (!privacyChecked) next.privacy = "개인정보 수집 및 이용에 동의해주세요.";
 
     setErrors(next);
     if (Object.keys(next).length > 0) return;
@@ -343,6 +353,7 @@ export function ContactForm() {
           title="개인정보처리방침"
           content={PRIVACY_TEXT}
           onClose={() => setModal(null)}
+          onConfirm={() => setPrivacyChecked(true)}
         />
       )}
       {modal === "marketing" && (
@@ -350,6 +361,7 @@ export function ContactForm() {
           title="홍보 및 마케팅 정보 수신 동의 (선택)"
           content={MARKETING_TEXT}
           onClose={() => setModal(null)}
+          onConfirm={() => setMarketingChecked(true)}
         />
       )}
 
@@ -433,6 +445,8 @@ export function ContactForm() {
             name="privacy"
             badge="(필수)"
             label="개인정보 수집 및 이용 동의"
+            checked={privacyChecked}
+            onChange={setPrivacyChecked}
             onViewFull={() => setModal("privacy")}
           />
           {errors.privacy && (
@@ -442,6 +456,8 @@ export function ContactForm() {
             name="marketing"
             badge="(선택)"
             label="홍보 및 마케팅 정보 수신 동의"
+            checked={marketingChecked}
+            onChange={setMarketingChecked}
             onViewFull={() => setModal("marketing")}
           />
         </div>
