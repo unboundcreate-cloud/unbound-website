@@ -111,11 +111,6 @@ export default async function WorkDetailPage({
             <p className="text-base leading-relaxed text-white/75 md:text-lg">
               {work.description}
             </p>
-            <p className="mt-6 text-sm leading-relaxed text-brand-muted">
-              기획·디자인·제작·납품까지 원스톱으로 진행한 프로젝트입니다. 최신 AI
-              기술과 모션그래픽을 결합하여 클라이언트의 메시지를 가장 강렬하게
-              전달하는 영상을 완성했습니다.
-            </p>
             <a
               href={work.videoUrl}
               target="_blank"
