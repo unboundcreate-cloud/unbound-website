@@ -171,7 +171,7 @@ function PolicyModal({
         </div>
 
         {/* 본문 */}
-        <div className="overflow-y-auto px-6 py-5 text-xs leading-relaxed text-white/50">
+        <div className="overflow-y-auto overscroll-contain px-6 py-5 text-xs leading-relaxed text-white/50">
           {content.map((item, i) => {
             if (item.separator) {
               return <hr key={i} className="my-4 border-white/10" />;
@@ -269,7 +269,7 @@ function FieldWrap({ children }: { children: React.ReactNode }) {
   return (
     <div className="group relative border-b border-white/20">
       {children}
-      <span className="pointer-events-none absolute bottom-0 left-0 h-px w-0 bg-brand-accent transition-[width] duration-[1200ms] ease-[cubic-bezier(0.25,1,0.25,1)] group-hover:w-full peer-focus:w-full" />
+      <span className="pointer-events-none absolute bottom-0 left-0 h-px w-0 bg-brand-accent transition-[width] duration-[1200ms] ease-[cubic-bezier(0.25,1,0.25,1)] [@media(hover:hover)]:group-hover:w-full peer-focus:w-full" />
     </div>
   );
 }

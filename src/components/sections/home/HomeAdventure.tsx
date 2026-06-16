@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { SpotlightText } from "@/components/ui/SpotlightText";
 
@@ -23,7 +26,7 @@ export function HomeAdventure() {
       <div className="section-padding grid grid-cols-1 gap-14 py-32 md:grid-cols-2 md:gap-24 md:py-52">
         {ITEMS.map((it, i) => (
           <FadeIn key={it.label} delay={i * 0.15}>
-            <div className="group/card">
+            <div>
               <h2 className="font-display text-3xl uppercase leading-[0.95] text-white md:text-4xl lg:text-5xl">
                 <SpotlightText>
                   {it.heading[0]}
@@ -32,7 +35,13 @@ export function HomeAdventure() {
                 </SpotlightText>
               </h2>
               <div className="relative mt-8 h-px w-full bg-white/25">
-                <div className="absolute inset-y-0 left-0 w-0 bg-brand-accent transition-[width] duration-[1200ms] ease-[cubic-bezier(0.25,1,0.25,1)] group-hover/card:w-full" />
+                <motion.div
+                  className="absolute inset-y-0 left-0 bg-brand-accent"
+                  initial={{ width: 0 }}
+                  whileInView={{ width: "100%" }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 1.2, ease: [0.25, 1, 0.25, 1], delay: i * 0.1 }}
+                />
               </div>
               <Link href={it.href} className="group/link mt-6 block">
                 <p className="flex items-center gap-2 font-mono text-sm uppercase tracking-[0.25em] text-white transition-colors group-hover/link:text-brand-accent">
