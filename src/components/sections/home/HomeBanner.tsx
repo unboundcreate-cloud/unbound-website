@@ -10,7 +10,7 @@ export function HomeBanner() {
         <CharReveal text={LINE1} charDelay={30} />
         <CharReveal
           text={LINE2}
-          className="mt-8 md:mt-12"
+          className="mt-3 md:mt-4"
           charDelay={30}
           delay={LINE1.length * 30 * 0.55}
         />
