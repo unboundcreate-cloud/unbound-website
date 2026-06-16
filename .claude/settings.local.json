@@ -156,7 +156,11 @@
       "Bash(git commit -q -m 'Works에 신규 5작품 등록\\(킹덤·기생수더그레이·바겐·기생충·외계+인\\) + 영화 상위 정렬 *)",
       "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\('name:',p.name\\); console.log\\('scripts:',JSON.stringify\\(p.scripts,null,2\\)\\); console.log\\('engines:',JSON.stringify\\(p.engines||'\\(none\\)'\\)\\); console.log\\('deps:',Object.keys\\(p.dependencies||{}\\).join\\(', '\\)\\); console.log\\('devDeps:',Object.keys\\(p.devDependencies||{}\\).join\\(', '\\)\\)\")",
       "Bash(git commit -q -m '인계용 문서 정비: README 최신화, .env.example 추가 *)",
-      "Bash(git commit -q -m '.env.example 추적\\(예외 규칙 추가\\) *)"
+      "Bash(git commit -q -m '.env.example 추적\\(예외 규칙 추가\\) *)",
+      "Bash(gh auth *)",
+      "PowerShell(gh auth status 2>&1)",
+      "Bash(pandoc \"C:\\\\Users\\\\BEE\\\\Downloads\\\\unboundstudio_개인정보취급방침.docx\" -o /tmp/privacy.md)",
+      "WebFetch(domain:www.unboundstudio.co.kr)"
     ]
   }
 }
