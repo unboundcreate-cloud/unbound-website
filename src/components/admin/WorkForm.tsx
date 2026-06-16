@@ -66,7 +66,7 @@ export function WorkForm({ work, mode }: Props) {
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState("");
 
-  const set = (key: keyof Work, val: unknown) => setForm((f) => ({ ...f, [key]: val }));
+  const set = (key: keyof Work, val: unknown) => setForm((f) => ({ ...f, [key]: val } as Partial<Work>));
 
   const save = async () => {
     if (!form.id || !form.title) { setError("ID와 제목은 필수입니다."); return; }

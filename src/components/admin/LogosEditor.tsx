@@ -14,7 +14,7 @@ export function LogosEditor({ initialLogos }: Props) {
   const [error, setError] = useState("");
 
   const update = (idx: number, key: keyof Client, val: string) => {
-    setLogos((prev) => prev.map((l, i) => i === idx ? { ...l, [key]: val } : l));
+    setLogos((prev) => prev.map((l, i) => i === idx ? { ...l, [key]: val } as Client : l));
     setSaved(false);
   };
 

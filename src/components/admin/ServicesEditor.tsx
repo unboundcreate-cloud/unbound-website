@@ -14,7 +14,7 @@ export function ServicesEditor({ initialServices }: Props) {
   const [error, setError] = useState("");
 
   const update = (idx: number, key: keyof Service, val: string) => {
-    setServices((prev) => prev.map((s, i) => i === idx ? { ...s, [key]: val } : s));
+    setServices((prev) => prev.map((s, i) => i === idx ? { ...s, [key]: val } as Service : s));
     setSaved(false);
   };
 

@@ -16,7 +16,7 @@ export function RedirectsEditor({ initialRules }: Props) {
   const add = () => { setRules((r) => [...r, { from: "", to: "", type: "301" }]); setSaved(false); };
   const remove = (idx: number) => { setRules((r) => r.filter((_, i) => i !== idx)); setSaved(false); };
   const update = (idx: number, key: keyof RedirectRule, val: string) => {
-    setRules((r) => r.map((rule, i) => i === idx ? { ...rule, [key]: val } : rule));
+    setRules((r) => r.map((rule, i) => i === idx ? { ...rule, [key]: val } as RedirectRule : rule));
     setSaved(false);
   };
 
