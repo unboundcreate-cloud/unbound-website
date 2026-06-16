@@ -12,7 +12,7 @@ const SERVICE_TYPES = [
   "기타",
 ];
 
-type Status = "idle" | "submitting" | "done";
+type Status = "idle" | "submitting";
 
 type PolicyItem = {
   level?: "section";
@@ -216,6 +216,66 @@ function PolicyModal({
   );
 }
 
+function AlertModal({ message, onClose }: { message: string; onClose: () => void }) {
+  return (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      <div
+        className="relative z-10 w-full max-w-sm rounded-lg border border-white/10 bg-[#111] shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="px-6 py-6">
+          <p className="text-sm leading-relaxed text-white/85">{message}</p>
+        </div>
+        <div className="border-t border-white/10 px-6 py-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-full rounded bg-white/5 py-2.5 text-sm text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+          >
+            확인
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SuccessModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+      <div
+        className="relative z-10 w-full max-w-md rounded-lg border border-white/10 bg-[#111] px-8 py-12 text-center shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <p className="font-display text-5xl uppercase text-brand-accent">
+          Thank You
+        </p>
+        <p className="mt-6 text-sm leading-relaxed text-white/80 md:text-base">
+          문의가 정상적으로 접수 되었습니다.
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-white/50">
+          담당자 확인 후 빠른 시일 내에 연락 드리겠습니다. 감사합니다.
+        </p>
+        <button
+          type="button"
+          onClick={onClose}
+          className="mt-8 rounded-full bg-brand-accent px-8 py-2.5 font-display text-sm uppercase tracking-widest text-white transition-opacity hover:opacity-80"
+        >
+          닫기
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function CheckboxRow({
   name,
   label,
@@ -276,33 +336,40 @@ function FieldWrap({ children }: { children: React.ReactNode }) {
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
-  const [errors, setErrors] = useState<Record<string, string>>({});
   const [modal, setModal] = useState<"privacy" | "marketing" | null>(null);
   const [privacyChecked, setPrivacyChecked] = useState(false);
   const [marketingChecked, setMarketingChecked] = useState(false);
+  const [alertMsg, setAlertMsg] = useState<string | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
-    document.body.style.overflow = modal ? "hidden" : "";
+    document.body.style.overflow = modal || alertMsg || showSuccess ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
-  }, [modal]);
+  }, [modal, alertMsg, showSuccess]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const data = new FormData(form);
-    const next: Record<string, string> = {};
 
-    if (!String(data.get("name") || "").trim()) next.name = "이름을 입력해주세요.";
+    const name = String(data.get("name") || "").trim();
+    if (!name) { setAlertMsg("이름을 입력해주세요."); return; }
+
     const email = String(data.get("email") || "").trim();
-    if (!email) next.email = "이메일을 입력해주세요.";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-      next.email = "올바른 이메일 형식이 아닙니다.";
-    if (!String(data.get("message") || "").trim())
-      next.message = "프로젝트 내용을 입력해주세요.";
-    if (!privacyChecked) next.privacy = "개인정보 수집 및 이용에 동의해주세요.";
+    if (!email) { setAlertMsg("이메일을 입력해주세요."); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setAlertMsg("이메일 형식에 맞게 입력해주세요."); return;
+    }
 
-    setErrors(next);
-    if (Object.keys(next).length > 0) return;
+    const phone = String(data.get("phone") || "").trim();
+    if (phone && phone.replace(/\D/g, "").length < 10) {
+      setAlertMsg("연락처는 10자리 이상 입력해주세요."); return;
+    }
+
+    const message = String(data.get("message") || "").trim();
+    if (!message) { setAlertMsg("프로젝트 내용을 입력해주세요."); return; }
+
+    if (!privacyChecked) { setAlertMsg("개인정보 수집 및 이용에 동의해주세요."); return; }
 
     setStatus("submitting");
     try {
@@ -316,15 +383,16 @@ export function ContactForm() {
         const { error } = await res.json().catch(() => ({}));
         throw new Error(error || "전송에 실패했습니다.");
       }
-      setStatus("done");
+      setStatus("idle");
+      setShowSuccess(true);
+      form.reset();
+      setPrivacyChecked(false);
+      setMarketingChecked(false);
     } catch (err) {
       setStatus("idle");
-      setErrors({
-        submit:
-          err instanceof Error
-            ? err.message
-            : "전송에 실패했습니다. 잠시 후 다시 시도해주세요.",
-      });
+      setAlertMsg(
+        err instanceof Error ? err.message : "전송에 실패했습니다. 잠시 후 다시 시도해주세요."
+      );
     }
   };
 
@@ -333,21 +401,11 @@ export function ContactForm() {
   const labelClass =
     "font-mono text-[12px] uppercase tracking-[0.2em] text-brand-muted";
 
-  if (status === "done") {
-    return (
-      <div className="flex min-h-[300px] flex-col items-start justify-center">
-        <p className="font-display text-4xl uppercase text-brand-accent">
-          Thank you
-        </p>
-        <p className="mt-4 text-white/80">
-          문의가 접수되었습니다. 빠른 시일 내에 연락드리겠습니다.
-        </p>
-      </div>
-    );
-  }
-
   return (
     <>
+      {alertMsg && <AlertModal message={alertMsg} onClose={() => setAlertMsg(null)} />}
+      {showSuccess && <SuccessModal onClose={() => setShowSuccess(false)} />}
+
       {modal === "privacy" && (
         <PolicyModal
           title="개인정보처리방침"
@@ -372,7 +430,6 @@ export function ContactForm() {
             <FieldWrap>
               <input id="name" name="name" className={fieldClass} placeholder="Name" />
             </FieldWrap>
-            {errors.name && <p className="mt-1 text-xs text-brand-accent">{errors.name}</p>}
           </div>
           <div>
             <label className={labelClass} htmlFor="company">회사명</label>
@@ -391,7 +448,6 @@ export function ContactForm() {
             <FieldWrap>
               <input id="email" name="email" type="email" className={fieldClass} placeholder="you@email.com" />
             </FieldWrap>
-            {errors.email && <p className="mt-1 text-xs text-brand-accent">{errors.email}</p>}
           </div>
           <div>
             <label className={labelClass} htmlFor="phone">연락처</label>
@@ -437,7 +493,6 @@ export function ContactForm() {
               placeholder="Tell us about your project."
             />
           </FieldWrap>
-          {errors.message && <p className="mt-1 text-xs text-brand-accent">{errors.message}</p>}
         </div>
 
         <div className="flex flex-col gap-4 border-t border-white/10 pt-6">
@@ -449,9 +504,6 @@ export function ContactForm() {
             onChange={setPrivacyChecked}
             onViewFull={() => setModal("privacy")}
           />
-          {errors.privacy && (
-            <p className="-mt-2 text-xs text-brand-accent">{errors.privacy}</p>
-          )}
           <CheckboxRow
             name="marketing"
             badge="(선택)"
@@ -466,9 +518,6 @@ export function ContactForm() {
           <LiquidButton type="submit" disabled={status === "submitting"}>
             {status === "submitting" ? "전송 중..." : "Send Message"}
           </LiquidButton>
-          {errors.submit && (
-            <p className="text-xs text-brand-accent">{errors.submit}</p>
-          )}
         </div>
       </form>
     </>
