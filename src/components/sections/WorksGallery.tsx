@@ -93,7 +93,8 @@ export function WorksGallery({
 
   return (
     <>
-      <div className="section-padding mb-12 flex flex-wrap gap-3">
+      <div className="section-padding mb-12 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex gap-3 min-w-max sm:flex-wrap sm:min-w-0">
         {FILTERS.map((f) => (
           <FilterButton
             key={f.value}
@@ -102,6 +103,7 @@ export function WorksGallery({
             onClick={() => setActive(f.value)}
           />
         ))}
+        </div>
       </div>
 
       <div className="section-padding">
