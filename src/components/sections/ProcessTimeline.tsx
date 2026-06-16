@@ -13,11 +13,9 @@ const PROCESS = [
 export function ProcessTimeline() {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
-  // 빨간 선이 hovered 점까지만 채워지는 비율
-  const fillPct =
-    hoveredIdx !== null
-      ? Math.round((hoveredIdx / PROCESS.length) * 100)
-      : 0;
+  // 각 항목 사이 구간만 빨갛게 채움
+  const segLeft = hoveredIdx !== null ? `${(hoveredIdx / PROCESS.length) * 100}%` : "0%";
+  const segWidth = `${(1 / PROCESS.length) * 100}%`;
 
   return (
     <>
@@ -36,12 +34,14 @@ export function ProcessTimeline() {
         <div className="relative mb-10">
           {/* 기본 라인 (흰색) */}
           <div className="absolute inset-x-0 top-[5px] h-px bg-white/15" />
-          {/* 호버 시 채워지는 빨간 라인 */}
+          {/* 호버된 구간만 빨갛게 */}
           <div
-            className="absolute left-0 top-[5px] h-px bg-brand-accent"
+            className="absolute top-[5px] h-px bg-brand-accent"
             style={{
-              width: `${fillPct}%`,
-              transition: "width 0.45s cubic-bezier(0.16,1,0.3,1)",
+              left: segLeft,
+              width: segWidth,
+              opacity: hoveredIdx !== null ? 1 : 0,
+              transition: "left 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease",
             }}
           />
           {/* 점 */}
