@@ -1,225 +1,150 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const KAKAO_URL = "http://pf.kakao.com/_humXX";
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-interface FaqItem {
-  q: string;
-  a: string;
-  related?: Array<[number, number]>;
+type Category = "서비스" | "프로젝트" | "상담";
+
+interface QnAItem {
+  id: string;
+  question: string;
+  answer: string;
+  category: Category;
+  nextIds: string[];
 }
 
-interface FaqCategory {
-  label: string;
-  items: FaqItem[];
+// ─── Q&A Data ─────────────────────────────────────────────────────────────────
+
+const QNA_LIST: QnAItem[] = [
+  {
+    id: "q1",
+    question: "Unbound Studio는 어떤 회사인가요?",
+    answer:
+      "경계 없는 창의성, 무한한 가능성으로 이야기를 살리는 영상제작스튜디오입니다. 모션그래픽스, 4K/8K 영상 제작, AI 기술을 활용한 차별화된 콘텐츠를 제공합니다.",
+    category: "서비스",
+    nextIds: ["q2", "q3", "q7"],
+  },
+  {
+    id: "q2",
+    question: "주요 서비스가 무엇인가요?",
+    answer:
+      "① 모션 그래픽스  ② 영상 포스트 프로덕션  ③ AI 콘텐츠 생성  ④ 기업 홍보영상  ⑤ 제품 영상 등을 제공합니다.",
+    category: "서비스",
+    nextIds: ["q3", "q5", "q4"],
+  },
+  {
+    id: "q3",
+    question: "AI 기술을 어떻게 활용하나요?",
+    answer:
+      "Kling, Midjourney, Runway, Zenspark 등 최신 AI 도구로 혁신적인 영상을 제작합니다. 빠른 제작 속도와 창의적인 표현이 가능합니다.",
+    category: "서비스",
+    nextIds: ["q6", "q7", "q10"],
+  },
+  {
+    id: "q4",
+    question: "포트폴리오를 볼 수 있나요?",
+    answer:
+      "네, 웹사이트의 포트폴리오 메뉴에서 KT Enterprise, Corning, SK Signet 등 주요 프로젝트를 확인하실 수 있습니다.",
+    category: "서비스",
+    nextIds: ["q7", "q5", "q10"],
+  },
+  {
+    id: "q5",
+    question: "프로젝트는 어떻게 진행되나요?",
+    answer:
+      "상담 및 기획 → 구성안/스토리보드 → 제작 → 포스트 프로덕션 → 최종 검수 순으로 진행됩니다.",
+    category: "프로젝트",
+    nextIds: ["q6", "q9", "q10"],
+  },
+  {
+    id: "q6",
+    question: "제작 기간은 얼마나 걸리나요?",
+    answer:
+      "프로젝트 규모에 따라 다릅니다. 간단한 영상은 2~3일, 복잡한 프로젝트는 2~8주가 소요될 수 있습니다.",
+    category: "프로젝트",
+    nextIds: ["q8", "q9", "q10"],
+  },
+  {
+    id: "q7",
+    question: "어떤 기업들과 일했나요?",
+    answer:
+      "KT Enterprise, Corning, SK Signet, GS Caltex, Karcher, dsm-firmenich, Macrogen 등 국내외 주요 B2B 기업들과 협력해왔습니다.",
+    category: "프로젝트",
+    nextIds: ["q4", "q2", "q13"],
+  },
+  {
+    id: "q8",
+    question: "영상 길이는 제한이 있나요?",
+    answer:
+      "없습니다. 15초 숏폼부터 5분 이상의 장편 다큐멘터리까지 모두 제작 가능합니다.",
+    category: "프로젝트",
+    nextIds: ["q6", "q9", "q5"],
+  },
+  {
+    id: "q9",
+    question: "수정/재작업은 가능한가요?",
+    answer:
+      "네, 계약 범위 내에서 합리적인 수정은 포함됩니다. 상담 시 구체적인 수정 횟수를 함께 정의합니다.",
+    category: "프로젝트",
+    nextIds: ["q5", "q10", "q11"],
+  },
+  {
+    id: "q10",
+    question: "견적은 어떻게 받나요?",
+    answer:
+      "문의하기를 통해 프로젝트 상세정보(목표·예산·기간·스타일)를 공유해 주시면 당일 내 견적을 드립니다. 카카오 채널로 연락주셔도 됩니다.",
+    category: "상담",
+    nextIds: ["q11", "q12", "q13"],
+  },
+  {
+    id: "q11",
+    question: "상담은 무료인가요?",
+    answer: "네, 초기 상담은 완전 무료입니다. 커피 한 잔 마시며 편하게 대화해요 ☕",
+    category: "상담",
+    nextIds: ["q10", "q12", "q13"],
+  },
+  {
+    id: "q12",
+    question: "야간/주말 상담도 가능한가요?",
+    answer:
+      "프로젝트 상황에 따라 협의 가능합니다. 카카오 채널로 연락주시면 일정을 조율해드립니다.",
+    category: "상담",
+    nextIds: ["q11", "q10", "q13"],
+  },
+  {
+    id: "q13",
+    question: "협력사/파트너십이 가능한가요?",
+    answer:
+      "네, 협력 가능한 프로젝트는 기꺼이 함께합니다. 카카오 채널이나 이메일로 편하게 연락주세요.",
+    category: "상담",
+    nextIds: ["q10", "q11", "q12"],
+  },
+];
+
+const QNA: Record<string, QnAItem> = {};
+for (const item of QNA_LIST) {
+  QNA[item.id] = item;
 }
 
-type Screen =
-  | { type: "home" }
-  | { type: "faq-list"; catIdx: number }
-  | { type: "faq-answer"; catIdx: number; faqIdx: number }
-  | { type: "works" }
-  | { type: "services" }
-  | { type: "estimator"; step: number; answers: string[] }
-  | { type: "estimator-result"; answers: string[] };
+const INITIAL_IDS: string[] = ["q1", "q2", "q5", "q10"];
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
+// ─── Category badge styles ─────────────────────────────────────────────────────
 
-const FAQ: FaqCategory[] = [
-  {
-    label: "진행 방식",
-    items: [
-      {
-        q: "소재(로고, 이미지, 영상 등)는 어떻게 전달하나요?",
-        a: "구글 드라이브 링크나 이메일 create@unboundstudio.co.kr 로 전달해 주시면 됩니다.",
-        related: [[0, 1], [0, 2]],
-      },
-      {
-        q: "작업 진행 상황은 어떻게 확인하나요?",
-        a: "단계별로 중간 공유를 진행합니다. 방향을 함께 확인하며 진행하기 때문에 결과물에서 크게 벗어나는 경우가 없습니다.",
-        related: [[0, 0], [1, 2]],
-      },
-      {
-        q: "레퍼런스가 없어도 진행 가능한가요?",
-        a: "네, 상담 시 방향성을 함께 잡아드립니다. 레퍼런스가 없어도 충분히 진행 가능합니다.",
-        related: [[1, 1], [2, 0]],
-      },
-    ],
-  },
-  {
-    label: "수정 · 촬영",
-    items: [
-      {
-        q: "수정은 몇 번 가능한가요?",
-        a: "프로젝트당 3회 기준으로 진행됩니다. 범위를 벗어난 추가 수정은 별도 협의합니다.",
-        related: [[2, 0], [2, 2]],
-      },
-      {
-        q: "촬영도 함께 진행 가능한가요?",
-        a: "올인원 서비스가 가능한 프로덕션으로, 촬영이 필요한 프로젝트도 진행합니다.",
-        related: [[0, 2], [1, 2]],
-      },
-      {
-        q: "급한 일정도 가능한가요?",
-        a: "일정에 따라 협의 가능합니다. 먼저 문의 주시면 검토 후 안내드립니다.",
-        related: [[2, 0], [0, 1]],
-      },
-    ],
-  },
-  {
-    label: "계약 · 결제",
-    items: [
-      {
-        q: "계약금은 언제 입금하나요?",
-        a: "기획 확정 후 착수금 30%를 입금해 주시면 제작을 시작합니다. 잔금은 납품 후 익월 말일 기준으로 정산하는 것을 기본으로 합니다.",
-        related: [[2, 1], [3, 0]],
-      },
-      {
-        q: "세금계산서 발행이 가능한가요?",
-        a: "네, 사업자 등록 업체로 세금계산서 발행 가능합니다.",
-        related: [[2, 0], [2, 2]],
-      },
-      {
-        q: "작업 취소 시 환불은 어떻게 되나요?",
-        a: "착수 전 취소 시 전액 환불, 기획 확정 후에는 진행 단계에 따라 부분 환불됩니다.",
-        related: [[2, 0], [1, 0]],
-      },
-    ],
-  },
-  {
-    label: "저작권",
-    items: [
-      {
-        q: "작업 결과물의 저작권은 누구에게 있나요?",
-        a: "납품 완료 및 최종 정산 후 저작권은 클라이언트에게 귀속됩니다.",
-        related: [[2, 0], [0, 0]],
-      },
-    ],
-  },
-];
-
-const POPULAR: Array<{ catIdx: number; faqIdx: number; label: string }> = [
-  { catIdx: 1, faqIdx: 0, label: "수정 횟수" },
-  { catIdx: 2, faqIdx: 0, label: "계약금 안내" },
-  { catIdx: 3, faqIdx: 0, label: "저작권 귀속" },
-];
-
-const WORKS_CATS = [
-  { label: "드라마 & 예능", value: "drama", note: "Netflix · TvN · KBS · MBC" },
-  { label: "광고 & 홍보", value: "promo", note: "한화 · 봉명동네커피" },
-  { label: "AI 제작", value: "ai", note: "채널A · 마크로젠" },
-  { label: "B2B", value: "b2b", note: "SK Signet" },
-  { label: "공공 / 기관", value: "public", note: "한국지역난방공사" },
-];
-
-const SERVICES = [
-  { no: "01", sub: "기획", desc: "브랜드 분석부터 스토리 콘셉트까지", slug: "planning" },
-  { no: "02", sub: "촬영 · 제작", desc: "올인원 촬영 및 현장 운영", slug: "production" },
-  { no: "03", sub: "모션그래픽", desc: "2D 합성, 시각효과, 애니메이션", slug: "vfx" },
-  { no: "04", sub: "색보정", desc: "톤 & 무드 완성 크리에이티브 그레이딩", slug: "color-grading" },
-  { no: "05", sub: "편집 · 종합편집", desc: "스토리 재구성부터 최종 납품", slug: "editing" },
-  { no: "06", sub: "AI 제작", desc: "AI 기반 영상 생성 & 자동화 워크플로우", slug: "ai-production" },
-];
-
-const EST_STEPS = [
-  {
-    question: "어떤 종류의 영상인가요?",
-    options: [
-      { label: "드라마 / 예능 오프닝", value: "broadcast" },
-      { label: "브랜드 필름", value: "brand" },
-      { label: "광고 영상", value: "ad" },
-      { label: "AI 제작 콘텐츠", value: "ai" },
-      { label: "B2B / 기관 홍보", value: "b2b" },
-    ],
-  },
-  {
-    question: "영상 분량은 어느 정도인가요?",
-    options: [
-      { label: "15초 이하 (숏폼)", value: "15s" },
-      { label: "15초 ~ 1분", value: "1min" },
-      { label: "1분 ~ 3분", value: "3min" },
-      { label: "3분 이상", value: "3min+" },
-    ],
-  },
-  {
-    question: "희망 납품 일정은?",
-    options: [
-      { label: "1주 이내 (긴급)", value: "urgent" },
-      { label: "2 ~ 4주", value: "normal" },
-      { label: "1 ~ 2개월", value: "comfortable" },
-      { label: "미정 / 협의 가능", value: "flexible" },
-    ],
-  },
-];
-
-function calcEstimate(answers: string[]): { period: string; level: string; note: string } {
-  const type = answers[0] ?? "";
-  const scale = answers[1] ?? "";
-  const timeline = answers[2] ?? "";
-  let period = "2 ~ 4주";
-  let level = "중규모 프로젝트";
-
-  if (type === "broadcast" && (scale === "3min" || scale === "3min+")) {
-    period = "2 ~ 3개월";
-    level = "대규모 프로젝트";
-  } else if (scale === "15s" || type === "ai") {
-    period = "1 ~ 2주";
-    level = "소규모 프로젝트";
-  } else if (scale === "3min+" || type === "brand") {
-    period = "1 ~ 2개월";
-    level = "중~대규모 프로젝트";
-  } else if (type === "broadcast") {
-    period = "3주 ~ 2개월";
-    level = "중규모 프로젝트";
-  }
-
-  const note =
-    timeline === "urgent"
-      ? "긴급 납기는 추가 협의가 필요합니다. 가능 여부를 먼저 확인해 드립니다."
-      : "최종 견적은 상세 브리핑 미팅 후 확정됩니다.";
-
-  return { period, level, note };
-}
-
-// ─── Screen fade variants ─────────────────────────────────────────────────────
-
-const screenVariants = {
-  enter: { opacity: 0, y: 6 },
-  center: { opacity: 1, y: 0, transition: { duration: 0.18 } },
-  exit: { opacity: 0, y: -4, transition: { duration: 0.12 } },
+const CAT_STYLE: Record<Category, string> = {
+  서비스: "text-blue-400/70 border-blue-400/20 bg-blue-400/[0.07]",
+  프로젝트: "text-emerald-400/70 border-emerald-400/20 bg-emerald-400/[0.07]",
+  상담: "text-yellow-300/70 border-yellow-300/20 bg-yellow-300/[0.07]",
 };
-
-// ─── Shared styles ────────────────────────────────────────────────────────────
-
-const ROW =
-  "flex w-full items-center justify-between rounded-xl border border-white/8 bg-white/[0.025] px-3.5 py-3 text-left transition-all hover:border-brand-accent/35 hover:bg-brand-accent/5";
 
 // ─── Icon components ──────────────────────────────────────────────────────────
 
-function ChevRight() {
-  return (
-    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-4 w-4 flex-none text-white/25">
-      <path d="M7 15l5-5-5-5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-function ChevLeft() {
-  return (
-    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-4 w-4">
-      <path d="M13 5l-5 5 5 5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-function ArrowIcon() {
-  return (
-    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-3.5 w-3.5 flex-none">
-      <path d="M4 16L16 4M16 4H8M16 4v8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 function CloseIcon() {
   return (
     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-4 w-4">
@@ -227,42 +152,46 @@ function CloseIcon() {
     </svg>
   );
 }
-function QuestionIcon() {
+
+function ChevRight() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} className="h-5 w-5">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2.5 2.5-2.5 2.5M12 16.5h.01" strokeLinecap="round" strokeLinejoin="round" />
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-3.5 w-3.5 flex-none text-white/25">
+      <path d="M7 15l5-5-5-5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
-function CategoryIcon({ label }: { label: string }) {
-  if (label === "진행 방식") {
-    return (
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.6} className="h-[17px] w-[17px]">
-        <path d="M3 5h14M3 10h10M3 15h7" strokeLinecap="round" />
-      </svg>
-    );
-  }
-  if (label === "수정 · 촬영") {
-    return (
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.6} className="h-[17px] w-[17px]">
-        <path d="M13.5 2.5l4 4L6 18H2v-4L13.5 2.5z" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    );
-  }
-  if (label === "계약 · 결제") {
-    return (
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.6} className="h-[17px] w-[17px]">
-        <rect x="3" y="2" width="14" height="16" rx="2" />
-        <path d="M7 7h6M7 11h6M7 15h3" strokeLinecap="round" />
-      </svg>
-    );
-  }
+
+function ResetIcon() {
   return (
-    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.6} className="h-[17px] w-[17px]">
-      <circle cx="10" cy="10" r="8" />
-      <path d="M12.5 8a3 3 0 1 0 0 4" strokeLinecap="round" />
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.7} className="h-3.5 w-3.5">
+      <path d="M4 10a6 6 0 1 1 1.8 4.3M4 6v4h4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
+  );
+}
+
+function KakaoIcon() {
+  return (
+    <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 flex-none">
+      <path d="M10 2C5.58 2 2 5.16 2 9.04c0 2.47 1.4 4.64 3.54 5.93l-.9 3.37a.3.3 0 0 0 .44.34L9.2 16.4c.26.03.53.05.8.05 4.42 0 8-3.16 8-7.04C18 5.16 14.42 2 10 2z" />
+    </svg>
+  );
+}
+
+function ChatBubbleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-5 w-5">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+function BotAvatar() {
+  return (
+    <div className="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-brand-accent text-[9px] font-bold text-white">
+      U
+    </div>
   );
 }
 
@@ -270,67 +199,31 @@ function CategoryIcon({ label }: { label: string }) {
 
 export function ChatBot() {
   const [open, setOpen] = useState(false);
-  const [screen, setScreen] = useState<Screen>({ type: "home" });
+  const [history, setHistory] = useState<string[]>([]);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
-  function go(next: Screen) {
-    setScreen(next);
+  const currentOptions: string[] =
+    history.length === 0
+      ? INITIAL_IDS
+      : (QNA[history[history.length - 1]]?.nextIds ?? INITIAL_IDS);
+
+  useEffect(() => {
+    if (open) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [history, open]);
+
+  function select(qid: string) {
+    setHistory((h) => [...h, qid]);
   }
 
-  function back() {
-    if (screen.type === "faq-answer") {
-      go({ type: "faq-list", catIdx: screen.catIdx });
-    } else if (
-      screen.type === "faq-list" ||
-      screen.type === "works" ||
-      screen.type === "services"
-    ) {
-      go({ type: "home" });
-    } else if (screen.type === "estimator") {
-      if (screen.step === 0) {
-        go({ type: "home" });
-      } else {
-        go({
-          type: "estimator",
-          step: screen.step - 1,
-          answers: screen.answers.slice(0, screen.step - 1),
-        });
-      }
-    } else if (screen.type === "estimator-result") {
-      go({ type: "estimator", step: 2, answers: screen.answers.slice(0, 2) });
-    } else {
-      go({ type: "home" });
-    }
+  function reset() {
+    setHistory([]);
   }
 
   function closeWidget() {
     setOpen(false);
-    setTimeout(() => go({ type: "home" }), 300);
-  }
-
-  function getTitle(): string {
-    switch (screen.type) {
-      case "home": return "Unbound Studio";
-      case "faq-list": return FAQ[screen.catIdx].label;
-      case "faq-answer": return FAQ[screen.catIdx].label;
-      case "works": return "포트폴리오";
-      case "services": return "서비스 안내";
-      case "estimator": return `견적 가이드 ${screen.step + 1} / 3`;
-      case "estimator-result": return "예상 견적";
-      default: return "Unbound Studio";
-    }
-  }
-
-  function getKey(): string {
-    switch (screen.type) {
-      case "home": return "home";
-      case "faq-list": return `fl-${screen.catIdx}`;
-      case "faq-answer": return `fa-${screen.catIdx}-${screen.faqIdx}`;
-      case "works": return "works";
-      case "services": return "services";
-      case "estimator": return `est-${screen.step}`;
-      case "estimator-result": return "result";
-      default: return "home";
-    }
+    setTimeout(reset, 300);
   }
 
   return (
@@ -343,390 +236,159 @@ export function ChatBot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.96 }}
             transition={{ duration: 0.22 }}
-            className="mb-3 flex h-[540px] w-[340px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0d0d0d] shadow-2xl"
+            className="mb-3 flex h-[560px] w-[340px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0d0d0d] shadow-2xl"
           >
             {/* Header */}
             <div className="flex flex-none items-center justify-between border-b border-white/10 px-4 py-3.5">
               <div className="flex items-center gap-2">
-                {screen.type !== "home" && (
-                  <button
-                    onClick={back}
-                    aria-label="뒤로"
-                    className="mr-0.5 flex h-7 w-7 items-center justify-center rounded-lg text-white/40 transition-colors hover:bg-white/5 hover:text-white"
-                  >
-                    <ChevLeft />
-                  </button>
-                )}
                 <span className="h-1.5 w-1.5 rounded-full bg-brand-accent" />
                 <span className="font-display text-[11px] uppercase tracking-[0.18em] text-white">
-                  {getTitle()}
+                  Unbound Studio
                 </span>
               </div>
-              <button
-                onClick={closeWidget}
-                aria-label="닫기"
-                className="flex h-7 w-7 items-center justify-center rounded-lg text-white/40 transition-colors hover:bg-white/5 hover:text-white"
-              >
-                <CloseIcon />
-              </button>
+              <div className="flex items-center gap-0.5">
+                {history.length > 0 && (
+                  <button
+                    onClick={reset}
+                    aria-label="처음으로"
+                    title="처음으로"
+                    className="flex h-7 w-7 items-center justify-center rounded-lg text-white/30 transition-colors hover:bg-white/5 hover:text-white/70"
+                  >
+                    <ResetIcon />
+                  </button>
+                )}
+                <button
+                  onClick={closeWidget}
+                  aria-label="닫기"
+                  className="flex h-7 w-7 items-center justify-center rounded-lg text-white/40 transition-colors hover:bg-white/5 hover:text-white"
+                >
+                  <CloseIcon />
+                </button>
+              </div>
             </div>
 
-            {/* Body */}
-            <div className="relative flex-1 overflow-hidden">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={getKey()}
-                  variants={screenVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  className="absolute inset-0 overflow-y-auto"
-                >
-                  {/* HOME */}
-                  {screen.type === "home" && (
-                    <div className="space-y-4 p-4">
-                      <div>
-                        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/25">
-                          인기 질문
-                        </p>
-                        <div className="flex flex-wrap gap-1.5">
-                          {POPULAR.map((pq) => (
-                            <button
-                              key={pq.label}
-                              onClick={() =>
-                                go({ type: "faq-answer", catIdx: pq.catIdx, faqIdx: pq.faqIdx })
-                              }
-                              className="rounded-full border border-white/10 px-3 py-1 text-[11px] text-white/50 transition-all hover:border-brand-accent/50 hover:text-brand-accent"
-                            >
-                              {pq.label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
+            {/* Chat body */}
+            <div className="flex-1 space-y-4 overflow-y-auto px-3 py-4">
+              {/* Greeting */}
+              <motion.div
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+                className="flex gap-2"
+              >
+                <BotAvatar />
+                <div className="max-w-[82%] rounded-2xl rounded-tl-sm bg-white/[0.07] px-3.5 py-3">
+                  <p className="whitespace-pre-line text-[13px] leading-relaxed text-white/85">
+                    {"안녕하세요! 👋 Unbound Studio입니다.\n무엇을 도와드릴까요?"}
+                  </p>
+                </div>
+              </motion.div>
 
-                      <div>
-                        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/25">
-                          자주 묻는 질문
-                        </p>
-                        <div className="space-y-1.5">
-                          {FAQ.map((cat, i) => (
-                            <button
-                              key={cat.label}
-                              onClick={() => go({ type: "faq-list", catIdx: i })}
-                              className={ROW}
-                            >
-                              <div className="flex items-center gap-2.5">
-                                <span className="text-white/40">
-                                  <CategoryIcon label={cat.label} />
-                                </span>
-                                <div>
-                                  <p className="text-[13px] font-medium text-white">{cat.label}</p>
-                                  <p className="text-[11px] text-white/30">{cat.items.length}개 질문</p>
-                                </div>
-                              </div>
-                              <ChevRight />
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/25">
-                          더 알아보기
-                        </p>
-                        <div className="space-y-1.5">
-                          <button onClick={() => go({ type: "works" })} className={ROW}>
-                            <div className="flex items-center gap-2.5">
-                              <span className="text-white/40">
-                                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.6} className="h-[17px] w-[17px]">
-                                  <rect x="2" y="2" width="7" height="7" rx="1.5" />
-                                  <rect x="11" y="2" width="7" height="7" rx="1.5" />
-                                  <rect x="2" y="11" width="7" height="7" rx="1.5" />
-                                  <rect x="11" y="11" width="7" height="7" rx="1.5" />
-                                </svg>
-                              </span>
-                              <span className="text-[13px] font-medium text-white">포트폴리오 보기</span>
-                            </div>
-                            <ChevRight />
-                          </button>
-                          <button onClick={() => go({ type: "services" })} className={ROW}>
-                            <div className="flex items-center gap-2.5">
-                              <span className="text-white/40">
-                                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.6} className="h-[17px] w-[17px]">
-                                  <path d="M10 2L2 6v8l8 4 8-4V6L10 2zM10 2v12M2 6l8 4 8-4" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                              </span>
-                              <span className="text-[13px] font-medium text-white">서비스 안내</span>
-                            </div>
-                            <ChevRight />
-                          </button>
-                          <button
-                            onClick={() => go({ type: "estimator", step: 0, answers: [] })}
-                            className="flex w-full items-center justify-between rounded-xl border border-brand-accent/20 bg-brand-accent/5 px-3.5 py-3 text-left transition-all hover:border-brand-accent/40 hover:bg-brand-accent/10"
-                          >
-                            <div className="flex items-center gap-2.5">
-                              <span className="text-brand-accent/70">
-                                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.6} className="h-[17px] w-[17px]">
-                                  <rect x="3" y="2" width="14" height="16" rx="2" />
-                                  <path d="M7 6h6M7 10h2M11 10h2M7 14h2M11 14h2" strokeLinecap="round" />
-                                </svg>
-                              </span>
-                              <div>
-                                <p className="text-[13px] font-medium text-white">프로젝트 견적 가이드</p>
-                                <p className="text-[11px] text-white/35">예상 기간 · 규모 안내</p>
-                              </div>
-                            </div>
-                            <span className="text-brand-accent/50"><ChevRight /></span>
-                          </button>
-                        </div>
+              {/* Conversation history */}
+              {history.map((qid, i) => {
+                const item = QNA[qid];
+                if (!item) return null;
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="space-y-2"
+                  >
+                    {/* User bubble */}
+                    <div className="flex justify-end">
+                      <div className="max-w-[82%] rounded-2xl rounded-tr-sm bg-brand-accent px-3.5 py-2.5 text-[13px] leading-snug text-white">
+                        {item.question}
                       </div>
                     </div>
-                  )}
 
-                  {/* FAQ LIST */}
-                  {screen.type === "faq-list" && (
-                    <div className="space-y-1.5 p-4">
-                      <p className="mb-3 text-[11px] text-white/35">질문을 선택해 주세요</p>
-                      {FAQ[screen.catIdx].items.map((item, i) => {
-                        const ci = screen.catIdx;
-                        return (
-                          <motion.button
-                            key={i}
-                            initial={{ opacity: 0, y: 6 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: i * 0.05, duration: 0.18 }}
-                            onClick={() => go({ type: "faq-answer", catIdx: ci, faqIdx: i })}
-                            className={ROW + " items-start gap-3"}
-                          >
-                            <span className="text-[13px] leading-snug text-white/75">{item.q}</span>
-                            <ChevRight />
-                          </motion.button>
-                        );
-                      })}
-                    </div>
-                  )}
-
-                  {/* FAQ ANSWER */}
-                  {screen.type === "faq-answer" && (
-                    <div className="space-y-3 p-4">
-                      <div className="flex justify-end">
-                        <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-brand-accent px-3.5 py-3 text-[13px] leading-relaxed text-white">
-                          {FAQ[screen.catIdx].items[screen.faqIdx].q}
-                        </div>
-                      </div>
-                      <div className="flex justify-start">
-                        <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-white/[0.07] px-3.5 py-3 text-[13px] leading-relaxed text-white/85">
-                          {FAQ[screen.catIdx].items[screen.faqIdx].a}
-                        </div>
-                      </div>
-
-                      {(FAQ[screen.catIdx].items[screen.faqIdx].related ?? []).length > 0 && (
-                        <div className="pt-1">
-                          <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/25">
-                            관련 질문
+                    {/* Bot answer */}
+                    <div className="flex gap-2">
+                      <BotAvatar />
+                      <div className="max-w-[82%] space-y-2">
+                        <div className="rounded-2xl rounded-tl-sm bg-white/[0.07] px-3.5 py-3">
+                          <p className="text-[13px] leading-relaxed text-white/85">
+                            {item.answer}
                           </p>
-                          <div className="space-y-1.5">
-                            {(FAQ[screen.catIdx].items[screen.faqIdx].related ?? []).map(
-                              ([ci, fi], idx) => (
-                                <button
-                                  key={idx}
-                                  onClick={() => go({ type: "faq-answer", catIdx: ci, faqIdx: fi })}
-                                  className="flex w-full items-start gap-2 rounded-xl border border-white/8 px-3 py-2.5 text-left transition-all hover:border-white/15 hover:bg-white/[0.02]"
-                                >
-                                  <span className="mt-px flex-none text-[11px] font-semibold text-brand-accent/60">Q</span>
-                                  <span className="text-[12px] leading-snug text-white/50">
-                                    {FAQ[ci].items[fi].q}
-                                  </span>
-                                </button>
-                              ),
-                            )}
-                          </div>
                         </div>
-                      )}
 
-                      <button
-                        onClick={() => go({ type: "faq-list", catIdx: screen.catIdx })}
-                        className="w-full rounded-xl border border-white/10 py-2.5 text-[12px] text-white/35 transition-all hover:border-white/20 hover:text-white/55"
-                      >
-                        다른 질문 보기
-                      </button>
-                    </div>
-                  )}
+                        {/* Category badge */}
+                        <span
+                          className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold ${CAT_STYLE[item.category]}`}
+                        >
+                          {item.category}
+                        </span>
 
-                  {/* WORKS */}
-                  {screen.type === "works" && (
-                    <div className="p-4">
-                      <p className="mb-3 text-[11px] text-white/35">카테고리를 선택해 주세요</p>
-                      <div className="space-y-1.5">
-                        {WORKS_CATS.map((cat) => (
-                          <Link
-                            key={cat.value}
-                            href={`/works?category=${cat.value}`}
-                            onClick={closeWidget}
-                            className={ROW}
+                        {/* Kakao CTA — 상담 카테고리 답변 후 자연스럽게 노출 */}
+                        {item.category === "상담" && (
+                          <a
+                            href={KAKAO_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 rounded-xl border border-yellow-300/25 bg-yellow-300/[0.06] px-3 py-2.5 text-[12px] font-medium text-yellow-300/80 transition-all hover:border-yellow-300/40 hover:bg-yellow-300/10"
                           >
-                            <div>
-                              <p className="text-[13px] font-medium text-white">{cat.label}</p>
-                              <p className="mt-0.5 text-[11px] text-white/30">{cat.note}</p>
-                            </div>
-                            <ArrowIcon />
-                          </Link>
-                        ))}
+                            <KakaoIcon />
+                            카카오 채널로 바로 문의하기 →
+                          </a>
+                        )}
                       </div>
-                      <Link
-                        href="/works"
-                        onClick={closeWidget}
-                        className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border border-white/10 py-2.5 text-[12px] text-white/35 transition-all hover:border-white/20 hover:text-white/60"
-                      >
-                        전체 포트폴리오 보기
-                        <ArrowIcon />
-                      </Link>
                     </div>
-                  )}
+                  </motion.div>
+                );
+              })}
 
-                  {/* SERVICES */}
-                  {screen.type === "services" && (
-                    <div className="p-4">
-                      <p className="mb-3 text-[11px] text-white/35">Unbound Studio 제작 서비스</p>
-                      <div className="space-y-1.5">
-                        {SERVICES.map((svc) => (
-                          <Link
-                            key={svc.slug}
-                            href={`/services#${svc.slug}`}
-                            onClick={closeWidget}
-                            className={ROW + " gap-3"}
-                          >
-                            <span className="flex-none font-display text-[11px] tracking-wider text-brand-accent/60">
-                              {svc.no}
-                            </span>
-                            <div className="min-w-0 flex-1">
-                              <p className="text-[13px] font-medium text-white">{svc.sub}</p>
-                              <p className="text-[11px] text-white/35">{svc.desc}</p>
-                            </div>
-                            <ArrowIcon />
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+              {/* Next question options */}
+              <div className="space-y-1.5">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/25">
+                  {history.length === 0 ? "궁금한 것을 선택해 주세요" : "이런 것도 궁금하신가요?"}
+                </p>
+                {currentOptions.map((qid) => {
+                  const item = QNA[qid];
+                  if (!item) return null;
+                  return (
+                    <button
+                      key={qid}
+                      onClick={() => select(qid)}
+                      className="flex w-full items-center justify-between gap-2 rounded-xl border border-white/8 bg-white/[0.025] px-3.5 py-2.5 text-left transition-all hover:border-brand-accent/35 hover:bg-brand-accent/5"
+                    >
+                      <span className="text-[12px] leading-snug text-white/65">
+                        {item.question}
+                      </span>
+                      <ChevRight />
+                    </button>
+                  );
+                })}
+              </div>
 
-                  {/* ESTIMATOR */}
-                  {screen.type === "estimator" && (
-                    <div className="p-4">
-                      <div className="mb-4 flex gap-1.5">
-                        {[0, 1, 2].map((i) => (
-                          <div
-                            key={i}
-                            className={`h-1 flex-1 rounded-full transition-all duration-300 ${
-                              i <= screen.step ? "bg-brand-accent" : "bg-white/10"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <p className="mb-4 text-[14px] font-medium leading-snug text-white">
-                        {EST_STEPS[screen.step].question}
-                      </p>
-                      <div className="space-y-1.5">
-                        {EST_STEPS[screen.step].options.map((opt, i) => {
-                          const s = screen.step;
-                          const ans = screen.answers;
-                          return (
-                            <motion.button
-                              key={opt.value}
-                              initial={{ opacity: 0, y: 6 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: i * 0.04, duration: 0.18 }}
-                              onClick={() => {
-                                const next = [...ans, opt.value];
-                                if (s < 2) {
-                                  go({ type: "estimator", step: s + 1, answers: next });
-                                } else {
-                                  go({ type: "estimator-result", answers: next });
-                                }
-                              }}
-                              className={ROW}
-                            >
-                              <span className="text-[13px] text-white/75">{opt.label}</span>
-                              <ChevRight />
-                            </motion.button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* ESTIMATOR RESULT */}
-                  {screen.type === "estimator-result" && (
-                    <div className="space-y-3 p-4">
-                      <div className="space-y-2.5 rounded-xl border border-brand-accent/20 bg-brand-accent/5 p-4">
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-brand-accent/70">
-                          예상 결과
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[12px] text-white/45">프로젝트 유형</span>
-                          <span className="text-[12px] font-medium text-white">
-                            {EST_STEPS[0].options.find((o) => o.value === screen.answers[0])?.label ?? ""}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[12px] text-white/45">분량</span>
-                          <span className="text-[12px] font-medium text-white">
-                            {EST_STEPS[1].options.find((o) => o.value === screen.answers[1])?.label ?? ""}
-                          </span>
-                        </div>
-                        <div className="h-px bg-white/10" />
-                        <div className="flex items-center justify-between">
-                          <span className="text-[12px] text-white/45">예상 제작 기간</span>
-                          <span className="text-[14px] font-semibold text-brand-accent">
-                            {calcEstimate(screen.answers).period}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[12px] text-white/45">규모</span>
-                          <span className="text-[12px] font-medium text-white">
-                            {calcEstimate(screen.answers).level}
-                          </span>
-                        </div>
-                      </div>
-                      <p className="text-[12px] leading-relaxed text-white/40">
-                        {calcEstimate(screen.answers).note}
-                      </p>
-                      <Link
-                        href="/contact"
-                        onClick={closeWidget}
-                        className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-accent py-3 text-[13px] font-medium text-white transition-opacity hover:opacity-85"
-                      >
-                        지금 상담 문의하기
-                        <ArrowIcon />
-                      </Link>
-                      <button
-                        onClick={() => go({ type: "estimator", step: 0, answers: [] })}
-                        className="w-full rounded-xl border border-white/10 py-2.5 text-[12px] text-white/35 transition-all hover:border-white/20 hover:text-white/55"
-                      >
-                        다시 계산하기
-                      </button>
-                    </div>
-                  )}
-                </motion.div>
-              </AnimatePresence>
+              {/* Scroll anchor */}
+              <div ref={bottomRef} />
             </div>
 
             {/* Footer */}
-            <div className="flex-none border-t border-white/8 px-4 py-3">
+            <div className="flex-none space-y-1.5 border-t border-white/8 px-3 py-3">
+              <a
+                href={KAKAO_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-yellow-300/25 bg-yellow-300/[0.06] py-2.5 text-[12px] font-semibold text-yellow-300/80 transition-all hover:border-yellow-300/40 hover:bg-yellow-300/10"
+              >
+                <KakaoIcon />
+                카카오톡으로 문의하기
+              </a>
               <Link
                 href="/contact"
                 onClick={closeWidget}
-                className="flex items-center justify-center gap-1.5 text-[11px] text-white/30 transition-colors hover:text-white/60"
+                className="flex w-full items-center justify-center gap-1 py-1.5 text-[11px] text-white/25 transition-colors hover:text-white/50"
               >
-                직접 문의하기
-                <ArrowIcon />
+                온라인 문의하기 →
               </Link>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Toggle Button */}
+      {/* Toggle button */}
       <motion.button
         onClick={() => setOpen((o) => !o)}
         whileHover={{ scale: 1.08 }}
@@ -747,13 +409,13 @@ export function ChatBot() {
             </motion.div>
           ) : (
             <motion.div
-              key="faq"
+              key="chat"
               initial={{ rotate: 90, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
               exit={{ rotate: -90, opacity: 0 }}
               transition={{ duration: 0.18 }}
             >
-              <QuestionIcon />
+              <ChatBubbleIcon />
             </motion.div>
           )}
         </AnimatePresence>
