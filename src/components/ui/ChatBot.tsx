@@ -256,9 +256,11 @@ function calcEstimate(answers: string[]): { period: string; level: string; note:
 
 // ─── Animation ────────────────────────────────────────────────────────────────
 
+const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
 const slideV = {
   initial: (d: number) => ({ x: d * 18, opacity: 0 }),
-  animate: { x: 0, opacity: 1, transition: { duration: 0.17, ease: [0.16, 1, 0.3, 1] } },
+  animate: { x: 0, opacity: 1, transition: { duration: 0.17, ease: EASE } },
   exit: (d: number) => ({ x: d * -18, opacity: 0, transition: { duration: 0.13 } }),
 };
 
