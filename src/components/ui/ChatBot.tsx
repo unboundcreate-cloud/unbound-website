@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const KAKAO_URL = "http://pf.kakao.com/_humXX";
+const KAKAO_URL = "https://pf.kakao.com/_xejmXX/chat";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
