@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
+
+const MotionLink = motion(Link);
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -344,7 +347,7 @@ export function ChatBot() {
             initial={{ opacity: 0, y: 16, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.96 }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.22, ease: EASE }}
             className="mb-3 flex h-[540px] w-[340px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0d0d0d] shadow-2xl"
           >
             {/* Header */}
@@ -529,7 +532,7 @@ export function ChatBot() {
                       <p className="mb-3 text-[11px] text-white/35">카테고리를 선택해 주세요</p>
                       <div className="space-y-1.5">
                         {WORKS_CATS.map((cat, i) => (
-                          <motion.a
+                          <MotionLink
                             key={cat.value}
                             href={`/works?category=${cat.value}`}
                             onClick={closeWidget}
@@ -544,17 +547,17 @@ export function ChatBot() {
                               <span className="rounded-md bg-white/8 px-2 py-0.5 text-[11px] text-white/40">{cat.count}</span>
                               <span className="text-white/25"><I.Arrow /></span>
                             </div>
-                          </motion.a>
+                          </MotionLink>
                         ))}
                       </div>
-                      <a
+                      <Link
                         href="/works"
                         onClick={closeWidget}
                         className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border border-white/10 py-2.5 text-[12px] text-white/35 transition-all hover:border-white/20 hover:text-white/60"
                       >
                         전체 포트폴리오 보기
                         <I.Arrow />
-                      </a>
+                      </Link>
                     </div>
                   )}
 
@@ -564,7 +567,7 @@ export function ChatBot() {
                       <p className="mb-3 text-[11px] text-white/35">Unbound Studio 제작 서비스</p>
                       <div className="space-y-1.5">
                         {SERVICES.map((svc, i) => (
-                          <motion.a
+                          <MotionLink
                             key={svc.slug}
                             href={`/services#${svc.slug}`}
                             onClick={closeWidget}
@@ -577,7 +580,7 @@ export function ChatBot() {
                               <p className="text-[11px] text-white/35">{svc.desc}</p>
                             </div>
                             <span className="text-white/20 flex-none"><I.Arrow /></span>
-                          </motion.a>
+                          </MotionLink>
                         ))}
                       </div>
                     </div>
@@ -665,14 +668,14 @@ export function ChatBot() {
                         {calcEstimate(screen.answers).note}
                       </p>
 
-                      <a
+                      <Link
                         href="/contact"
                         onClick={closeWidget}
                         className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-accent py-3 text-[13px] font-medium text-white transition-opacity hover:opacity-85"
                       >
                         지금 상담 문의하기
                         <I.Arrow />
-                      </a>
+                      </Link>
                       <button
                         onClick={() => go({ type: "estimator", step: 0, answers: [] })}
                         className="w-full rounded-xl border border-white/10 py-2.5 text-[12px] text-white/35 transition-all hover:border-white/20 hover:text-white/55"
@@ -688,14 +691,14 @@ export function ChatBot() {
 
             {/* Footer */}
             <div className="flex-none border-t border-white/8 px-4 py-3">
-              <a
+              <Link
                 href="/contact"
                 onClick={closeWidget}
                 className="flex items-center justify-center gap-1.5 text-[11px] text-white/30 transition-colors hover:text-white/60"
               >
                 직접 문의하기
                 <I.Arrow />
-              </a>
+              </Link>
             </div>
           </motion.div>
         )}
