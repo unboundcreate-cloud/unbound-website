@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useDragControls } from "framer-motion";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -222,6 +222,8 @@ export function ChatBot() {
   const [open, setOpen] = useState(false);
   const [history, setHistory] = useState<string[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const dragConstraintsRef = useRef<HTMLDivElement>(null);
+  const dragControls = useDragControls();
 
   // Consult wizard state
   const [screen, setScreen] = useState<"home" | "consult">("home");
@@ -330,32 +332,48 @@ export function ChatBot() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-[9990] flex flex-col items-end">
+    <>
+      {/* Invisible viewport-sized container that bounds the chatbot drag */}
+      <div ref={dragConstraintsRef} className="pointer-events-none fixed inset-0 z-[9988]" />
+
+      <div className="fixed bottom-6 right-6 z-[9990] flex flex-col items-end">
       {/* Widget */}
       <AnimatePresence>
         {open && (
           <motion.div
+            drag
+            dragControls={dragControls}
+            dragListener={false}
+            dragConstraints={dragConstraintsRef}
+            dragElastic={0}
+            dragMomentum={false}
             initial={{ opacity: 0, y: 24, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.96, transition: { duration: 0.22, ease: "easeIn" } }}
             transition={{ duration: 0.45, ease: "easeOut" }}
-            className="mb-3 flex h-[560px] w-[340px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0d0d0d] shadow-2xl"
+            className="mb-3 flex h-[620px] w-[380px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0d0d0d] shadow-2xl"
           >
-            {/* Header */}
-            <div className="flex flex-none items-center justify-between border-b border-white/10 px-4 py-3.5">
+            {/* Header — drag handle */}
+            <div
+              onPointerDown={(e) => dragControls.start(e)}
+              className="flex flex-none items-center justify-between border-b border-white/10 px-4 py-3.5 cursor-grab active:cursor-grabbing select-none touch-none"
+            >
               <div className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-brand-accent" />
                 <span className="font-display text-[11px] uppercase tracking-[0.18em] text-white">
                   Unbound Studio
                 </span>
               </div>
-              <div className="flex items-center gap-0.5">
+              <div
+                onPointerDown={(e) => e.stopPropagation()}
+                className="flex items-center gap-0.5"
+              >
                 {(history.length > 0 || screen === "consult") && (
                   <button
                     onClick={reset}
                     aria-label="처음으로"
                     title="처음으로"
-                    className="flex h-7 w-7 items-center justify-center rounded-lg text-white/30 transition-colors hover:bg-white/5 hover:text-white/70"
+                    className="flex h-7 w-7 items-center justify-center rounded-lg text-white/30 transition-colors hover:bg-white/5 hover:text-white/70 cursor-pointer"
                   >
                     <ResetIcon />
                   </button>
@@ -363,7 +381,7 @@ export function ChatBot() {
                 <button
                   onClick={closeWidget}
                   aria-label="닫기"
-                  className="flex h-7 w-7 items-center justify-center rounded-lg text-white/40 transition-colors hover:bg-white/5 hover:text-white"
+                  className="flex h-7 w-7 items-center justify-center rounded-lg text-white/40 transition-colors hover:bg-white/5 hover:text-white cursor-pointer"
                 >
                   <CloseIcon />
                 </button>
@@ -384,7 +402,7 @@ export function ChatBot() {
                 <BotAvatar />
                 <div className="max-w-[82%] rounded-2xl rounded-tl-sm bg-white/[0.07] px-3.5 py-3">
                   <p className="whitespace-pre-line text-[13px] leading-relaxed text-white/85">
-                    {"안녕하세요! 👋 Unbound Studio입니다.\n프로젝트 상담을 시작하시거나, 자주 묻는 질문을 살펴보세요."}
+                    {"안녕하세요! 👋\nUnbound Studio입니다.\n\n프로젝트 상담을 시작하시거나,\n자주 묻는 질문을 살펴보세요."}
                   </p>
                 </div>
               </motion.div>
@@ -829,5 +847,6 @@ export function ChatBot() {
         </AnimatePresence>
       </motion.button>
     </div>
+    </>
   );
 }
