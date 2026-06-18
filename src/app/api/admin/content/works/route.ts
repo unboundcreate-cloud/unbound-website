@@ -18,3 +18,27 @@ export async function POST(req: Request) {
   await saveWorks([...works, newWork]);
   return NextResponse.json({ ok: true });
 }
+
+// PATCH: 정렬된 ID 배열을 받아 works 순서를 재배치
+export async function PATCH(req: Request) {
+  if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const body: { orderedIds?: unknown } = await req.json();
+  const orderedIds = body.orderedIds;
+  if (!Array.isArray(orderedIds) || !orderedIds.every((x) => typeof x === "string")) {
+    return NextResponse.json({ error: "orderedIds(string[]) 필요" }, { status: 400 });
+  }
+  const works = await getWorks();
+  const byId = new Map(works.map((w) => [w.id, w]));
+  const reordered: Work[] = [];
+  for (const id of orderedIds) {
+    const w = byId.get(id);
+    if (w) {
+      reordered.push(w);
+      byId.delete(id);
+    }
+  }
+  // 정렬 목록에 없는 항목은 뒤에 보존
+  for (const w of byId.values()) reordered.push(w);
+  await saveWorks(reordered);
+  return NextResponse.json({ ok: true });
+}
