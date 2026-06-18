@@ -426,7 +426,7 @@ export function ChatBot() {
                   <motion.div
                     key="home"
                     variants={screenFade} initial="enter" animate="center" exit="exit"
-                    className="px-5 py-5 space-y-5"
+                    className="px-5 py-5 space-y-4"
                   >
                     {/* Greeting */}
                     <motion.div initial="hidden" animate="show" variants={msgV} className="flex gap-3">
@@ -437,11 +437,39 @@ export function ChatBot() {
                       </p>
                     </motion.div>
 
+                    {/* Consult CTA — primary action, always above the fold */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.18, duration: 0.28, ease: "easeOut" }}
+                    >
+                      <button
+                        onClick={goConsult}
+                        className="group flex w-full items-center justify-between rounded-xl border border-brand-accent/25 bg-brand-accent/[0.07] px-4 py-3.5 transition-all hover:border-brand-accent/50 hover:bg-brand-accent/10"
+                      >
+                        <div className="text-left">
+                          <p className="text-[13px] font-semibold text-white/85 transition-colors group-hover:text-white">
+                            프로젝트 상담 시작하기
+                          </p>
+                          <p className="mt-0.5 text-[10.5px] text-white/35">
+                            영상 유형 · 길이 · 예산 · 레퍼런스 입력 → 이메일 접수
+                          </p>
+                        </div>
+                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.7}
+                          className="h-4 w-4 flex-none text-brand-accent/40 transition-colors group-hover:text-brand-accent">
+                          <path d="M6 4l4 4-4 4" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </button>
+                    </motion.div>
+
+                    {/* Divider */}
+                    <div className="flex items-center gap-3">
+                      <div className="h-px flex-1 bg-white/[0.07]" />
+                      <span className="text-[9px] text-white/20">자주 묻는 질문</span>
+                      <div className="h-px flex-1 bg-white/[0.07]" />
+                    </div>
+
                     {/* FAQ quick options */}
                     <motion.div initial="hidden" animate="show" variants={listV}>
-                      <motion.p variants={itemV} className="mb-2.5 text-[9.5px] font-semibold uppercase tracking-[0.18em] text-white/22">
-                        자주 묻는 질문
-                      </motion.p>
                       {INITIAL_IDS.map((qid) => {
                         const item = QNA[qid];
                         if (!item) return null;
@@ -450,7 +478,7 @@ export function ChatBot() {
                             key={qid}
                             variants={itemV}
                             onClick={() => goFaq(qid)}
-                            className="group flex w-full items-center justify-between gap-3 border-b border-white/[0.06] py-3 text-left last:border-0"
+                            className="group flex w-full items-center justify-between gap-3 border-b border-white/[0.06] py-2.5 text-left last:border-0"
                           >
                             <span className="text-[12px] leading-snug text-white/40 transition-colors duration-200 group-hover:text-white/80">
                               {item.question}
@@ -462,35 +490,6 @@ export function ChatBot() {
                           </motion.button>
                         );
                       })}
-                    </motion.div>
-
-                    {/* Divider + consult CTA */}
-                    <motion.div
-                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.45, duration: 0.3 }}
-                      className="pt-1"
-                    >
-                      <div className="mb-3 flex items-center gap-3">
-                        <div className="h-px flex-1 bg-white/[0.07]" />
-                        <span className="text-[9px] text-white/22">또는</span>
-                        <div className="h-px flex-1 bg-white/[0.07]" />
-                      </div>
-                      <button
-                        onClick={goConsult}
-                        className="group flex w-full items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3.5 transition-all hover:border-brand-accent/35 hover:bg-brand-accent/5"
-                      >
-                        <div className="text-left">
-                          <p className="text-[12.5px] font-semibold text-white/75 transition-colors group-hover:text-white">
-                            프로젝트 상담 시작하기
-                          </p>
-                          <p className="mt-0.5 text-[10.5px] text-white/28">
-                            영상 유형 · 길이 · 예산 · 레퍼런스
-                          </p>
-                        </div>
-                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.7}
-                          className="h-4 w-4 flex-none text-white/20 transition-colors group-hover:text-brand-accent/70">
-                          <path d="M6 4l4 4-4 4" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </button>
                     </motion.div>
                   </motion.div>
                 )}
