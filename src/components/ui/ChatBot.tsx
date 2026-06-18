@@ -314,12 +314,12 @@ export function ChatBot() {
     setScreen("consult");
   }
 
-  function cSet<K extends keyof ConsultAnswers>(k: K, v: string) {
-    setCAns((a) => ({ ...a, [k]: v }));
+  function cSet(k: keyof ConsultAnswers, v: string) {
+    setCAns((a) => ({ ...a, [k]: v } as ConsultAnswers));
   }
 
-  function cChoose<K extends keyof ConsultAnswers>(k: K, v: string, next: ConsultStep) {
-    setCAns((a) => ({ ...a, [k]: v }));
+  function cChoose(k: keyof ConsultAnswers, v: string, next: ConsultStep) {
+    setCAns((a) => ({ ...a, [k]: v } as ConsultAnswers));
     setTimeout(() => setCStep(next), 120);
   }
 
@@ -680,7 +680,7 @@ export function ChatBot() {
                           </div>
                           {cError && <p className="mt-3 text-[11px] text-red-400">{cError}</p>}
                           <div className="mt-5 flex items-center gap-2.5">
-                            <button onClick={cSubmit}
+                            <button onClick={() => { void cSubmit(); }}
                               disabled={!cAns.name.trim() || !cAns.email.trim()}
                               className="rounded-full bg-brand-accent px-7 py-2.5 font-display text-[11px] uppercase tracking-widest text-white transition-opacity disabled:opacity-30 hover:opacity-80">
                               상담 신청하기
