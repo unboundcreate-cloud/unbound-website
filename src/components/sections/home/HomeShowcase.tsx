@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { useInView } from "framer-motion";
-import { worksOrdered } from "@/data/works";
+import { worksOrdered, type Work } from "@/data/works";
 import { HomeShowcaseCard } from "./HomeShowcaseCard";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { SpotlightText } from "@/components/ui/SpotlightText";
@@ -16,13 +16,17 @@ const SLUGS = [
   "chunhwa-romance",
 ];
 
-export function HomeShowcase() {
+export function HomeShowcase({ works }: { works?: Work[] }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-20px" });
 
-  const items = SLUGS.map((s) =>
-    worksOrdered.find((w) => w.slug === s),
-  ).filter((w): w is NonNullable<typeof w> => Boolean(w));
+  const source = works ?? worksOrdered;
+  const bySlug = new Map(source.map((w) => [w.slug, w] as const));
+  const matched = SLUGS.map((s) => bySlug.get(s)).filter(
+    (w): w is Work => Boolean(w),
+  );
+  // 선택된 슬러그가 모두 사라진 경우 source의 앞 6개로 fallback
+  const items = matched.length > 0 ? matched : source.slice(0, 6);
 
   return (
     <section className="relative overflow-hidden bg-brand-black py-24 md:py-32">

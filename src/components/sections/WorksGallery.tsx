@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { WorkCard } from "@/components/ui/WorkCard";
-import { worksOrdered, type WorkCategory } from "@/data/works";
+import { worksOrdered, type Work, type WorkCategory } from "@/data/works";
 
 type FilterValue = WorkCategory | "all";
 
@@ -81,15 +81,18 @@ function FilterButton({
 
 export function WorksGallery({
   initialCategory = "all",
+  works,
 }: {
   initialCategory?: FilterValue;
+  works?: Work[];
 }) {
   const [active, setActive] = useState<FilterValue>(initialCategory);
+  const source = works ?? worksOrdered;
 
   const filtered =
     active === "all"
-      ? worksOrdered
-      : worksOrdered.filter((w) => w.category === active);
+      ? source
+      : source.filter((w) => w.category === active);
 
   return (
     <>

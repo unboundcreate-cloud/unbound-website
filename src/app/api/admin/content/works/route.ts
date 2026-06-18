@@ -1,7 +1,14 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { isAuthenticated } from "@/lib/admin-auth";
 import { getWorks, saveWorks } from "@/lib/content-store";
 import type { Work } from "@/data/works";
+
+function revalidateWorksPaths() {
+  revalidatePath("/");
+  revalidatePath("/works");
+  revalidatePath("/works/[slug]", "page");
+}
 
 export async function GET() {
   if (!(await isAuthenticated())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -16,6 +23,7 @@ export async function POST(req: Request) {
   const works = await getWorks();
   if (works.find((w) => w.id === newWork.id)) return NextResponse.json({ error: "이미 존재하는 ID입니다." }, { status: 409 });
   await saveWorks([...works, newWork]);
+  revalidateWorksPaths();
   return NextResponse.json({ ok: true });
 }
 
@@ -40,5 +48,6 @@ export async function PATCH(req: Request) {
   // 정렬 목록에 없는 항목은 뒤에 보존
   for (const w of byId.values()) reordered.push(w);
   await saveWorks(reordered);
+  revalidateWorksPaths();
   return NextResponse.json({ ok: true });
 }

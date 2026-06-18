@@ -2,12 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { works, getWork } from "@/data/works";
 import { Tag } from "@/components/ui/Tag";
+import { getWorks } from "@/lib/content-store";
 
-export function generateStaticParams() {
-  return works.map((w) => ({ slug: w.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -15,7 +13,8 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const work = getWork(slug);
+  const works = await getWorks();
+  const work = works.find((w) => w.slug === slug);
   if (!work) return { title: "Works | Unbound Studio" };
   return {
     title: `${work.title} | Unbound Studio`,
@@ -29,7 +28,8 @@ export default async function WorkDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const work = getWork(slug);
+  const works = await getWorks();
+  const work = works.find((w) => w.slug === slug);
   if (!work) notFound();
 
   const index = works.findIndex((w) => w.slug === slug);
