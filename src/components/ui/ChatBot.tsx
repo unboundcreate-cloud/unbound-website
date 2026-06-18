@@ -135,6 +135,27 @@ for (const item of QNA_LIST) {
 
 const INITIAL_IDS: string[] = ["q1", "q2", "q5", "q10"];
 
+// ─── Consult wizard ───────────────────────────────────────────────────────────
+
+const SERVICE_OPTS: string[] = [
+  "모션그래픽 / 타이틀",
+  "기업 / 브랜드 홍보",
+  "광고 / 상업영상",
+  "AI 활용 영상",
+  "공공기관 / 교육",
+  "숏폼 / SNS 콘텐츠",
+];
+
+const DURATION_OPTS: string[] = ["15초 이하", "30초", "1분", "2~3분", "5분 이상", "미정"];
+
+const BUDGET_OPTS: string[] = [
+  "500만원 미만",
+  "500만 ~ 1,500만원",
+  "1,500만 ~ 5,000만원",
+  "5,000만원 이상",
+  "미정 · 협의 후 결정",
+];
+
 // ─── Category badge styles ─────────────────────────────────────────────────────
 
 const CAT_STYLE: Record<Category, string> = {
@@ -202,6 +223,19 @@ export function ChatBot() {
   const [history, setHistory] = useState<string[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  // Consult wizard state
+  const [screen, setScreen] = useState<"home" | "consult">("home");
+  const [cStep, setCStep] = useState<number>(0);
+  const [cService, setCService] = useState<string>("");
+  const [cDuration, setCDuration] = useState<string>("");
+  const [cBudget, setCBudget] = useState<string>("");
+  const [cReference, setCReference] = useState<string>("");
+  const [cName, setCName] = useState<string>("");
+  const [cEmail, setCEmail] = useState<string>("");
+  const [cSubmitting, setCSubmitting] = useState<boolean>(false);
+  const [cDone, setCDone] = useState<boolean>(false);
+  const [cError, setCError] = useState<string>("");
+
   const currentOptions: string[] =
     history.length === 0
       ? INITIAL_IDS
@@ -211,7 +245,7 @@ export function ChatBot() {
     if (open) {
       bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [history, open]);
+  }, [history, screen, cStep, cDone, open]);
 
   function select(qid: string) {
     setHistory((h) => [...h, qid]);
@@ -219,11 +253,80 @@ export function ChatBot() {
 
   function reset() {
     setHistory([]);
+    setScreen("home");
+    setCStep(0);
+    setCService("");
+    setCDuration("");
+    setCBudget("");
+    setCReference("");
+    setCName("");
+    setCEmail("");
+    setCSubmitting(false);
+    setCDone(false);
+    setCError("");
   }
 
   function closeWidget() {
     setOpen(false);
     setTimeout(reset, 300);
+  }
+
+  function startConsult() {
+    setScreen("consult");
+    setCStep(0);
+    setCDone(false);
+    setCError("");
+  }
+
+  function consultBack() {
+    if (cStep > 0) {
+      setCStep(cStep - 1);
+    } else {
+      setScreen("home");
+    }
+  }
+
+  async function submitConsult() {
+    setCError("");
+    if (!cName.trim()) {
+      setCError("이름을 입력해주세요.");
+      return;
+    }
+    if (!cEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cEmail)) {
+      setCError("올바른 이메일을 입력해주세요.");
+      return;
+    }
+    setCSubmitting(true);
+    const message = [
+      "[챗봇 프로젝트 상담]",
+      `영상 유형: ${cService}`,
+      `영상 길이: ${cDuration}`,
+      `예산 범위: ${cBudget}`,
+      cReference ? `레퍼런스: ${cReference}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: cName,
+          email: cEmail,
+          service: cService,
+          budget: cBudget,
+          message,
+        }),
+      });
+      if (!res.ok) {
+        throw new Error("send failed");
+      }
+      setCDone(true);
+    } catch {
+      setCError("전송에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    } finally {
+      setCSubmitting(false);
+    }
   }
 
   return (
@@ -247,7 +350,7 @@ export function ChatBot() {
                 </span>
               </div>
               <div className="flex items-center gap-0.5">
-                {history.length > 0 && (
+                {(history.length > 0 || screen === "consult") && (
                   <button
                     onClick={reset}
                     aria-label="처음으로"
@@ -269,6 +372,8 @@ export function ChatBot() {
 
             {/* Chat body */}
             <div className="flex-1 space-y-4 overflow-y-auto px-3 py-4">
+              {screen === "home" && (
+              <>
               {/* Greeting */}
               <motion.div
                 initial={{ opacity: 0, y: 6 }}
@@ -279,10 +384,25 @@ export function ChatBot() {
                 <BotAvatar />
                 <div className="max-w-[82%] rounded-2xl rounded-tl-sm bg-white/[0.07] px-3.5 py-3">
                   <p className="whitespace-pre-line text-[13px] leading-relaxed text-white/85">
-                    {"안녕하세요! 👋 Unbound Studio입니다.\n무엇을 도와드릴까요?"}
+                    {"안녕하세요! 👋 Unbound Studio입니다.\n프로젝트 상담을 시작하시거나, 자주 묻는 질문을 살펴보세요."}
                   </p>
                 </div>
               </motion.div>
+
+              {/* Consult CTA — top, prominent */}
+              <motion.button
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25, delay: 0.05 }}
+                onClick={startConsult}
+                className="group flex w-full items-center justify-between rounded-2xl border border-brand-accent/30 bg-gradient-to-br from-brand-accent/[0.12] to-brand-accent/[0.04] px-4 py-3.5 text-left transition-all hover:border-brand-accent/55 hover:from-brand-accent/[0.18] hover:to-brand-accent/[0.06]"
+              >
+                <div>
+                  <p className="text-[13px] font-semibold text-white">프로젝트 상담 시작하기</p>
+                  <p className="mt-0.5 text-[10.5px] text-white/45">영상 유형 · 길이 · 예산 · 레퍼런스 → 견적 안내</p>
+                </div>
+                <ChevRight />
+              </motion.button>
 
               {/* Conversation history */}
               {history.map((qid, i) => {
@@ -341,7 +461,7 @@ export function ChatBot() {
               {/* Next question options */}
               <div className="space-y-1.5">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/25">
-                  {history.length === 0 ? "궁금한 것을 선택해 주세요" : "이런 것도 궁금하신가요?"}
+                  {history.length === 0 ? "자주 묻는 질문" : "이런 것도 궁금하신가요?"}
                 </p>
                 {currentOptions.map((qid) => {
                   const item = QNA[qid];
@@ -360,6 +480,198 @@ export function ChatBot() {
                   );
                 })}
               </div>
+              </>
+              )}
+
+              {screen === "consult" && (
+              <div className="flex h-full flex-col">
+                {/* Progress + back */}
+                <div className="mb-4 flex items-center gap-3">
+                  <button
+                    onClick={consultBack}
+                    className="flex items-center gap-1 text-[11px] text-white/35 transition-colors hover:text-white/70"
+                  >
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-3.5 w-3.5">
+                      <path d="M10 12L6 8l4-4" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    이전
+                  </button>
+                  <div className="flex flex-1 gap-1">
+                    {[0, 1, 2, 3, 4].map((i) => (
+                      <div
+                        key={i}
+                        className={`h-0.5 flex-1 rounded-full transition-colors ${
+                          i <= cStep ? "bg-brand-accent" : "bg-white/10"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="font-mono text-[10px] text-white/30">
+                    {cStep + 1}/5
+                  </span>
+                </div>
+
+                {cDone ? (
+                  <div className="flex flex-1 flex-col items-center justify-center px-2 text-center">
+                    <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-brand-accent/15 text-brand-accent">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-6 w-6">
+                        <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                    <p className="font-display text-[15px] uppercase tracking-[0.14em] text-white">Thank you</p>
+                    <p className="mt-2 max-w-[260px] text-[12px] leading-relaxed text-white/55">
+                      상담 신청이 접수되었습니다.
+                      <br />
+                      담당자가 빠른 시일 내에 이메일로 연락드리겠습니다.
+                    </p>
+                    <button
+                      onClick={reset}
+                      className="mt-5 rounded-full border border-white/15 px-4 py-2 text-[11px] text-white/60 transition-colors hover:border-white/35 hover:text-white"
+                    >
+                      처음으로
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    {cStep === 0 && (
+                      <div>
+                        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-accent/65">Step 01</p>
+                        <p className="mb-4 mt-1 text-[14px] font-medium text-white">어떤 영상을 만들고 싶으신가요?</p>
+                        <div className="grid grid-cols-2 gap-2">
+                          {SERVICE_OPTS.map((o) => (
+                            <button
+                              key={o}
+                              onClick={() => { setCService(o); setCStep(1); }}
+                              className={`rounded-xl border px-3 py-3 text-left text-[12px] font-medium leading-snug transition-all ${
+                                cService === o
+                                  ? "border-brand-accent bg-brand-accent/12 text-white"
+                                  : "border-white/10 bg-white/[0.025] text-white/55 hover:border-white/25 hover:text-white"
+                              }`}
+                            >
+                              {o}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {cStep === 1 && (
+                      <div>
+                        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-accent/65">Step 02</p>
+                        <p className="mb-4 mt-1 text-[14px] font-medium text-white">영상 길이는 얼마나 되나요?</p>
+                        <div className="grid grid-cols-3 gap-2">
+                          {DURATION_OPTS.map((o) => (
+                            <button
+                              key={o}
+                              onClick={() => { setCDuration(o); setCStep(2); }}
+                              className={`rounded-xl border px-3 py-3 text-center text-[12px] font-medium transition-all ${
+                                cDuration === o
+                                  ? "border-brand-accent bg-brand-accent/12 text-white"
+                                  : "border-white/10 bg-white/[0.025] text-white/55 hover:border-white/25 hover:text-white"
+                              }`}
+                            >
+                              {o}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {cStep === 2 && (
+                      <div>
+                        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-accent/65">Step 03</p>
+                        <p className="mb-4 mt-1 text-[14px] font-medium text-white">예산 범위는 어느 정도인가요?</p>
+                        <div className="flex flex-col gap-2">
+                          {BUDGET_OPTS.map((o) => (
+                            <button
+                              key={o}
+                              onClick={() => { setCBudget(o); setCStep(3); }}
+                              className={`flex items-center justify-between rounded-xl border px-4 py-3 text-left text-[12px] font-medium transition-all ${
+                                cBudget === o
+                                  ? "border-brand-accent bg-brand-accent/12 text-white"
+                                  : "border-white/10 bg-white/[0.025] text-white/55 hover:border-white/25 hover:text-white"
+                              }`}
+                            >
+                              <span>{o}</span>
+                              <ChevRight />
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {cStep === 3 && (
+                      <div>
+                        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-accent/65">Step 04</p>
+                        <p className="mt-1 text-[14px] font-medium text-white">참고할 만한 레퍼런스가 있나요?</p>
+                        <p className="mb-4 mt-0.5 text-[11px] text-white/40">YouTube URL이나 키워드 — 선택사항입니다.</p>
+                        <input
+                          type="text"
+                          value={cReference}
+                          onChange={(e) => setCReference(e.target.value)}
+                          placeholder="https://youtu.be/... 또는 참고 키워드"
+                          className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-[13px] text-white placeholder:text-white/25 transition-colors focus:border-brand-accent/55 focus:outline-none"
+                        />
+                        <div className="mt-4 flex gap-2">
+                          <button
+                            onClick={() => setCStep(4)}
+                            className="flex-1 rounded-full bg-brand-accent py-2.5 font-display text-[11px] uppercase tracking-[0.16em] text-white transition-opacity hover:opacity-85"
+                          >
+                            다음
+                          </button>
+                          <button
+                            onClick={() => { setCReference(""); setCStep(4); }}
+                            className="rounded-full border border-white/12 px-4 py-2.5 text-[11px] text-white/45 transition-colors hover:border-white/30 hover:text-white/75"
+                          >
+                            건너뛰기
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {cStep === 4 && (
+                      <div>
+                        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-accent/65">Step 05</p>
+                        <p className="mt-1 text-[14px] font-medium text-white">연락처를 남겨주세요.</p>
+                        <p className="mb-5 mt-0.5 text-[11px] text-white/40">담당자가 검토 후 빠르게 답변드립니다.</p>
+                        <div className="space-y-3">
+                          <div>
+                            <label className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/40">이름 *</label>
+                            <input
+                              type="text"
+                              value={cName}
+                              onChange={(e) => setCName(e.target.value)}
+                              placeholder="Name"
+                              className="mt-1 w-full border-0 border-b border-white/15 bg-transparent py-2 text-[13px] text-white placeholder:text-white/25 transition-colors focus:border-brand-accent focus:outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/40">이메일 *</label>
+                            <input
+                              type="email"
+                              value={cEmail}
+                              onChange={(e) => setCEmail(e.target.value)}
+                              placeholder="you@email.com"
+                              className="mt-1 w-full border-0 border-b border-white/15 bg-transparent py-2 text-[13px] text-white placeholder:text-white/25 transition-colors focus:border-brand-accent focus:outline-none"
+                            />
+                          </div>
+                        </div>
+                        {cError && (
+                          <p className="mt-3 text-[11px] text-red-400">{cError}</p>
+                        )}
+                        <button
+                          onClick={() => { void submitConsult(); }}
+                          disabled={cSubmitting || !cName.trim() || !cEmail.trim()}
+                          className="mt-5 w-full rounded-full bg-brand-accent py-2.5 font-display text-[11px] uppercase tracking-[0.16em] text-white transition-opacity hover:opacity-85 disabled:opacity-30"
+                        >
+                          {cSubmitting ? "전송 중..." : "상담 신청하기"}
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+              )}
 
               {/* Scroll anchor */}
               <div ref={bottomRef} />
