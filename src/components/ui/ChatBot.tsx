@@ -55,7 +55,7 @@ const QNA_LIST: QnAItem[] = [
       "네, Works 메뉴에서 드라마 & 예능, 광고 & 홍보, B2B, AI, 공공 / 기관 등 다양한 분야의 작업물을 확인하실 수 있습니다.",
     category: "서비스",
     nextIds: ["q2", "q5", "q10"],
-    cta: { label: "Works 보러가기 →", href: "/works" },
+    cta: { label: "Works 보러가기", href: "/works" },
   },
   {
     id: "q5",
@@ -479,7 +479,7 @@ export function ChatBot() {
                             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.7} className="h-3.5 w-3.5">
                               <path d="M4 10l4 4 8-8" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
-                            챗봇에서 견적 받기 →
+                            챗봇에서 견적 받기
                           </button>
                         )}
 
@@ -506,7 +506,7 @@ export function ChatBot() {
                             className="flex items-center gap-2 rounded-xl border border-yellow-300/25 bg-yellow-300/[0.06] px-3 py-2.5 text-[12px] font-medium text-yellow-300/80 transition-all hover:border-yellow-300/40 hover:bg-yellow-300/10"
                           >
                             <KakaoIcon />
-                            카카오 채널로 바로 문의하기 →
+                            카카오 채널로 바로 문의하기
                           </a>
                         )}
 
@@ -968,7 +968,7 @@ export function ChatBot() {
                 onClick={closeWidget}
                 className="flex w-full items-center justify-center gap-1 py-1.5 text-[11px] text-white/25 transition-colors hover:text-white/50"
               >
-                온라인 문의하기 →
+                온라인 문의하기
               </Link>
             </div>
           </motion.div>
