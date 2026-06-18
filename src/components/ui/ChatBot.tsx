@@ -205,7 +205,7 @@ export function ChatBot() {
   function pickDuration(v: string) { setDuration(v); setTimeout(() => setCStep("budget"), 120); }
   function pickBudget(v: string) { setBudget(v); setTimeout(() => setCStep("reference"), 120); }
 
-  function submitConsult() {
+  async function submitConsult() {
     setCError("");
     if (!name.trim()) { setCError("이름을 입력해주세요."); return; }
     if (!email.trim()) { setCError("이메일을 입력해주세요."); return; }
@@ -222,20 +222,20 @@ export function ChatBot() {
       reference ? `레퍼런스: ${reference}` : "",
     ].filter(Boolean).join("\n");
 
-    fetch("/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, service, budget, message: msg }),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("전송 실패");
-        setCStep("done");
-      })
-      .catch(() => {
-        setCError("전송에 실패했습니다. 다시 시도해주세요.");
-        setCStep("contact");
-      })
-      .finally(() => setSubmitting(false));
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, service, budget, message: msg }),
+      });
+      if (!res.ok) throw new Error("전송 실패");
+      setCStep("done");
+    } catch {
+      setCError("전송에 실패했습니다. 다시 시도해주세요.");
+      setCStep("contact");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   const cIdx = CONSULT_STEPS.indexOf(cStep);
@@ -496,7 +496,7 @@ export function ChatBot() {
                       </div>
                       {cError && <p className="mt-3 text-[11px] text-red-400">{cError}</p>}
                       <div className="mt-5 flex items-center gap-2.5">
-                        <button onClick={submitConsult} disabled={submitting || !name.trim() || !email.trim()}
+                        <button onClick={() => { void submitConsult(); }} disabled={submitting || !name.trim() || !email.trim()}
                           className="rounded-full bg-brand-accent px-7 py-2.5 font-display text-[11px] uppercase tracking-widest text-white transition-opacity disabled:opacity-30 hover:opacity-80">
                           상담 신청하기
                         </button>
