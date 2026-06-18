@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/sections/ContactForm";
-import { ProjectConsultation } from "@/components/sections/ProjectConsultation";
 import { SocialLinks } from "@/components/ui/SocialLinks";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { SpotlightText } from "@/components/ui/SpotlightText";
@@ -27,28 +26,13 @@ export default function ContactPage() {
               프로젝트 문의는 언제든지 환영합니다.
             </p>
             <p className="mt-1 text-sm text-brand-muted md:text-base">
-              아래 가이드 상담을 따라가시면 빠르게 견적을 받으실 수 있습니다.
+              아래 정보로 연락 주시거나 폼을 작성해주세요.
             </p>
           </div>
         </FadeIn>
       </header>
 
-      {/* ── 가이드 상담 위자드 ───────────────────────────────── */}
-      <section className="section-padding pb-24">
-        <FadeIn delay={0.1}>
-          <p className="label-text mb-8">프로젝트 상담 시작하기</p>
-          <div className="max-w-2xl">
-            <ProjectConsultation />
-          </div>
-        </FadeIn>
-      </section>
-
-      {/* ── 직접 작성하기 (기존 폼) ──────────────────────────── */}
-      <section className="section-padding border-t border-white/8 pb-32">
-        <FadeIn delay={0.08}>
-          <p className="label-text mb-12">직접 작성하기</p>
-        </FadeIn>
-
+      <section className="section-padding pb-32">
         <div className="grid grid-cols-1 gap-16 md:grid-cols-12">
           {/* 연락처 정보 */}
           <div className="md:col-span-4">
