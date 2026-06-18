@@ -335,10 +335,10 @@ export function ChatBot() {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: 16, scale: 0.96 }}
+            initial={{ opacity: 0, y: 24, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.96 }}
-            transition={{ duration: 0.22 }}
+            exit={{ opacity: 0, y: 16, scale: 0.96, transition: { duration: 0.22, ease: "easeIn" } }}
+            transition={{ duration: 0.45, ease: "easeOut" }}
             className="mb-3 flex h-[560px] w-[340px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0d0d0d] shadow-2xl"
           >
             {/* Header */}
@@ -376,9 +376,9 @@ export function ChatBot() {
               <>
               {/* Greeting */}
               <motion.div
-                initial={{ opacity: 0, y: 6 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
                 className="flex gap-2"
               >
                 <BotAvatar />
@@ -391,9 +391,9 @@ export function ChatBot() {
 
               {/* Consult CTA — top, prominent */}
               <motion.button
-                initial={{ opacity: 0, y: 6 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.25, delay: 0.05 }}
+                transition={{ duration: 0.5, delay: 0.32, ease: "easeOut" }}
                 onClick={startConsult}
                 className="group flex w-full items-center justify-between rounded-2xl border border-brand-accent/30 bg-gradient-to-br from-brand-accent/[0.12] to-brand-accent/[0.04] px-4 py-3.5 text-left transition-all hover:border-brand-accent/55 hover:from-brand-accent/[0.18] hover:to-brand-accent/[0.06]"
               >
@@ -411,9 +411,9 @@ export function ChatBot() {
                 return (
                   <motion.div
                     key={i}
-                    initial={{ opacity: 0, y: 8 }}
+                    initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: 0.45, ease: "easeOut" }}
                     className="space-y-2"
                   >
                     {/* User bubble */}
@@ -459,16 +459,24 @@ export function ChatBot() {
               })}
 
               {/* Next question options */}
-              <div className="space-y-1.5">
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
+                className="space-y-1.5"
+              >
                 <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/25">
                   {history.length === 0 ? "자주 묻는 질문" : "이런 것도 궁금하신가요?"}
                 </p>
-                {currentOptions.map((qid) => {
+                {currentOptions.map((qid, idx) => {
                   const item = QNA[qid];
                   if (!item) return null;
                   return (
-                    <button
+                    <motion.button
                       key={qid}
+                      initial={{ opacity: 0, x: -6 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.35, delay: 0.6 + idx * 0.07, ease: "easeOut" }}
                       onClick={() => select(qid)}
                       className="flex w-full items-center justify-between gap-2 rounded-xl border border-white/8 bg-white/[0.025] px-3.5 py-2.5 text-left transition-all hover:border-brand-accent/35 hover:bg-brand-accent/5"
                     >
@@ -476,10 +484,10 @@ export function ChatBot() {
                         {item.question}
                       </span>
                       <ChevRight />
-                    </button>
+                    </motion.button>
                   );
                 })}
-              </div>
+              </motion.div>
               </>
               )}
 
@@ -512,35 +520,70 @@ export function ChatBot() {
                 </div>
 
                 {cDone ? (
-                  <div className="flex flex-1 flex-col items-center justify-center px-2 text-center">
-                    <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-brand-accent/15 text-brand-accent">
+                  <motion.div
+                    key="done"
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="flex flex-1 flex-col items-center justify-center px-2 text-center"
+                  >
+                    <motion.div
+                      initial={{ scale: 0, rotate: -45 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ duration: 0.55, delay: 0.1, ease: "easeOut" }}
+                      className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-brand-accent/15 text-brand-accent"
+                    >
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-6 w-6">
                         <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
-                    </div>
-                    <p className="font-display text-[15px] uppercase tracking-[0.14em] text-white">Thank you</p>
-                    <p className="mt-2 max-w-[260px] text-[12px] leading-relaxed text-white/55">
+                    </motion.div>
+                    <motion.p
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 0.35, ease: "easeOut" }}
+                      className="font-display text-[15px] uppercase tracking-[0.14em] text-white"
+                    >
+                      Thank you
+                    </motion.p>
+                    <motion.p
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 0.5, ease: "easeOut" }}
+                      className="mt-2 max-w-[260px] text-[12px] leading-relaxed text-white/55"
+                    >
                       상담 신청이 접수되었습니다.
                       <br />
                       담당자가 빠른 시일 내에 이메일로 연락드리겠습니다.
-                    </p>
-                    <button
+                    </motion.p>
+                    <motion.button
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.4, delay: 0.7, ease: "easeOut" }}
                       onClick={reset}
                       className="mt-5 rounded-full border border-white/15 px-4 py-2 text-[11px] text-white/60 transition-colors hover:border-white/35 hover:text-white"
                     >
                       처음으로
-                    </button>
-                  </div>
+                    </motion.button>
+                  </motion.div>
                 ) : (
-                  <>
+                  <AnimatePresence mode="wait">
                     {cStep === 0 && (
-                      <div>
+                      <motion.div
+                        key="step-0"
+                        initial={{ opacity: 0, x: 18 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -18, transition: { duration: 0.2, ease: "easeIn" } }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
+                      >
                         <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-accent/65">Step 01</p>
                         <p className="mb-4 mt-1 text-[14px] font-medium text-white">어떤 영상을 만들고 싶으신가요?</p>
                         <div className="grid grid-cols-2 gap-2">
-                          {SERVICE_OPTS.map((o) => (
-                            <button
+                          {SERVICE_OPTS.map((o, idx) => (
+                            <motion.button
                               key={o}
+                              initial={{ opacity: 0, y: 8 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.32, delay: 0.15 + idx * 0.05, ease: "easeOut" }}
                               onClick={() => { setCService(o); setCStep(1); }}
                               className={`rounded-xl border px-3 py-3 text-left text-[12px] font-medium leading-snug transition-all ${
                                 cService === o
@@ -549,20 +592,29 @@ export function ChatBot() {
                               }`}
                             >
                               {o}
-                            </button>
+                            </motion.button>
                           ))}
                         </div>
-                      </div>
+                      </motion.div>
                     )}
 
                     {cStep === 1 && (
-                      <div>
+                      <motion.div
+                        key="step-1"
+                        initial={{ opacity: 0, x: 18 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -18, transition: { duration: 0.2, ease: "easeIn" } }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
+                      >
                         <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-accent/65">Step 02</p>
                         <p className="mb-4 mt-1 text-[14px] font-medium text-white">영상 길이는 얼마나 되나요?</p>
                         <div className="grid grid-cols-3 gap-2">
-                          {DURATION_OPTS.map((o) => (
-                            <button
+                          {DURATION_OPTS.map((o, idx) => (
+                            <motion.button
                               key={o}
+                              initial={{ opacity: 0, y: 8 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.32, delay: 0.15 + idx * 0.05, ease: "easeOut" }}
                               onClick={() => { setCDuration(o); setCStep(2); }}
                               className={`rounded-xl border px-3 py-3 text-center text-[12px] font-medium transition-all ${
                                 cDuration === o
@@ -571,20 +623,29 @@ export function ChatBot() {
                               }`}
                             >
                               {o}
-                            </button>
+                            </motion.button>
                           ))}
                         </div>
-                      </div>
+                      </motion.div>
                     )}
 
                     {cStep === 2 && (
-                      <div>
+                      <motion.div
+                        key="step-2"
+                        initial={{ opacity: 0, x: 18 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -18, transition: { duration: 0.2, ease: "easeIn" } }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
+                      >
                         <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-accent/65">Step 03</p>
                         <p className="mb-4 mt-1 text-[14px] font-medium text-white">예산 범위는 어느 정도인가요?</p>
                         <div className="flex flex-col gap-2">
-                          {BUDGET_OPTS.map((o) => (
-                            <button
+                          {BUDGET_OPTS.map((o, idx) => (
+                            <motion.button
                               key={o}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ duration: 0.32, delay: 0.15 + idx * 0.06, ease: "easeOut" }}
                               onClick={() => { setCBudget(o); setCStep(3); }}
                               className={`flex items-center justify-between rounded-xl border px-4 py-3 text-left text-[12px] font-medium transition-all ${
                                 cBudget === o
@@ -594,25 +655,39 @@ export function ChatBot() {
                             >
                               <span>{o}</span>
                               <ChevRight />
-                            </button>
+                            </motion.button>
                           ))}
                         </div>
-                      </div>
+                      </motion.div>
                     )}
 
                     {cStep === 3 && (
-                      <div>
+                      <motion.div
+                        key="step-3"
+                        initial={{ opacity: 0, x: 18 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -18, transition: { duration: 0.2, ease: "easeIn" } }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
+                      >
                         <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-accent/65">Step 04</p>
                         <p className="mt-1 text-[14px] font-medium text-white">참고할 만한 레퍼런스가 있나요?</p>
                         <p className="mb-4 mt-0.5 text-[11px] text-white/40">YouTube URL이나 키워드 — 선택사항입니다.</p>
-                        <input
+                        <motion.input
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.35, delay: 0.2, ease: "easeOut" }}
                           type="text"
                           value={cReference}
                           onChange={(e) => setCReference(e.target.value)}
                           placeholder="https://youtu.be/... 또는 참고 키워드"
                           className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-[13px] text-white placeholder:text-white/25 transition-colors focus:border-brand-accent/55 focus:outline-none"
                         />
-                        <div className="mt-4 flex gap-2">
+                        <motion.div
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.35, delay: 0.35, ease: "easeOut" }}
+                          className="mt-4 flex gap-2"
+                        >
                           <button
                             onClick={() => setCStep(4)}
                             className="flex-1 rounded-full bg-brand-accent py-2.5 font-display text-[11px] uppercase tracking-[0.16em] text-white transition-opacity hover:opacity-85"
@@ -625,16 +700,27 @@ export function ChatBot() {
                           >
                             건너뛰기
                           </button>
-                        </div>
-                      </div>
+                        </motion.div>
+                      </motion.div>
                     )}
 
                     {cStep === 4 && (
-                      <div>
+                      <motion.div
+                        key="step-4"
+                        initial={{ opacity: 0, x: 18 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -18, transition: { duration: 0.2, ease: "easeIn" } }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
+                      >
                         <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-accent/65">Step 05</p>
                         <p className="mt-1 text-[14px] font-medium text-white">연락처를 남겨주세요.</p>
                         <p className="mb-5 mt-0.5 text-[11px] text-white/40">담당자가 검토 후 빠르게 답변드립니다.</p>
-                        <div className="space-y-3">
+                        <motion.div
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.4, delay: 0.18, ease: "easeOut" }}
+                          className="space-y-3"
+                        >
                           <div>
                             <label className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/40">이름 *</label>
                             <input
@@ -655,20 +741,30 @@ export function ChatBot() {
                               className="mt-1 w-full border-0 border-b border-white/15 bg-transparent py-2 text-[13px] text-white placeholder:text-white/25 transition-colors focus:border-brand-accent focus:outline-none"
                             />
                           </div>
-                        </div>
+                        </motion.div>
                         {cError && (
-                          <p className="mt-3 text-[11px] text-red-400">{cError}</p>
+                          <motion.p
+                            initial={{ opacity: 0, y: 4 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.25, ease: "easeOut" }}
+                            className="mt-3 text-[11px] text-red-400"
+                          >
+                            {cError}
+                          </motion.p>
                         )}
-                        <button
+                        <motion.button
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.4, delay: 0.42, ease: "easeOut" }}
                           onClick={() => { void submitConsult(); }}
                           disabled={cSubmitting || !cName.trim() || !cEmail.trim()}
                           className="mt-5 w-full rounded-full bg-brand-accent py-2.5 font-display text-[11px] uppercase tracking-[0.16em] text-white transition-opacity hover:opacity-85 disabled:opacity-30"
                         >
                           {cSubmitting ? "전송 중..." : "상담 신청하기"}
-                        </button>
-                      </div>
+                        </motion.button>
+                      </motion.div>
                     )}
-                  </>
+                  </AnimatePresence>
                 )}
               </div>
               )}
