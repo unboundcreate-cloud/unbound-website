@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Reorder, AnimatePresence } from "framer-motion";
+import { Reorder, AnimatePresence, motion } from "framer-motion";
 import type { Work } from "@/data/works";
 
 const CATEGORY_OPTS: { value: string; label: string }[] = [
@@ -17,7 +17,7 @@ const CATEGORY_LABELS: Record<string, string> = Object.fromEntries(
   CATEGORY_OPTS.map((c) => [c.value, c.label]),
 );
 
-type SaveState = "idle" | "saving" | "saved" | "error";
+type ViewMode = "list" | "grid";
 
 export default function WorksPage() {
   const [works, setWorks] = useState<Work[]>([]);
@@ -27,23 +27,28 @@ export default function WorksPage() {
   const [filterFeatured, setFilterFeatured] = useState(false);
   const [reorderSaving, setReorderSaving] = useState(false);
   const [reorderError, setReorderError] = useState("");
+  const [view, setView] = useState<ViewMode>("list");
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [bulkBusy, setBulkBusy] = useState(false);
 
   useEffect(() => {
-    void (async () => {
-      try {
-        const res = await fetch("/api/admin/content/works", { cache: "no-store" });
-        if (!res.ok) throw new Error("로드 실패");
-        const data: Work[] = await res.json();
-        setWorks(data);
-      } catch {
-        setReorderError("작업물 목록을 불러오지 못했습니다.");
-      } finally {
-        setLoading(false);
-      }
-    })();
+    void loadWorks();
   }, []);
 
-  // filtered view (DnD는 필터 미적용일 때만 활성)
+  async function loadWorks() {
+    try {
+      const res = await fetch("/api/admin/content/works", { cache: "no-store" });
+      if (!res.ok) throw new Error("로드 실패");
+      const data: Work[] = await res.json();
+      setWorks(data);
+    } catch {
+      setReorderError("작업물 목록을 불러오지 못했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // filtered view (DnD는 필터 미적용 + 리스트 뷰일 때만 활성)
   const filtered = works.filter((w) => {
     if (search.trim()) {
       const s = search.toLowerCase();
@@ -59,7 +64,35 @@ export default function WorksPage() {
   });
 
   const filterActive = !!search.trim() || !!filterCat || filterFeatured;
+  const dndEnabled = !filterActive && view === "list";
+  const visible = filterActive ? filtered : works;
 
+  // ─── selection ──────────────────────────────────────────────────────────────
+  function toggleSelect(id: string) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+  function clearSelection() {
+    setSelected(new Set());
+  }
+  const visibleIds = visible.map((w) => w.id);
+  const allSelected = visibleIds.length > 0 && visibleIds.every((id) => selected.has(id));
+  function toggleSelectAll() {
+    setSelected((prev) => {
+      if (visibleIds.every((id) => prev.has(id))) {
+        const next = new Set(prev);
+        visibleIds.forEach((id) => next.delete(id));
+        return next;
+      }
+      return new Set([...prev, ...visibleIds]);
+    });
+  }
+
+  // ─── persistence ──────────────────────────────────────────────────────────────
   async function persistReorder(next: Work[]) {
     setReorderSaving(true);
     setReorderError("");
@@ -95,7 +128,6 @@ export default function WorksPage() {
       });
       if (!res.ok) throw new Error("저장 실패");
     } catch {
-      // 롤백
       setWorks((prev) => prev.map((w) => (w.id === id ? current : w)));
       setReorderError("저장에 실패했습니다.");
     }
@@ -136,22 +168,111 @@ export default function WorksPage() {
     }
   }
 
+  // ─── bulk actions (순차 실행으로 Redis race 방지) ─────────────────────────────
+  async function bulkSetFeatured(value: boolean) {
+    setBulkBusy(true);
+    setReorderError("");
+    const ids = [...selected];
+    try {
+      for (const id of ids) {
+        const current = works.find((w) => w.id === id);
+        if (!current || current.featured === value) continue;
+        const merged = { ...current, featured: value };
+        const res = await fetch(`/api/admin/content/works/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(merged),
+        });
+        if (!res.ok) throw new Error();
+      }
+      await loadWorks();
+      clearSelection();
+    } catch {
+      setReorderError("일괄 변경 중 오류가 발생했습니다.");
+    } finally {
+      setBulkBusy(false);
+    }
+  }
+
+  async function bulkDelete() {
+    const ids = [...selected];
+    if (ids.length === 0) return;
+    if (!confirm(`선택한 ${ids.length}개 작업물을 삭제하시겠습니까?`)) return;
+    setBulkBusy(true);
+    setReorderError("");
+    try {
+      for (const id of ids) {
+        const res = await fetch(`/api/admin/content/works/${id}`, { method: "DELETE" });
+        if (!res.ok) throw new Error();
+      }
+      await loadWorks();
+      clearSelection();
+    } catch {
+      setReorderError("일괄 삭제 중 오류가 발생했습니다.");
+    } finally {
+      setBulkBusy(false);
+    }
+  }
+
+  // shared handlers per work
+  const rowHandlers = (work: Work) => ({
+    selected: selected.has(work.id),
+    onToggleSelect: () => toggleSelect(work.id),
+    onUpdate: (p: Partial<Work>) => void updateWork(work.id, p),
+    onDelete: () => void deleteWork(work.id, work.title),
+    onDuplicate: () => void duplicateWork(work),
+  });
+
   return (
     <div className="p-8">
+      {/* 헤더 */}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-lg font-semibold text-white">작업물 (Works)</h1>
           <p className="mt-0.5 text-sm text-white/40">
-            {works.length}개 · 행을 잡고 드래그해서 순서 변경
+            {works.length}개
+            {dndEnabled && " · 행을 잡고 드래그해서 순서 변경"}
             {reorderSaving && <span className="ml-2 text-brand-accent">저장 중…</span>}
           </p>
         </div>
-        <Link
-          href="/admin/content/works/new"
-          className="rounded-lg bg-brand-accent px-4 py-2 text-sm font-medium text-white hover:opacity-85 transition-opacity"
-        >
-          + 작업물 추가
-        </Link>
+        <div className="flex items-center gap-2">
+          {/* 뷰 토글 */}
+          <div className="flex rounded-lg border border-white/10 bg-white/5 p-0.5">
+            <button
+              onClick={() => setView("list")}
+              className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs transition-colors ${
+                view === "list" ? "bg-white/10 text-white" : "text-white/40 hover:text-white/70"
+              }`}
+              title="리스트 보기"
+            >
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.6} className="h-3.5 w-3.5">
+                <path d="M2 4h12M2 8h12M2 12h12" strokeLinecap="round" />
+              </svg>
+              리스트
+            </button>
+            <button
+              onClick={() => setView("grid")}
+              className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs transition-colors ${
+                view === "grid" ? "bg-white/10 text-white" : "text-white/40 hover:text-white/70"
+              }`}
+              title="카드 보기"
+            >
+              <svg viewBox="0 0 16 16" fill="currentColor" className="h-3.5 w-3.5">
+                <rect x="2" y="2" width="5" height="5" rx="1" />
+                <rect x="9" y="2" width="5" height="5" rx="1" />
+                <rect x="2" y="9" width="5" height="5" rx="1" />
+                <rect x="9" y="9" width="5" height="5" rx="1" />
+              </svg>
+              카드
+            </button>
+          </div>
+          <Link
+            href="/admin/content/works/new"
+            className="rounded-lg bg-brand-accent px-4 py-2 text-sm font-medium text-white hover:opacity-85 transition-opacity"
+          >
+            + 작업물 추가
+          </Link>
+        </div>
       </div>
 
       {/* 필터 바 */}
@@ -161,6 +282,7 @@ export default function WorksPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="제목 · 클라이언트 · ID 검색…"
+          spellCheck={false}
           className="flex-1 min-w-[200px] rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-sm text-white placeholder-white/25 focus:border-brand-accent/60 focus:outline-none"
         />
         <select
@@ -198,109 +320,169 @@ export default function WorksPage() {
         </div>
       )}
 
-      {filterActive && (
+      {/* 선택 / 일괄 작업 바 */}
+      <div className="mb-3 flex flex-wrap items-center gap-3 rounded-lg border border-white/8 bg-white/[0.02] px-3 py-2">
+        <label className="flex items-center gap-2 text-xs text-white/60 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={allSelected}
+            onChange={toggleSelectAll}
+            className="h-4 w-4 accent-brand-accent"
+          />
+          전체 선택
+        </label>
+        {selected.size > 0 ? (
+          <>
+            <span className="text-xs text-brand-accent">{selected.size}개 선택됨</span>
+            <div className="ml-auto flex items-center gap-2">
+              <button
+                onClick={() => void bulkSetFeatured(true)}
+                disabled={bulkBusy}
+                className="rounded-md border border-white/10 px-2.5 py-1 text-xs text-white/70 hover:bg-white/5 disabled:opacity-40"
+              >
+                ★ Featured ON
+              </button>
+              <button
+                onClick={() => void bulkSetFeatured(false)}
+                disabled={bulkBusy}
+                className="rounded-md border border-white/10 px-2.5 py-1 text-xs text-white/70 hover:bg-white/5 disabled:opacity-40"
+              >
+                ☆ Featured OFF
+              </button>
+              <button
+                onClick={() => void bulkDelete()}
+                disabled={bulkBusy}
+                className="rounded-md border border-red-500/30 px-2.5 py-1 text-xs text-red-400 hover:bg-red-500/10 disabled:opacity-40"
+              >
+                선택 삭제
+              </button>
+              <button
+                onClick={clearSelection}
+                disabled={bulkBusy}
+                className="text-xs text-white/40 hover:text-white disabled:opacity-40"
+              >
+                선택 해제
+              </button>
+            </div>
+          </>
+        ) : (
+          <span className="text-xs text-white/25">
+            체크박스로 여러 개를 선택해 일괄 작업할 수 있습니다.
+          </span>
+        )}
+      </div>
+
+      {filterActive && view === "list" && (
         <p className="mb-3 text-[11px] text-white/35">
           ⚠ 필터링 중에는 드래그 정렬이 비활성화됩니다. 정렬을 변경하려면 필터를 초기화하세요.
         </p>
       )}
-
-      {/* 헤더 */}
-      <div className="grid grid-cols-[28px_72px_minmax(0,2.2fr)_minmax(0,1.2fr)_minmax(0,1fr)_72px_80px_96px] gap-3 border-b border-white/10 px-3 py-2 text-[11px] font-medium uppercase tracking-wider text-white/30">
-        <div />
-        <div>썸네일</div>
-        <div>제목</div>
-        <div>클라이언트</div>
-        <div>카테고리</div>
-        <div>연도</div>
-        <div>Featured</div>
-        <div className="text-right">관리</div>
-      </div>
+      {view === "grid" && !filterActive && (
+        <p className="mb-3 text-[11px] text-white/35">
+          ⓘ 카드 보기에서는 드래그 정렬이 비활성화됩니다. 순서 변경은 리스트 보기에서 가능합니다.
+        </p>
+      )}
 
       {loading ? (
         <div className="py-12 text-center text-sm text-white/40">불러오는 중…</div>
-      ) : filtered.length === 0 ? (
+      ) : visible.length === 0 ? (
         <div className="py-12 text-center text-sm text-white/40">
           {filterActive ? "조건에 맞는 작업물이 없습니다." : "작업물이 없습니다."}
         </div>
-      ) : filterActive ? (
-        // 필터 활성 시: DnD 없는 일반 리스트
-        <div className="divide-y divide-white/5">
+      ) : view === "grid" ? (
+        // ─── 카드 그리드 뷰 ───
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
           <AnimatePresence initial={false}>
-            {filtered.map((work) => (
-              <WorkRow
-                key={work.id}
-                work={work}
-                onUpdate={(p) => void updateWork(work.id, p)}
-                onDelete={() => void deleteWork(work.id, work.title)}
-                onDuplicate={() => void duplicateWork(work)}
-                draggable={false}
-              />
+            {visible.map((work) => (
+              <WorkCardItem key={work.id} work={work} {...rowHandlers(work)} />
             ))}
           </AnimatePresence>
         </div>
       ) : (
-        // 필터 비활성: DnD 활성
-        <Reorder.Group
-          axis="y"
-          values={works}
-          onReorder={handleReorder}
-          className="divide-y divide-white/5"
-        >
-          <AnimatePresence initial={false}>
-            {works.map((work) => (
-              <Reorder.Item
-                key={work.id}
-                value={work}
-                className="bg-transparent"
-                whileDrag={{
-                  scale: 1.01,
-                  boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
-                  zIndex: 50,
-                  backgroundColor: "rgba(255,255,255,0.04)",
-                }}
-                transition={{ duration: 0.25 }}
-              >
-                <WorkRow
-                  work={work}
-                  onUpdate={(p) => void updateWork(work.id, p)}
-                  onDelete={() => void deleteWork(work.id, work.title)}
-                  onDuplicate={() => void duplicateWork(work)}
-                  draggable
-                />
-              </Reorder.Item>
-            ))}
-          </AnimatePresence>
-        </Reorder.Group>
+        // ─── 리스트 뷰 ───
+        <>
+          {/* 헤더 */}
+          <div className="grid grid-cols-[28px_28px_72px_minmax(0,2.2fr)_minmax(0,1.2fr)_minmax(0,1fr)_72px_80px_96px] gap-3 border-b border-white/10 px-3 py-2 text-[11px] font-medium uppercase tracking-wider text-white/30">
+            <div />
+            <div />
+            <div>썸네일</div>
+            <div>제목</div>
+            <div>클라이언트</div>
+            <div>카테고리</div>
+            <div>연도</div>
+            <div>Featured</div>
+            <div className="text-right">관리</div>
+          </div>
+
+          {dndEnabled ? (
+            <Reorder.Group
+              axis="y"
+              values={works}
+              onReorder={handleReorder}
+              className="divide-y divide-white/5"
+            >
+              <AnimatePresence initial={false}>
+                {works.map((work) => (
+                  <Reorder.Item
+                    key={work.id}
+                    value={work}
+                    className="bg-transparent"
+                    whileDrag={{
+                      scale: 1.01,
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+                      zIndex: 50,
+                      backgroundColor: "rgba(255,255,255,0.04)",
+                    }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    <WorkRow work={work} draggable {...rowHandlers(work)} />
+                  </Reorder.Item>
+                ))}
+              </AnimatePresence>
+            </Reorder.Group>
+          ) : (
+            <div className="divide-y divide-white/5">
+              <AnimatePresence initial={false}>
+                {visible.map((work) => (
+                  <WorkRow key={work.id} work={work} draggable={false} {...rowHandlers(work)} />
+                ))}
+              </AnimatePresence>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
 }
 
-// ─── Row ──────────────────────────────────────────────────────────────────────
+// ─── Row (list view) ────────────────────────────────────────────────────────────
+
+interface ItemProps {
+  work: Work;
+  selected: boolean;
+  onToggleSelect: () => void;
+  onUpdate: (patch: Partial<Work>) => void;
+  onDelete: () => void;
+  onDuplicate: () => void;
+}
 
 function WorkRow({
   work,
+  selected,
+  onToggleSelect,
   onUpdate,
   onDelete,
   onDuplicate,
   draggable,
-}: {
-  work: Work;
-  onUpdate: (patch: Partial<Work>) => void;
-  onDelete: () => void;
-  onDuplicate: () => void;
-  draggable: boolean;
-}) {
+}: ItemProps & { draggable: boolean }) {
   return (
-    <div
-      className="grid grid-cols-[28px_72px_minmax(0,2.2fr)_minmax(0,1.2fr)_minmax(0,1fr)_72px_80px_96px] gap-3 items-center px-3 py-2 hover:bg-white/[0.02] transition-colors group"
-    >
+    <div className="grid grid-cols-[28px_28px_72px_minmax(0,2.2fr)_minmax(0,1.2fr)_minmax(0,1fr)_72px_80px_96px] gap-3 items-center px-3 py-2 hover:bg-white/[0.02] transition-colors group">
       {/* 드래그 핸들 */}
       <div
         className={`flex items-center justify-center ${
           draggable ? "cursor-grab active:cursor-grabbing text-white/25 hover:text-white/70" : "text-white/10"
         }`}
-        title={draggable ? "드래그해서 순서 변경" : "필터 중 정렬 비활성"}
+        title={draggable ? "드래그해서 순서 변경" : "필터/카드 보기 중 정렬 비활성"}
       >
         <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
           <circle cx="7" cy="5" r="1.4" />
@@ -312,36 +494,26 @@ function WorkRow({
         </svg>
       </div>
 
-      {/* 썸네일 */}
-      <div>
-        {work.thumbnailUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={work.thumbnailUrl}
-            alt={work.title}
-            className="h-12 w-16 rounded object-cover bg-white/10"
-          />
-        ) : (
-          <div className="h-12 w-16 rounded bg-white/10" />
-        )}
+      {/* 선택 체크박스 */}
+      <div className="flex items-center justify-center">
+        <input
+          type="checkbox"
+          checked={selected}
+          onChange={onToggleSelect}
+          className="h-4 w-4 accent-brand-accent"
+        />
       </div>
 
-      {/* 제목 (인라인) */}
-      <InlineText
-        value={work.title}
-        onSave={(v) => onUpdate({ title: v })}
-        className="text-white"
-      />
+      {/* 썸네일 (hover 확대) */}
+      <ThumbPreview src={work.thumbnailUrl} alt={work.title} />
 
-      {/* 클라이언트 (인라인) */}
-      <InlineText
-        value={work.client ?? ""}
-        placeholder="—"
-        onSave={(v) => onUpdate({ client: v })}
-        className="text-white/60"
-      />
+      {/* 제목 */}
+      <InlineText value={work.title} onSave={(v) => onUpdate({ title: v })} className="text-white" />
 
-      {/* 카테고리 (셀렉트 인라인) */}
+      {/* 클라이언트 */}
+      <InlineText value={work.client ?? ""} placeholder="—" onSave={(v) => onUpdate({ client: v })} className="text-white/60" />
+
+      {/* 카테고리 */}
       <InlineSelect
         value={work.category ?? "drama"}
         options={CATEGORY_OPTS}
@@ -349,15 +521,10 @@ function WorkRow({
         renderLabel={(v) => CATEGORY_LABELS[v] ?? v}
       />
 
-      {/* 연도 (인라인) */}
-      <InlineText
-        value={work.year ?? ""}
-        placeholder="—"
-        onSave={(v) => onUpdate({ year: v })}
-        className="text-white/60"
-      />
+      {/* 연도 */}
+      <InlineText value={work.year ?? ""} placeholder="—" onSave={(v) => onUpdate({ year: v })} className="text-white/60" />
 
-      {/* Featured 토글 */}
+      {/* Featured */}
       <div>
         <button
           onClick={() => onUpdate({ featured: !work.featured })}
@@ -371,7 +538,7 @@ function WorkRow({
         </button>
       </div>
 
-      {/* 관리 버튼 */}
+      {/* 관리 */}
       <div className="flex items-center justify-end gap-1.5 text-[11px]">
         <Link
           href={`/admin/content/works/${work.id}`}
@@ -380,20 +547,116 @@ function WorkRow({
         >
           편집
         </Link>
-        <button
-          onClick={onDuplicate}
-          className="rounded px-1.5 py-1 text-white/40 hover:text-white hover:bg-white/5 transition-colors"
-          title="복제"
-        >
+        <button onClick={onDuplicate} className="rounded px-1.5 py-1 text-white/40 hover:text-white hover:bg-white/5 transition-colors" title="복제">
           복제
         </button>
-        <button
-          onClick={onDelete}
-          className="rounded px-1.5 py-1 text-red-400/65 hover:text-red-400 hover:bg-red-500/10 transition-colors"
-          title="삭제"
-        >
+        <button onClick={onDelete} className="rounded px-1.5 py-1 text-red-400/65 hover:text-red-400 hover:bg-red-500/10 transition-colors" title="삭제">
           삭제
         </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Card (grid view) ─────────────────────────────────────────────────────────
+
+function WorkCardItem({
+  work,
+  selected,
+  onToggleSelect,
+  onUpdate,
+  onDelete,
+  onDuplicate,
+}: ItemProps) {
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.97, transition: { duration: 0.15 } }}
+      transition={{ duration: 0.25 }}
+      className={`group overflow-hidden rounded-xl border bg-white/[0.02] transition-colors ${
+        selected ? "border-brand-accent/60" : "border-white/8 hover:border-white/20"
+      }`}
+    >
+      {/* 썸네일 */}
+      <div className="relative aspect-video bg-white/5">
+        {work.thumbnailUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={work.thumbnailUrl} alt={work.title} className="h-full w-full object-cover" />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-xs text-white/20">No Image</div>
+        )}
+        {/* 체크박스 */}
+        <label className="absolute left-2 top-2 flex h-6 w-6 items-center justify-center rounded-md bg-black/55 backdrop-blur-sm cursor-pointer">
+          <input
+            type="checkbox"
+            checked={selected}
+            onChange={onToggleSelect}
+            className="h-4 w-4 accent-brand-accent"
+          />
+        </label>
+        {/* Featured */}
+        <button
+          onClick={() => onUpdate({ featured: !work.featured })}
+          className={`absolute right-2 top-2 rounded-full px-2 py-0.5 text-[10px] backdrop-blur-sm transition-colors ${
+            work.featured ? "bg-brand-accent/85 text-white" : "bg-black/55 text-white/55 hover:text-white"
+          }`}
+        >
+          {work.featured ? "★ Featured" : "☆"}
+        </button>
+      </div>
+
+      {/* 정보 */}
+      <div className="space-y-2 p-3">
+        <InlineText value={work.title} onSave={(v) => onUpdate({ title: v })} className="text-[13px] font-medium text-white" />
+        <InlineText value={work.client ?? ""} placeholder="클라이언트 —" onSave={(v) => onUpdate({ client: v })} className="text-[12px] text-white/55" />
+        <div className="flex items-center gap-2">
+          <InlineSelect
+            value={work.category ?? "drama"}
+            options={CATEGORY_OPTS}
+            onSave={(v) => onUpdate({ category: v as Work["category"] })}
+            renderLabel={(v) => CATEGORY_LABELS[v] ?? v}
+          />
+          <InlineText value={work.year ?? ""} placeholder="연도" onSave={(v) => onUpdate({ year: v })} className="text-[12px] text-white/55" />
+        </div>
+        <div className="flex items-center justify-end gap-1.5 border-t border-white/5 pt-2 text-[11px]">
+          <Link
+            href={`/admin/content/works/${work.id}`}
+            className="rounded px-1.5 py-1 text-white/40 hover:text-white hover:bg-white/5 transition-colors"
+          >
+            편집
+          </Link>
+          <button onClick={onDuplicate} className="rounded px-1.5 py-1 text-white/40 hover:text-white hover:bg-white/5 transition-colors">
+            복제
+          </button>
+          <button onClick={onDelete} className="rounded px-1.5 py-1 text-red-400/65 hover:text-red-400 hover:bg-red-500/10 transition-colors">
+            삭제
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── Thumbnail with hover preview ─────────────────────────────────────────────
+
+function ThumbPreview({ src, alt }: { src?: string; alt: string }) {
+  if (!src) {
+    return <div className="h-12 w-16 rounded bg-white/10" />;
+  }
+  return (
+    <div className="group/thumb relative">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={alt} className="h-12 w-16 rounded object-cover bg-white/10" />
+      {/* 확대 미리보기 */}
+      <div className="pointer-events-none absolute left-0 top-0 z-50 hidden group-hover/thumb:block">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={src}
+          alt={alt}
+          className="h-44 w-72 max-w-none rounded-lg border border-white/15 object-cover shadow-[0_12px_40px_rgba(0,0,0,0.7)]"
+        />
       </div>
     </div>
   );
