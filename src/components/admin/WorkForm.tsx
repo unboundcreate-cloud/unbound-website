@@ -66,7 +66,49 @@ export function WorkForm({ work, mode }: Props) {
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState("");
 
+  const [ytInput, setYtInput] = useState("");
+  const [ytBusy, setYtBusy] = useState(false);
+  const [ytError, setYtError] = useState("");
+  const [ytMsg, setYtMsg] = useState("");
+
   const set = (key: keyof Work, val: unknown) => setForm((f) => ({ ...f, [key]: val } as Partial<Work>));
+
+  const importFromYoutube = async () => {
+    if (!ytInput.trim()) { setYtError("YouTube 링크를 입력해주세요."); return; }
+    setYtBusy(true); setYtError(""); setYtMsg("");
+    try {
+      const res = await fetch(`/api/admin/youtube-meta?url=${encodeURIComponent(ytInput.trim())}`);
+      if (!res.ok) {
+        const body: { error?: string } = await res.json().catch(() => ({}));
+        throw new Error(body.error ?? "가져오기 실패");
+      }
+      const data: {
+        title?: string;
+        thumbnailUrl?: string;
+        videoUrl?: string;
+        embedUrl?: string;
+        description?: string;
+        duration?: string;
+      } = await res.json();
+      setForm((f) => ({
+        ...f,
+        title: data.title ?? f.title,
+        thumbnailUrl: data.thumbnailUrl ?? f.thumbnailUrl,
+        videoUrl: data.videoUrl ?? f.videoUrl,
+        embedUrl: data.embedUrl ?? f.embedUrl,
+        description: data.description ?? f.description,
+        duration: data.duration ?? f.duration,
+      }));
+      const filled = ["제목", "썸네일", "영상 URL"];
+      if (data.description) filled.push("설명");
+      if (data.duration) filled.push("길이");
+      setYtMsg(`${filled.join(" · ")} 불러옴. 확인 후 저장하세요.`);
+    } catch (e) {
+      setYtError(e instanceof Error ? e.message : "가져오기 실패");
+    } finally {
+      setYtBusy(false);
+    }
+  };
 
   const save = async () => {
     if (!form.id || !form.title) { setError("ID와 제목은 필수입니다."); return; }
@@ -117,6 +159,38 @@ export function WorkForm({ work, mode }: Props) {
       </div>
 
       {error && <div className="mb-4 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400">{error}</div>}
+
+      {/* YouTube 빠른 채우기 */}
+      <div className="mb-4 rounded-xl border border-brand-accent/25 bg-brand-accent/[0.04] p-4">
+        <div className="mb-2 flex items-center gap-2">
+          <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 text-red-500">
+            <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z" />
+          </svg>
+          <span className="text-[13px] font-medium text-white">YouTube 링크로 빠르게 채우기</span>
+        </div>
+        <p className="mb-3 text-[11px] text-white/40">
+          링크를 붙여넣으면 제목 · 썸네일 · 영상 URL이 자동으로 채워집니다.
+        </p>
+        <div className="flex gap-2">
+          <input
+            className={inputCls}
+            value={ytInput}
+            onChange={(e) => setYtInput(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); void importFromYoutube(); } }}
+            placeholder="https://youtu.be/… 또는 https://www.youtube.com/watch?v=…"
+            spellCheck={false}
+          />
+          <button
+            onClick={() => void importFromYoutube()}
+            disabled={ytBusy}
+            className="flex-none rounded-lg bg-brand-accent px-4 py-2 text-sm font-medium text-white hover:opacity-85 disabled:opacity-40 transition-opacity"
+          >
+            {ytBusy ? "가져오는 중…" : "가져오기"}
+          </button>
+        </div>
+        {ytError && <p className="mt-2 text-[12px] text-red-400">{ytError}</p>}
+        {ytMsg && <p className="mt-2 text-[12px] text-emerald-400">{ytMsg}</p>}
+      </div>
 
       <div className="rounded-xl border border-white/8 bg-white/[0.02] px-6">
         <Field label="ID" hint="고유값, 변경 불가">
