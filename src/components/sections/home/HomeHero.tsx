@@ -160,7 +160,7 @@ export function HomeHero() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7 }}
-                className="font-display text-[8vw] uppercase leading-[0.95] text-white sm:text-5xl md:text-6xl lg:text-7xl"
+                className="font-display text-[24vw] uppercase leading-[0.95] text-white sm:text-[9rem] md:text-[11.25rem] lg:text-[13.5rem]"
               >
                 <SpotlightText>
                   Move Without Limits
