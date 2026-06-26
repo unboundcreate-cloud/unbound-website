@@ -11,7 +11,24 @@ export function HomeHero() {
   const [muted, setMuted] = useState(true);
   const [volume, setVolume] = useState(0.2);
   const [revealed, setRevealed] = useState(false);
+  const [controlsVisible, setControlsVisible] = useState(true);
   const started = useRef(false);
+  const hideTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  // 마우스가 움직이면 컨트롤 표시, 1.5초간 멈추면 숨김
+  function showControls() {
+    setControlsVisible(true);
+    if (hideTimer.current) clearTimeout(hideTimer.current);
+    hideTimer.current = setTimeout(() => setControlsVisible(false), 1500);
+  }
+
+  // 초기 표시 후 자동 숨김
+  useEffect(() => {
+    hideTimer.current = setTimeout(() => setControlsVisible(false), 2000);
+    return () => {
+      if (hideTimer.current) clearTimeout(hideTimer.current);
+    };
+  }, []);
 
   // 인트로("unbound.")가 끝난 뒤 영상을 처음부터 재생 — 앞부분이 안 잘리도록.
   // 소리 켜진 채 재생 시도, 브라우저가 막으면 무음으로 폴백.
@@ -78,7 +95,11 @@ export function HomeHero() {
   return (
     <section className="bg-brand-black pt-28 md:pt-32">
       <div>
-        <div className="relative h-[calc(100svh-7rem)] min-h-[480px] w-full overflow-hidden bg-brand-black md:h-[calc(100svh-8rem)]">
+        <div
+          onMouseMove={showControls}
+          onPointerDown={showControls}
+          className="relative h-[calc(100svh-7rem)] min-h-[480px] w-full overflow-hidden bg-brand-black md:h-[calc(100svh-8rem)]"
+        >
           {/* 배경 영상 — 인트로 후 처음부터 페이드인 재생 · 루프 · 클릭 시 음소거 토글 */}
           <video
             ref={videoRef}
@@ -98,8 +119,12 @@ export function HomeHero() {
           <div className="pointer-events-none absolute inset-0 bg-black/20" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
-          {/* 사운드 컨트롤 — 음소거 토글 + 볼륨 슬라이더 */}
-          <div className="absolute right-4 top-4 z-20 flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-2 py-1.5 backdrop-blur-sm md:right-5 md:top-5">
+          {/* 사운드 컨트롤 — 마우스 움직임 시 표시, 멈추면 자동 숨김 */}
+          <div
+            className={`absolute right-4 top-4 z-20 flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-2 py-1.5 backdrop-blur-sm transition-opacity duration-500 md:right-5 md:top-5 ${
+              controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+            }`}
+          >
             <button
               onClick={toggleSound}
               aria-label={muted ? "소리 켜기" : "소리 끄기"}
