@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { SpotlightText } from "@/components/ui/SpotlightText";
@@ -9,26 +9,39 @@ export function HomeHero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
 
+  // 마운트 시 소리 켜진 채 자동재생 시도 → 브라우저가 막으면 무음으로 폴백
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = false;
+    const p = v.play();
+    if (p && typeof p.then === "function") {
+      p.then(() => setMuted(false)).catch(() => {
+        v.muted = true;
+        setMuted(true);
+        void v.play().catch(() => {});
+      });
+    }
+  }, []);
+
   function toggleSound() {
     const v = videoRef.current;
     if (!v) return;
-    const next = !muted;
+    const next = !v.muted;
     v.muted = next;
-    if (!next) {
-      // 음소거 해제 시 재생 보장
-      void v.play().catch(() => {});
-    }
+    if (!next) void v.play().catch(() => {});
     setMuted(next);
   }
 
   return (
     <section className="bg-brand-black pt-28 md:pt-32">
       <div>
-        <div className="relative h-[calc(100dvh-7rem)] min-h-[560px] w-full overflow-hidden bg-brand-black md:h-[calc(100dvh-8rem)]">
-          {/* 배경 영상 — 자동재생 · 무음 · 루프 */}
+        <div className="relative h-[calc(100svh-7rem)] min-h-[480px] w-full overflow-hidden bg-brand-black md:h-[calc(100svh-8rem)]">
+          {/* 배경 영상 — 자동재생 · 루프 · 클릭 시 음소거 토글 */}
           <video
             ref={videoRef}
-            className="absolute inset-0 h-full w-full object-cover"
+            onClick={toggleSound}
+            className="absolute inset-0 h-full w-full cursor-pointer object-cover"
             src="/hero-reel.mp4"
             poster="/hero-reel-poster.jpg"
             autoPlay
@@ -36,7 +49,6 @@ export function HomeHero() {
             loop
             playsInline
             preload="auto"
-            aria-hidden
           />
 
           {/* 가독성용 어두운 오버레이 */}
@@ -47,7 +59,7 @@ export function HomeHero() {
           <button
             onClick={toggleSound}
             aria-label={muted ? "소리 켜기" : "소리 끄기"}
-            className="absolute right-5 top-5 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60"
+            className="absolute right-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60 md:right-5 md:top-5 md:h-11 md:w-11"
           >
             {muted ? (
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-5 w-5">

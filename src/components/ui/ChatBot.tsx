@@ -363,7 +363,7 @@ export function ChatBot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.96, transition: { duration: 0.22, ease: "easeIn" } }}
             transition={{ duration: 0.45, ease: "easeOut" }}
-            className="mb-3 flex h-[620px] w-[380px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0d0d0d] shadow-2xl"
+            className="mb-3 flex h-[620px] max-h-[calc(100dvh-6rem)] w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0d0d0d] shadow-2xl"
           >
             {/* Header — drag handle */}
             <div
