@@ -8,11 +8,13 @@ import { SpotlightText } from "@/components/ui/SpotlightText";
 export function HomeHero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
+  const [volume, setVolume] = useState(1);
 
   // 마운트 시 소리 켜진 채 자동재생 시도 → 브라우저가 막으면 무음으로 폴백
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
+    v.volume = 1;
     v.muted = false;
     const p = v.play();
     if (p && typeof p.then === "function") {
@@ -29,8 +31,24 @@ export function HomeHero() {
     if (!v) return;
     const next = !v.muted;
     v.muted = next;
-    if (!next) void v.play().catch(() => {});
+    if (!next) {
+      if (v.volume === 0) {
+        v.volume = 1;
+        setVolume(1);
+      }
+      void v.play().catch(() => {});
+    }
     setMuted(next);
+  }
+
+  function changeVolume(value: number) {
+    const v = videoRef.current;
+    if (!v) return;
+    v.volume = value;
+    v.muted = value === 0;
+    if (value > 0) void v.play().catch(() => {});
+    setVolume(value);
+    setMuted(value === 0);
   }
 
   return (
@@ -55,24 +73,36 @@ export function HomeHero() {
           <div className="pointer-events-none absolute inset-0 bg-black/20" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
-          {/* 음소거 토글 버튼 */}
-          <button
-            onClick={toggleSound}
-            aria-label={muted ? "소리 켜기" : "소리 끄기"}
-            className="absolute right-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60 md:right-5 md:top-5 md:h-11 md:w-11"
-          >
-            {muted ? (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-5 w-5">
-                <path d="M11 5L6 9H2v6h4l5 4V5z" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M23 9l-6 6M17 9l6 6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            ) : (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-5 w-5">
-                <path d="M11 5L6 9H2v6h4l5 4V5z" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            )}
-          </button>
+          {/* 사운드 컨트롤 — 음소거 토글 + 볼륨 슬라이더 */}
+          <div className="absolute right-4 top-4 z-20 flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-2 py-1.5 backdrop-blur-sm md:right-5 md:top-5">
+            <button
+              onClick={toggleSound}
+              aria-label={muted ? "소리 켜기" : "소리 끄기"}
+              className="flex h-7 w-7 flex-none items-center justify-center rounded-full text-white transition-colors hover:bg-white/10"
+            >
+              {muted || volume === 0 ? (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-5 w-5">
+                  <path d="M11 5L6 9H2v6h4l5 4V5z" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M23 9l-6 6M17 9l6 6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-5 w-5">
+                  <path d="M11 5L6 9H2v6h4l5 4V5z" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              )}
+            </button>
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={muted ? 0 : volume}
+              onChange={(e) => changeVolume(Number(e.target.value))}
+              aria-label="볼륨 조절"
+              className="h-1 w-16 cursor-pointer appearance-none rounded-full bg-white/25 accent-white md:w-24"
+            />
+          </div>
 
           <div className="section-padding absolute inset-x-0 bottom-0 flex flex-col gap-6 pb-8 md:flex-row md:items-end md:justify-between md:pb-12">
             <div>
