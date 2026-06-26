@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { markIntroDone } from "@/lib/intro-signal";
 
 const CHARS = ["U", "n", "b", "o", "u", "n", "d", "."];
 
@@ -15,12 +16,13 @@ export function IntroAnimation() {
 
     if (sessionStorage.getItem("intro-done")) {
       setPhase("done");
+      markIntroDone();
       return;
     }
     sessionStorage.setItem("intro-done", "1");
 
     const t1 = setTimeout(() => setPhase("exit"), 1800);
-    const t2 = setTimeout(() => setPhase("done"), 2700);
+    const t2 = setTimeout(() => { setPhase("done"); markIntroDone(); }, 2700);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 

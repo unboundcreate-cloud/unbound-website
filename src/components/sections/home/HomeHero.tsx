@@ -4,26 +4,48 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { SpotlightText } from "@/components/ui/SpotlightText";
+import { onIntroDone } from "@/lib/intro-signal";
 
 export function HomeHero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
   const [volume, setVolume] = useState(1);
+  const started = useRef(false);
 
-  // 마운트 시 소리 켜진 채 자동재생 시도 → 브라우저가 막으면 무음으로 폴백
+  // 인트로("unbound.")가 끝난 뒤 영상을 처음부터 재생 — 앞부분이 안 잘리도록.
+  // 소리 켜진 채 재생 시도, 브라우저가 막으면 무음으로 폴백.
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    v.volume = 1;
-    v.muted = false;
-    const p = v.play();
-    if (p && typeof p.then === "function") {
-      p.then(() => setMuted(false)).catch(() => {
-        v.muted = true;
-        setMuted(true);
-        void v.play().catch(() => {});
-      });
-    }
+    v.currentTime = 0;
+
+    let fallback: ReturnType<typeof setTimeout> | undefined;
+
+    const startPlayback = () => {
+      if (started.current) return;
+      started.current = true;
+      if (fallback) clearTimeout(fallback);
+      v.currentTime = 0;
+      v.volume = 1;
+      v.muted = false;
+      const p = v.play();
+      if (p && typeof p.then === "function") {
+        p.then(() => setMuted(false)).catch(() => {
+          v.muted = true;
+          setMuted(true);
+          void v.play().catch(() => {});
+        });
+      }
+    };
+
+    const off = onIntroDone(startPlayback);
+    // 안전 폴백: 신호가 4초 내 안 오면 그냥 재생
+    fallback = setTimeout(startPlayback, 4000);
+
+    return () => {
+      off();
+      if (fallback) clearTimeout(fallback);
+    };
   }, []);
 
   function toggleSound() {
@@ -55,14 +77,13 @@ export function HomeHero() {
     <section className="bg-brand-black pt-28 md:pt-32">
       <div>
         <div className="relative h-[calc(100svh-7rem)] min-h-[480px] w-full overflow-hidden bg-brand-black md:h-[calc(100svh-8rem)]">
-          {/* 배경 영상 — 자동재생 · 루프 · 클릭 시 음소거 토글 */}
+          {/* 배경 영상 — 인트로 후 처음부터 재생 · 루프 · 클릭 시 음소거 토글 */}
           <video
             ref={videoRef}
             onClick={toggleSound}
             className="absolute inset-0 h-full w-full cursor-pointer object-cover"
             src="/hero-reel.mp4"
             poster="/hero-reel-poster.jpg"
-            autoPlay
             muted
             loop
             playsInline
