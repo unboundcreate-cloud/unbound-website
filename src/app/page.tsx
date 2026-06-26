@@ -32,10 +32,6 @@ export default async function Home() {
       <HomeShowcase works={works} />
       {/* 하단부(배너~로고~Contact)를 하나의 연속 배경으로 묶어 이음새 제거 */}
       <div className="relative overflow-hidden bg-brand-black">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-0 h-[55vh] w-[80vw] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,rgba(230,50,38,0.13),transparent_70%)]" />
-          <div className="absolute bottom-0 left-1/4 h-[55vh] w-[70vw] bg-[radial-gradient(ellipse_at_center,rgba(230,50,38,0.16),transparent_70%)]" />
-        </div>
         <div className="relative">
           <HomeBanner />
           <HomeClients />
