@@ -10,6 +10,7 @@ export function HomeHero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
   const [volume, setVolume] = useState(1);
+  const [revealed, setRevealed] = useState(false);
   const started = useRef(false);
 
   // 인트로("unbound.")가 끝난 뒤 영상을 처음부터 재생 — 앞부분이 안 잘리도록.
@@ -28,6 +29,7 @@ export function HomeHero() {
       v.currentTime = 0;
       v.volume = 1;
       v.muted = false;
+      setRevealed(true); // 부드러운 페이드인 시작
       const p = v.play();
       if (p && typeof p.then === "function") {
         p.then(() => setMuted(false)).catch(() => {
@@ -77,11 +79,13 @@ export function HomeHero() {
     <section className="bg-brand-black pt-28 md:pt-32">
       <div>
         <div className="relative h-[calc(100svh-7rem)] min-h-[480px] w-full overflow-hidden bg-brand-black md:h-[calc(100svh-8rem)]">
-          {/* 배경 영상 — 인트로 후 처음부터 재생 · 루프 · 클릭 시 음소거 토글 */}
+          {/* 배경 영상 — 인트로 후 처음부터 페이드인 재생 · 루프 · 클릭 시 음소거 토글 */}
           <video
             ref={videoRef}
             onClick={toggleSound}
-            className="absolute inset-0 h-full w-full cursor-pointer object-cover"
+            className={`absolute inset-0 h-full w-full cursor-pointer object-cover transition-opacity duration-[1200ms] ease-out ${
+              revealed ? "opacity-100" : "opacity-0"
+            }`}
             src="/hero-reel.mp4"
             poster="/hero-reel-poster.jpg"
             muted
