@@ -7,62 +7,62 @@ export interface Service {
   images?: string[]; // showcase 레이아웃용 이미지 (항목당 2장 세로 배치)
 }
 
-// Unbound Studio 제공 서비스 — 영상 제작 전 과정
+// Unbound Studio 제공 서비스 — 영상 분야별 6종
 // 이미지는 실제 작업 스틸(works 썸네일)을 대표 비주얼로 사용. 추후 전용 이미지로 교체 가능.
 export const services: Service[] = [
   {
     number: "01",
-    title: "Planning",
-    subtitle: "기획",
-    slug: "planning",
+    title: "AI Content",
+    subtitle: "AI 콘텐츠",
+    slug: "ai-content",
     description:
-      "모든 프로젝트는 깊이 있는 이해에서 시작됩니다.\n브랜드의 목표와 타깃, 시장 환경을 분석하여 가장 효과적인 영상 전략을 설계합니다.\n핵심 메시지를 중심으로 스토리와 비주얼 콘셉트를 구체화하고, 명확한 레퍼런스를 통해 프로젝트의 방향성을 정립합니다.\n탄탄한 기획은 완성도 높은 결과물을 만드는 가장 중요한 출발점입니다.",
-    images: ["/works/seven-escape-2.png", "/works/kbs-24h-healthclub-opening.jpg"],
+      "Kling, Midjourney, Runway 등 최신 AI 도구로 기존 제작 방식의 한계를 넘습니다.\nAI 기반 이미지·영상 생성과 자동화 워크플로우로 제작 속도를 높이면서도 완성도는 그대로 유지합니다.\n기술과 크리에이티브의 균형으로 차별화된 비주얼과 새로운 표현을 제안합니다.",
+    images: ["/works/channela-aizit-opening.jpg", "/works/kiss-sixth-sense.webp"],
   },
   {
     number: "02",
-    title: "Production",
-    subtitle: "촬영 · 제작",
-    slug: "production",
+    title: "Broadcast & Drama",
+    subtitle: "방송예능 · 드라마",
+    slug: "broadcast-drama",
     description:
-      "기획된 아이디어를 실제 영상으로 구현하는 단계입니다.\n촬영 장비와 인력 구성부터 현장 운영, 일정 관리까지 체계적으로 진행하며 프로젝트의 완성도를 높입니다.\n장면 하나하나의 의도를 정확하게 담아내고, 현장의 다양한 변수에도 유연하게 대응하여 최적의 결과물을 만들어냅니다.",
-    images: ["/works/tvn-please-stop-drinking-opening.jpg", "/works/tvchosun-runforyou-opening.webp"],
+      "예능·드라마의 오프닝 타이틀과 OAP, 모션그래픽을 전문으로 제작합니다.\n프로그램의 정체성과 무드를 한눈에 각인시키는 타이틀 시퀀스로 시청자의 첫인상을 사로잡습니다.\nKBS, TvN, TV조선, 채널A 등 주요 방송사와 함께한 검증된 퀄리티를 제공합니다.",
+    images: ["/works/tvn-please-stop-drinking-opening.jpg", "/works/good-detective-2.jpg"],
   },
   {
     number: "03",
-    title: "VFX / Motion Graphic",
-    subtitle: "2D · 모션그래픽",
-    slug: "vfx",
+    title: "Public & Institutional",
+    subtitle: "공공 · 기관 영상",
+    slug: "public-institutional",
     description:
-      "2D 합성과 모션그래픽, 시각효과를 통해 영상의 표현력을 확장합니다.\n그래픽 요소를 자연스럽게 결합하고 필요한 장면을 새롭게 구현하여 더욱 몰입감 있는 화면을 완성합니다.\n실사와 그래픽의 경계를 넘나드는 정교한 작업으로 브랜드의 메시지를 더욱 강렬하게 전달합니다.",
-    images: ["/works/netflix-cyberhell-motiongraphics.jpg", "/works/chunhwa-romance.jpg"],
+      "공공기관·기업의 메시지를 신뢰감 있게 전달하는 영상을 제작합니다.\n채용·홍보·교육·캠페인 등 목적에 맞춰 정보를 명확하게 구조화하고, 보는 사람이 끝까지 따라오도록 설계합니다.\n딱딱해지기 쉬운 주제도 세련된 비주얼과 리듬으로 풀어냅니다.",
+    images: ["/works/kbs-24h-healthclub-opening.jpg", "/works/night-blooming-flower.jpg"],
   },
   {
     number: "04",
-    title: "Color Grading",
-    subtitle: "색보정",
-    slug: "color-grading",
+    title: "Advertising & PR",
+    subtitle: "광고 · 홍보",
+    slug: "advertising-pr",
     description:
-      "색은 영상의 분위기와 감정을 결정하는 중요한 요소입니다.\n기본적인 색 균형과 노출 보정부터 작품의 무드를 완성하는 크리에이티브 그레이딩까지 세밀하게 작업합니다.\n톤과 명암, 색감의 디테일까지 정교하게 조율하여 영상 전체에 일관된 퀄리티와 깊이를 더합니다.",
-    images: ["/works/night-blooming-flower.jpg", "/works/mbc-she-killed-teaser.jpg"],
+      "브랜드의 가치를 가장 강렬하게 전달하는 광고·홍보 영상을 만듭니다.\n타깃과 채널에 맞춰 메시지를 설계하고, 짧은 시간 안에 시선을 멈추게 하는 후킹과 완성도를 동시에 잡습니다.\nTVCF부터 디지털 캠페인, SNS 숏폼까지 폭넓게 대응합니다.",
+    images: ["/works/tvchosun-runforyou-opening.webp", "/works/hellolife-flower-smile-opening.jpg"],
   },
   {
     number: "05",
-    title: "Editing",
-    subtitle: "편집 · 종합편집",
-    slug: "editing",
+    title: "B2B Film",
+    subtitle: "B2B 영상",
+    slug: "b2b-film",
     description:
-      "촬영된 소스를 선별하고 재구성하여 하나의 완성된 스토리로 만들어냅니다.\n컷의 흐름과 템포, 자막, 그래픽, 사운드를 세밀하게 조율하여 메시지의 전달력을 극대화합니다.\n종합편집 단계에서는 모든 요소를 유기적으로 연결해 완성도 높은 결과물을 제공합니다.",
-    images: ["/works/trigger.jpg", "/works/good-detective-2.jpg"],
+      "복잡한 기술과 솔루션을 누구나 이해할 수 있게 풀어내는 B2B 영상을 제작합니다.\n제품·서비스의 핵심 가치를 명료하게 시각화하여 의사결정자를 설득하는 영상으로 완성합니다.\nSK Signet, Corning 등 국내외 기업과 협업한 경험을 바탕으로 합니다.",
+    images: ["/works/trigger.jpg", "/works/seven-escape-2.png"],
   },
   {
     number: "06",
-    title: "AI Production",
-    subtitle: "AI 제작",
-    slug: "ai-production",
+    title: "Motion Graphic",
+    subtitle: "모션그래픽",
+    slug: "motion-graphic",
     description:
-      "최신 AI 기술을 활용하여 새로운 제작 방식과 창의적인 비주얼을 제안합니다.\nAI 기반 이미지 및 영상 생성, 자동화 워크플로우를 통해 제작 효율을 높이면서도 높은 완성도를 유지합니다.\n기술과 크리에이티브의 균형을 바탕으로 보다 빠르고 혁신적인 영상 솔루션을 제공합니다.",
-    images: ["/works/channela-aizit-opening.jpg", "/works/kiss-sixth-sense.webp"],
+      "2D 모션그래픽과 시각효과로 영상의 표현력을 한 단계 끌어올립니다.\n복잡한 정보를 직관적인 움직임으로 바꾸고, 브랜드 메시지에 생동감을 입혀 몰입도를 높입니다.\n타이틀, 인포그래픽, 애니메이션까지 모션의 모든 영역을 다룹니다.",
+    images: ["/works/netflix-cyberhell-motiongraphics.jpg", "/works/chunhwa-romance.jpg"],
   },
 ];
 
