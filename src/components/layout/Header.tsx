@@ -9,8 +9,8 @@ import { MagneticWrapper } from "@/components/ui/MagneticWrapper";
 
 const NAV = [
   { label: "Works", href: "/works" },
-  { label: "Insight", href: "/insight" },
   { label: "About", href: "/about" },
+  { label: "Insight", href: "/insight" },
   { label: "Services", href: "/services" },
   { label: "Contact", href: "/contact" },
 ];
