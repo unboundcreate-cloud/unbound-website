@@ -14,6 +14,35 @@ export function HomeHero() {
   const [controlsVisible, setControlsVisible] = useState(true);
   const started = useRef(false);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const loopCount = useRef(0); // 완료된 재생 횟수
+  const autoMuted = useRef(false); // 2회 후 자동 음소거 했는지
+
+  // 영상이 끝날 때마다: 횟수 세고, 2회째면 자동 음소거 후 무음 루프 지속
+  function handleEnded() {
+    const v = videoRef.current;
+    if (!v) return;
+    loopCount.current += 1;
+    v.currentTime = 0;
+    if (loopCount.current >= 2 && !autoMuted.current) {
+      autoMuted.current = true;
+      v.muted = true;
+      v.volume = volume; // 다음에 사용자가 소리 켤 때를 위해 기본 볼륨 복원
+      setMuted(true);
+    }
+    void v.play().catch(() => {});
+  }
+
+  // 2회째 재생의 마지막 ~1.2초 동안 볼륨을 부드럽게 줄여 자연스럽게 음소거 전환
+  function handleTimeUpdate() {
+    const v = videoRef.current;
+    if (!v || autoMuted.current || v.muted) return;
+    if (loopCount.current === 1 && v.duration) {
+      const remaining = v.duration - v.currentTime;
+      if (remaining <= 1.2) {
+        v.volume = Math.max(0, volume * (remaining / 1.2));
+      }
+    }
+  }
 
   // 마우스가 움직이면 컨트롤 표시, 1.5초간 멈추면 숨김
   function showControls() {
@@ -100,17 +129,18 @@ export function HomeHero() {
           onPointerDown={showControls}
           className="relative h-[calc(100svh-7rem)] min-h-[480px] w-full overflow-hidden bg-brand-black md:h-[calc(100svh-8rem)]"
         >
-          {/* 배경 영상 — 인트로 후 처음부터 페이드인 재생 · 루프 · 클릭 시 음소거 토글 */}
+          {/* 배경 영상 — 2회 재생 후 자동 음소거 · 클릭 시 음소거 토글 */}
           <video
             ref={videoRef}
             onClick={toggleSound}
+            onEnded={handleEnded}
+            onTimeUpdate={handleTimeUpdate}
             className={`absolute inset-0 h-full w-full cursor-pointer object-cover transition-opacity duration-[1200ms] ease-out ${
               revealed ? "opacity-100" : "opacity-0"
             }`}
             src="/hero-reel.mp4"
             poster="/hero-reel-poster.jpg"
             muted
-            loop
             playsInline
             preload="auto"
           />
