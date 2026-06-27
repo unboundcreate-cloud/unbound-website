@@ -9,7 +9,7 @@ import { onIntroDone } from "@/lib/intro-signal";
 export function HomeHero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
-  const [volume, setVolume] = useState(0.2);
+  const [volume, setVolume] = useState(0.1);
   const [revealed, setRevealed] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(true);
   const started = useRef(false);
@@ -73,7 +73,7 @@ export function HomeHero() {
       started.current = true;
       if (fallback) clearTimeout(fallback);
       v.currentTime = 0;
-      v.volume = 0.2;
+      v.volume = 0.1;
       v.muted = false;
       setRevealed(true); // 부드러운 페이드인 시작
       const p = v.play();
@@ -103,8 +103,8 @@ export function HomeHero() {
     v.muted = next;
     if (!next) {
       if (v.volume === 0) {
-        v.volume = 0.2;
-        setVolume(0.2);
+        v.volume = 0.1;
+        setVolume(0.1);
       }
       void v.play().catch(() => {});
     }
