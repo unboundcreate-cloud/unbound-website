@@ -140,7 +140,7 @@ export const insights: InsightPost[] = [
     client: "LASHEVAN · CEO 광고(15초)",
     date: "2026.05",
     readingTime: "6분",
-    coverImage: "/works/tvchosun-runforyou-opening.webp",
+    coverImage: "/works/lashevan-ceo-ad.webp",
     lead:
       "CEO가 직접 제품을 들고 설명하는 광고는 신뢰감이 좋습니다. 하지만 제품의 세밀한 특징 — 친환경 소재의 부드러움, 투명도, 신선한 질감, 스티칭·로고 — 은 클로즈업이 필요하고, 그럼 CEO 얼굴이 사라져 신뢰감이 떨어집니다. 우리의 답은 ‘AI 3D 제품을 광고에 녹여넣기’였습니다.",
     sections: [
