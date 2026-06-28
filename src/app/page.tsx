@@ -34,7 +34,7 @@ export default async function Home() {
       {/* 두 번째 이미지 브레이크 — 첫 번째와 동일 sticky 구동, Beyond Production이 위로 올라옴 */}
       <div className="relative">
         <div className="sticky top-0 z-0">
-          <HomeImageBreak image="/image-break-2.webp" />
+          <HomeImageBreak image="/image-break-desk-2.webp" />
         </div>
         <div className="relative z-10 bg-brand-black">
           <div className="h-16 bg-gradient-to-b from-transparent to-brand-black -mt-16" />
