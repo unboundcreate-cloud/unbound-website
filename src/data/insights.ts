@@ -182,11 +182,11 @@ export const insights: InsightPost[] = [
   {
     slug: "motiongraphics-data-storytelling",
     category: "Case Study",
-    title: "복잡한 데이터를 1초 만에 이해시키는 모션그래픽 설계법",
+    title: "데이터가 너무 많을 때, 영상을 멈추지 않게 만드는 법",
     summary:
-      "인포그래픽의 방대한 정보를, 시청자가 멈추지 않고 따라오게 만든 시각화 전략.",
-    client: "RM테크 · 기업소개 인포그래픽",
-    date: "2025.12",
+      "정보 과부하 없이 모든 것을 전달하는 시각 설계.",
+    client: "RM테크 · 도로 안전 인포그래픽",
+    date: "2026.04",
     readingTime: "7분",
     coverImage: "/works/rmtech-infographic.webp",
     lead:
