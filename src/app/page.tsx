@@ -7,14 +7,12 @@ import { HomeInsight } from "@/components/sections/home/HomeInsight";
 import { HomeBanner } from "@/components/sections/home/HomeBanner";
 import { HomeClients } from "@/components/sections/home/HomeClients";
 import { HomeContact } from "@/components/sections/home/HomeContact";
-import { getWorks } from "@/lib/content-store";
 
 export const dynamic = "force-dynamic";
 
 // 메인페이지 — gustngale 레퍼런스 레이아웃 기반 커스텀 구성(코드 고정).
 // 빌더(Puck)가 아닌 코드로 직접 렌더 → 수정은 코드에서 진행.
-export default async function Home() {
-  const works = await getWorks();
+export default function Home() {
   return (
     <>
       <HomeHero />
@@ -38,7 +36,7 @@ export default async function Home() {
         </div>
         <div className="relative z-10 bg-brand-black">
           <div className="h-16 bg-gradient-to-b from-transparent to-brand-black -mt-16" />
-          <HomeShowcase works={works} />
+          <HomeShowcase />
         </div>
       </div>
       {/* 하단부(배너~로고~Contact)를 하나의 연속 배경으로 묶어 이음새 제거 */}

@@ -2,31 +2,25 @@
 
 import { useRef } from "react";
 import { useInView } from "framer-motion";
-import { worksOrdered, type Work } from "@/data/works";
-import { HomeShowcaseCard } from "./HomeShowcaseCard";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { SpotlightText } from "@/components/ui/SpotlightText";
 
-const SLUGS = [
-  "night-blooming-flower",
-  "trigger",
-  "kiss-sixth-sense",
-  "seven-escape-2",
-  "good-detective-2",
-  "chunhwa-romance",
+type Category = { label: string; sub: string; video: string };
+
+// 6개 제작 분야 — hover 시 각 영상이 재생됨.
+// 영상은 public/showcase/ 에 아래 파일명으로 넣으면 자동 연결됩니다.
+const CATEGORIES: Category[] = [
+  { label: "AI Content", sub: "AI 콘텐츠", video: "/showcase/ai-content.mp4" },
+  { label: "Broadcast & Drama", sub: "방송·드라마", video: "/showcase/broadcast-drama.mp4" },
+  { label: "Public & Institutional", sub: "공공·기관", video: "/showcase/public-institutional.mp4" },
+  { label: "Advertising", sub: "광고", video: "/showcase/advertising.mp4" },
+  { label: "B2B Film", sub: "B2B 필름", video: "/showcase/b2b-film.mp4" },
+  { label: "Motion Graphic", sub: "모션그래픽", video: "/showcase/motion-graphic.mp4" },
 ];
 
-export function HomeShowcase({ works }: { works?: Work[] }) {
+export function HomeShowcase() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-20px" });
-
-  const source = works ?? worksOrdered;
-  const bySlug = new Map(source.map((w) => [w.slug, w] as const));
-  const matched = SLUGS.map((s) => bySlug.get(s)).filter(
-    (w): w is Work => Boolean(w),
-  );
-  // 선택된 슬러그가 모두 사라진 경우 source의 앞 6개로 fallback
-  const items = matched.length > 0 ? matched : source.slice(0, 6);
 
   return (
     <section className="relative overflow-hidden bg-brand-black py-24 md:py-32">
@@ -51,20 +45,71 @@ export function HomeShowcase({ works }: { works?: Work[] }) {
           ref={ref}
           className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3 md:mt-16 md:gap-6"
         >
-          {items.map((w, i) => (
+          {CATEGORIES.map((c, i) => (
             <div
-              key={w.id}
+              key={c.label}
               style={{
                 opacity: inView ? 1 : 0,
                 transition: "opacity 0.7s ease",
                 transitionDelay: `${i * 0.11}s`,
               }}
             >
-              <HomeShowcaseCard work={w} />
+              <ShowcaseCategoryCard category={c} index={i} />
             </div>
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function ShowcaseCategoryCard({ category, index }: { category: Category; index: number }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const play = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.currentTime = 0;
+    void v.play().catch(() => {});
+  };
+  const stop = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.pause();
+    v.currentTime = 0;
+  };
+
+  return (
+    <div
+      onMouseEnter={play}
+      onMouseLeave={stop}
+      className="group relative aspect-video w-full overflow-hidden rounded-lg bg-brand-gray"
+    >
+      {/* 기본 배경 — 영상이 없거나 로딩 전/터치 기기에서 보이는 그라디언트 */}
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-gray via-brand-black to-black" />
+
+      {/* hover 시 재생되는 로컬 영상 (히어로와 동일한 방식) */}
+      <video
+        ref={videoRef}
+        src={category.video}
+        muted
+        loop
+        playsInline
+        preload="none"
+        className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+      />
+
+      {/* 가독성용 오버레이 + 라벨 */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 p-5">
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-brand-accent">
+          {String(index + 1).padStart(2, "0")}
+        </p>
+        <h3 className="mt-1 font-display text-lg leading-tight text-white md:text-xl">
+          {category.label}
+        </h3>
+        <p className="mt-0.5 text-xs text-white/55">{category.sub}</p>
+      </div>
+    </div>
   );
 }
