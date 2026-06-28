@@ -134,7 +134,7 @@ export const insights: InsightPost[] = [
   {
     slug: "lashevan-ai-3d-product-ad",
     category: "Case Study",
-    title: "광고 속 AI 3D 제품, 실물과의 경계를 지우는 법",
+    title: "광고 속 AI 3D 제품,\n실물과의 경계를 지우는 법",
     summary:
       "CEO의 신뢰감은 지키면서, 실물로는 못 보여주는 소재감·신선함을 AI 3D로 채운 제품 광고 이야기.",
     client: "LASHEVAN · CEO 광고(15초)",
@@ -240,7 +240,7 @@ export const insights: InsightPost[] = [
   {
     slug: "finding-tone-without-reference",
     category: "Insight",
-    title: "레퍼런스가 없을 때, 브랜드의 ‘톤’을 잡는 법",
+    title: "레퍼런스가 없을 때,\n브랜드의 ‘톤’을 잡는 법",
     summary:
       "“참고할 게 없어요”라는 말 앞에서, 우리가 무에서 방향을 만들어내는 사고 과정.",
     client: "Unbound Studio · 크리에이티브",
