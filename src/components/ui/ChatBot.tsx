@@ -348,7 +348,7 @@ export function ChatBot() {
       {/* Invisible viewport-sized container that bounds the chatbot drag */}
       <div ref={dragConstraintsRef} className="pointer-events-none fixed inset-0 z-[9988]" />
 
-      <div className="fixed bottom-6 right-6 z-[9990] flex flex-col items-end">
+      <div className="fixed bottom-6 right-6 z-[9990] flex flex-col items-end max-md:bottom-24">
       {/* Widget */}
       <AnimatePresence>
         {open && (

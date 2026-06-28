@@ -7,17 +7,17 @@ import { useInView } from "framer-motion";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { SpotlightText } from "@/components/ui/SpotlightText";
 
-type Category = { label: string; sub: string; video: string; poster: string };
+type Category = { label: string; sub: string; video: string; poster: string; href: string };
 
-// 6개 제작 분야 — 기본은 썸네일, hover 시 영상이 부드럽게 페이드인.
+// 6개 제작 분야 — 기본은 썸네일, hover 시 영상이 부드럽게 페이드인. 클릭 시 해당 분야 Works로.
 // 영상은 public/showcase/<slug>.mp4, 썸네일은 public/showcase/<slug>.webp.
 const CATEGORIES: Category[] = [
-  { label: "AI Content", sub: "AI 콘텐츠", video: "/showcase/ai-content.mp4", poster: "/showcase/ai-content.webp" },
-  { label: "Broadcast & Drama", sub: "방송·드라마", video: "/showcase/broadcast-drama.mp4", poster: "/showcase/broadcast-drama.webp" },
-  { label: "Public & Institutional", sub: "공공·기관", video: "/showcase/public-institutional.mp4", poster: "/showcase/public-institutional.webp" },
-  { label: "Advertising", sub: "광고", video: "/showcase/advertising.mp4", poster: "/showcase/advertising.webp" },
-  { label: "B2B Film", sub: "B2B 필름", video: "/showcase/b2b-film.mp4", poster: "/showcase/b2b-film.webp" },
-  { label: "Motion Graphic", sub: "모션그래픽", video: "/showcase/motion-graphic.mp4", poster: "/showcase/motion-graphic.webp" },
+  { label: "AI Content", sub: "AI 콘텐츠", video: "/showcase/ai-content.mp4", poster: "/showcase/ai-content.webp", href: "/works?category=ai" },
+  { label: "Broadcast & Drama", sub: "방송·드라마", video: "/showcase/broadcast-drama.mp4", poster: "/showcase/broadcast-drama.webp", href: "/works?category=drama" },
+  { label: "Public & Institutional", sub: "공공·기관", video: "/showcase/public-institutional.mp4", poster: "/showcase/public-institutional.webp", href: "/works?category=public" },
+  { label: "Advertising", sub: "광고", video: "/showcase/advertising.mp4", poster: "/showcase/advertising.webp", href: "/works?category=promo" },
+  { label: "B2B Film", sub: "B2B 필름", video: "/showcase/b2b-film.mp4", poster: "/showcase/b2b-film.webp", href: "/works?category=b2b" },
+  { label: "Motion Graphic", sub: "모션그래픽", video: "/showcase/motion-graphic.mp4", poster: "/showcase/motion-graphic.webp", href: "/works" },
 ];
 
 export function HomeShowcase() {
@@ -93,10 +93,11 @@ function ShowcaseCategoryCard({ category, index }: { category: Category; index: 
   };
 
   return (
-    <div
+    <Link
+      href={category.href}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
-      className="group relative aspect-video w-full overflow-hidden rounded-lg bg-brand-gray"
+      className="group relative block aspect-video w-full overflow-hidden rounded-lg bg-brand-gray"
     >
       {/* 기본 썸네일 — 항상 표시(영상이 그 위로 페이드인) */}
       <Image
@@ -132,6 +133,6 @@ function ShowcaseCategoryCard({ category, index }: { category: Category; index: 
         </h3>
         <p className="mt-0.5 text-xs text-white/55">{category.sub}</p>
       </div>
-    </div>
+    </Link>
   );
 }
