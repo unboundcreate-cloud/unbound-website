@@ -46,7 +46,7 @@ export function HomeInsight() {
         </div>
 
         {/* ── 피처드 캐러셀 ─────────────────────────────── */}
-        <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-12">
+        <div className="grid grid-cols-1 items-stretch gap-8 md:grid-cols-2 md:gap-12">
           {/* 이미지 */}
           <Link
             href={`/insight/${post.slug}`}
@@ -82,8 +82,8 @@ export function HomeInsight() {
           </Link>
 
           {/* 내용 */}
-          <div>
-            {/* 점 인디케이터 */}
+          <div className="flex h-full flex-col">
+            {/* 점 인디케이터 (상단 고정) */}
             <div className="mb-7 flex gap-2">
               {insights.map((p, i) => (
                 <button
@@ -97,6 +97,8 @@ export function HomeInsight() {
               ))}
             </div>
 
+            {/* 가변 텍스트 — 상·하단 고정을 위해 가운데 영역에 배치 */}
+            <div className="min-h-0 flex-1 overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.div
                 key={post.slug}
@@ -118,8 +120,9 @@ export function HomeInsight() {
                 </p>
               </motion.div>
             </AnimatePresence>
+            </div>
 
-            {/* 화살표 */}
+            {/* 화살표 (하단 고정) */}
             <div className="mt-8 flex gap-3">
               <button
                 onClick={goPrev}
