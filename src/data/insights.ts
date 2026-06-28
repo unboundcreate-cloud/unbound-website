@@ -34,7 +34,7 @@ export const insights: InsightPost[] = [
     client: "한국지역난방공사 · 채용 영상",
     date: "2026.06",
     readingTime: "5분",
-    coverImage: "/works/kdhc-recruitment-character.jpg",
+    coverImage: "/works/kdhc-recruitment-title.webp",
     lead:
       "채용 영상은 보통 ‘딱딱’합니다. 정장 입은 직원, 사무실 스탠드샷, 자막으로 때우는 복지 정보. 지원자 입장에선 “또 이거야?”가 됩니다. 한국지역난방공사는 달랐습니다. 이미 보유한 브랜드 캐릭터를 중심에 놓고, 정보는 정확하되 ‘따뜻한’ 채용 영상을 기획부터 최종본까지 단 5일 만에 완성했습니다.",
     sections: [
