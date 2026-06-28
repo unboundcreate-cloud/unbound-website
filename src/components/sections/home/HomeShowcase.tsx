@@ -1,22 +1,23 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useInView } from "framer-motion";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { SpotlightText } from "@/components/ui/SpotlightText";
 
-type Category = { label: string; sub: string; video: string };
+type Category = { label: string; sub: string; video: string; poster: string };
 
-// 6개 제작 분야 — hover 시 각 영상이 재생됨.
-// 영상은 public/showcase/ 에 아래 파일명으로 넣으면 자동 연결됩니다.
+// 6개 제작 분야 — 기본은 썸네일, hover 시 영상이 부드럽게 페이드인.
+// 영상은 public/showcase/<slug>.mp4, 썸네일은 public/showcase/<slug>.webp.
 const CATEGORIES: Category[] = [
-  { label: "AI Content", sub: "AI 콘텐츠", video: "/showcase/ai-content.mp4" },
-  { label: "Broadcast & Drama", sub: "방송·드라마", video: "/showcase/broadcast-drama.mp4" },
-  { label: "Public & Institutional", sub: "공공·기관", video: "/showcase/public-institutional.mp4" },
-  { label: "Advertising", sub: "광고", video: "/showcase/advertising.mp4" },
-  { label: "B2B Film", sub: "B2B 필름", video: "/showcase/b2b-film.mp4" },
-  { label: "Motion Graphic", sub: "모션그래픽", video: "/showcase/motion-graphic.mp4" },
+  { label: "AI Content", sub: "AI 콘텐츠", video: "/showcase/ai-content.mp4", poster: "/showcase/ai-content.webp" },
+  { label: "Broadcast & Drama", sub: "방송·드라마", video: "/showcase/broadcast-drama.mp4", poster: "/showcase/broadcast-drama.webp" },
+  { label: "Public & Institutional", sub: "공공·기관", video: "/showcase/public-institutional.mp4", poster: "/showcase/public-institutional.webp" },
+  { label: "Advertising", sub: "광고", video: "/showcase/advertising.mp4", poster: "/showcase/advertising.webp" },
+  { label: "B2B Film", sub: "B2B 필름", video: "/showcase/b2b-film.mp4", poster: "/showcase/b2b-film.webp" },
+  { label: "Motion Graphic", sub: "모션그래픽", video: "/showcase/motion-graphic.mp4", poster: "/showcase/motion-graphic.webp" },
 ];
 
 export function HomeShowcase() {
@@ -76,30 +77,37 @@ export function HomeShowcase() {
 
 function ShowcaseCategoryCard({ category, index }: { category: Category; index: number }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [showVideo, setShowVideo] = useState(false);
 
-  const play = () => {
+  const onEnter = () => {
     const v = videoRef.current;
     if (!v) return;
     v.currentTime = 0;
     void v.play().catch(() => {});
   };
-  const stop = () => {
+  const onLeave = () => {
+    // 먼저 부드럽게 페이드아웃 → 그 뒤 일시정지(프레임 고정)
+    setShowVideo(false);
     const v = videoRef.current;
-    if (!v) return;
-    v.pause();
-    v.currentTime = 0;
+    if (v) v.pause();
   };
 
   return (
     <div
-      onMouseEnter={play}
-      onMouseLeave={stop}
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
       className="group relative aspect-video w-full overflow-hidden rounded-lg bg-brand-gray"
     >
-      {/* 기본 배경 — 영상이 없거나 로딩 전/터치 기기에서 보이는 그라디언트 */}
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-gray via-brand-black to-black" />
+      {/* 기본 썸네일 — 항상 표시(영상이 그 위로 페이드인) */}
+      <Image
+        src={category.poster}
+        alt={category.label}
+        fill
+        sizes="(max-width: 640px) 100vw, 33vw"
+        className="object-cover"
+      />
 
-      {/* hover 시 재생되는 로컬 영상 (히어로와 동일한 방식) */}
+      {/* hover 시 재생되는 영상 — 실제 재생이 시작되면 부드럽게 페이드인 */}
       <video
         ref={videoRef}
         src={category.video}
@@ -107,7 +115,10 @@ function ShowcaseCategoryCard({ category, index }: { category: Category; index: 
         loop
         playsInline
         preload="none"
-        className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        onPlaying={() => setShowVideo(true)}
+        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out ${
+          showVideo ? "opacity-100" : "opacity-0"
+        }`}
       />
 
       {/* 가독성용 오버레이 + 라벨 */}
