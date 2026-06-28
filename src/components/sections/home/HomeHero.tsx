@@ -12,6 +12,7 @@ export function HomeHero() {
   const [volume, setVolume] = useState(0.1);
   const [revealed, setRevealed] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(true);
+  const [src, setSrc] = useState<string>();
   const started = useRef(false);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const loopCount = useRef(0); // 완료된 재생 횟수
@@ -57,6 +58,13 @@ export function HomeHero() {
     return () => {
       if (hideTimer.current) clearTimeout(hideTimer.current);
     };
+  }, []);
+
+  // 디바이스별 소스 선택 — 모바일은 경량본(4MB), 데스크톱은 원본(16MB).
+  // SSR HTML엔 src가 없어 초기 로드 시 영상을 미리 받지 않음(LCP는 포스터).
+  useEffect(() => {
+    const mobile = window.matchMedia("(max-width: 767px)").matches;
+    setSrc(mobile ? "/hero-reel-mobile.mp4" : "/hero-reel.mp4");
   }, []);
 
   // 인트로("unbound.")가 끝난 뒤 영상을 처음부터 재생 — 앞부분이 안 잘리도록.
@@ -138,7 +146,7 @@ export function HomeHero() {
             className={`absolute inset-0 h-full w-full cursor-pointer object-cover transition-opacity duration-[1200ms] ease-out ${
               revealed ? "opacity-100" : "opacity-0"
             }`}
-            src="/hero-reel.mp4"
+            src={src}
             poster="/hero-reel-poster.jpg"
             muted
             playsInline
