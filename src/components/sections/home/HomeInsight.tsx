@@ -105,16 +105,16 @@ export function HomeInsight() {
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
               >
-                <p className="font-mono text-[12px] uppercase tracking-[0.2em] text-brand-accent">
+                <p className="font-mono text-[13px] uppercase tracking-[0.2em] text-brand-accent">
                   {post.category} · {post.date}
                 </p>
                 <Link href={`/insight/${post.slug}`}>
-                  <h2 className="mt-3 font-display text-3xl leading-tight text-white transition-colors hover:text-brand-accent md:text-4xl">
+                  <h2 className="mt-4 font-display text-4xl leading-[1.1] text-white transition-colors hover:text-brand-accent md:text-5xl lg:text-[3.25rem]">
                     {post.title}
                   </h2>
                 </Link>
-                <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/60 md:text-base">
-                  {post.summary}
+                <p className="mt-6 max-w-xl text-[15px] leading-relaxed text-white/65 md:text-base">
+                  {post.lead}
                 </p>
               </motion.div>
             </AnimatePresence>
