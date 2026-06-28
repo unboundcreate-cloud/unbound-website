@@ -3,6 +3,7 @@ import { HomeAdventure } from "@/components/sections/home/HomeAdventure";
 import { HomeImageBreak } from "@/components/sections/home/HomeImageBreak";
 import { HomeIntro } from "@/components/sections/home/HomeIntro";
 import { HomeShowcase } from "@/components/sections/home/HomeShowcase";
+import { HomeInsight } from "@/components/sections/home/HomeInsight";
 import { HomeBanner } from "@/components/sections/home/HomeBanner";
 import { HomeClients } from "@/components/sections/home/HomeClients";
 import { HomeContact } from "@/components/sections/home/HomeContact";
@@ -29,6 +30,7 @@ export default async function Home() {
           <HomeAdventure />
         </div>
       </div>
+      <HomeInsight />
       <HomeShowcase works={works} />
       {/* 하단부(배너~로고~Contact)를 하나의 연속 배경으로 묶어 이음새 제거 */}
       <div className="relative overflow-hidden bg-brand-black">
