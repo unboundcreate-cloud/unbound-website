@@ -108,7 +108,7 @@ export function InsightGallery() {
                 {featuredPost.category} · {featuredPost.date}
               </p>
               <Link href={`/insight/${featuredPost.slug}`}>
-                <h2 className="mt-4 font-display text-4xl leading-[1.1] text-white transition-colors hover:text-brand-accent md:text-5xl lg:text-[3.25rem]">
+                <h2 className="mt-4 whitespace-pre-line font-display text-4xl leading-[1.1] text-white transition-colors hover:text-brand-accent md:text-5xl lg:text-[3.25rem]">
                   {featuredPost.title}
                 </h2>
               </Link>

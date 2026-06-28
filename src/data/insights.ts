@@ -76,7 +76,7 @@ export const insights: InsightPost[] = [
   {
     slug: "ai-multi-character-3d-title",
     category: "Case Study",
-    title: "다인물 3D 캐릭터 타이틀을 만들 때 알아야 할 것들",
+    title: "다인물 3D 캐릭터 타이틀을 만들 때\n알아야 할 것들",
     summary:
       "4명의 인물을 AI로 자연스럽게 — 가장 어려운 건 ‘닮음’이 아니라 ‘넷이 함께일 때의 어색함’이었습니다.",
     client: "채널A AI지트 · 예능 타이틀",
@@ -182,7 +182,7 @@ export const insights: InsightPost[] = [
   {
     slug: "motiongraphics-data-storytelling",
     category: "Case Study",
-    title: "데이터가 너무 많을 때, 영상을 멈추지 않게 만드는 법",
+    title: "데이터가 너무 많을 때,\n영상을 멈추지 않게 만드는 법",
     summary:
       "정보 과부하 없이 모든 것을 전달하는 시각 설계.",
     client: "RM테크 · 도로 안전 인포그래픽",
