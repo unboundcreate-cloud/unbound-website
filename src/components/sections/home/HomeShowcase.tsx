@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { useInView } from "framer-motion";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { SpotlightText } from "@/components/ui/SpotlightText";
@@ -26,19 +27,29 @@ export function HomeShowcase() {
     <section className="relative overflow-hidden bg-brand-black py-24 md:py-32">
       <div className="section-padding relative">
         <FadeIn>
-          <h2 className="font-display text-3xl leading-tight text-white md:text-4xl lg:text-5xl">
-            <SpotlightText>
-              Beyond Production —
-              <br />
-              Creative, Intelligent, Unbound.
-            </SpotlightText>
-          </h2>
-          <p className="mt-6 max-w-2xl text-sm leading-relaxed text-white/60 md:text-base">
-            최첨단 AI와 모션그래픽으로 영상 제작의 새로운 기준을 제시합니다.
-          </p>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/60 md:text-base">
-            단순한 제작을 넘어, 브랜드의 메시지를 가장 강렬하게 전달하는 한 편의 이야기를 완성합니다.
-          </p>
+          <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+            <div>
+              <h2 className="font-display text-3xl leading-tight text-white md:text-4xl lg:text-5xl">
+                <SpotlightText>
+                  Beyond Production —
+                  <br />
+                  Creative, Intelligent, Unbound.
+                </SpotlightText>
+              </h2>
+              <p className="mt-6 max-w-2xl text-sm leading-relaxed text-white/60 md:text-base">
+                최첨단 AI와 모션그래픽으로 영상 제작의 새로운 기준을 제시합니다.
+              </p>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/60 md:text-base">
+                단순한 제작을 넘어, 브랜드의 메시지를 가장 강렬하게 전달하는 한 편의 이야기를 완성합니다.
+              </p>
+            </div>
+            <Link href="/works" className="group/link block shrink-0 md:mt-2">
+              <p className="flex items-center gap-2 font-mono text-sm uppercase tracking-[0.25em] text-white transition-colors group-hover/link:text-brand-accent">
+                View All Works
+                <span className="transition-transform group-hover/link:translate-x-1">›</span>
+              </p>
+            </Link>
+          </div>
         </FadeIn>
 
         <div
