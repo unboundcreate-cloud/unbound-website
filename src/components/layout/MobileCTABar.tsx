@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { trackEvent } from "@/lib/gtag";
 
 // 모바일 전용 하단 고정 CTA — 이탈 직전 문의/전화 전환을 잡아줌.
 export function MobileCTABar() {
@@ -21,6 +22,7 @@ export function MobileCTABar() {
     >
       <a
         href="tel:07080802827"
+        onClick={() => trackEvent("phone_click", { location: "mobile_cta" })}
         className="flex h-11 flex-1 items-center justify-center gap-2 rounded-full border border-white/25 text-sm font-medium text-white"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-4 w-4">
@@ -34,6 +36,7 @@ export function MobileCTABar() {
       </a>
       <Link
         href="/contact"
+        onClick={() => trackEvent("cta_click", { location: "mobile_cta", label: "프로젝트 문의" })}
         className="flex h-11 flex-[1.5] items-center justify-center rounded-full bg-brand-accent text-sm font-semibold text-white"
       >
         프로젝트 문의

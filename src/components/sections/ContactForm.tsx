@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { LiquidButton } from "@/components/ui/LiquidButton";
+import { trackEvent } from "@/lib/gtag";
 
 const SERVICE_TYPES = [
   "Motion Graphic",
@@ -385,6 +386,11 @@ export function ContactForm() {
       }
       setStatus("idle");
       setShowSuccess(true);
+      // GA4 전환 이벤트 — 문의 폼 제출 성공
+      trackEvent("generate_lead", {
+        method: "contact_form",
+        service: String(data.get("service") || ""),
+      });
       form.reset();
       setPrivacyChecked(false);
       setMarketingChecked(false);
