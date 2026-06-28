@@ -46,7 +46,7 @@ export function InsightGallery() {
         {/* 이미지 */}
         <Link
           href={`/insight/${featuredPost.slug}`}
-          className="group relative block aspect-[16/11] w-full overflow-hidden rounded-2xl bg-brand-gray"
+          className="group relative block aspect-video w-full overflow-hidden rounded-2xl bg-brand-gray"
         >
           <AnimatePresence mode="popLayout">
             <motion.div
@@ -189,7 +189,7 @@ function InsightCard({ post, index }: { post: InsightPost; index: number }) {
       transition={{ duration: 0.6, delay: (index % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
     >
       <Link href={`/insight/${post.slug}`} className="group block">
-        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-brand-gray">
+        <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-brand-gray">
           <Image
             src={post.coverImage}
             alt={post.title}

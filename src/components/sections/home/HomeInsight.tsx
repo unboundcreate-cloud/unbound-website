@@ -50,7 +50,7 @@ export function HomeInsight() {
           {/* 이미지 */}
           <Link
             href={`/insight/${post.slug}`}
-            className="group relative block aspect-[16/11] w-full overflow-hidden rounded-2xl bg-brand-gray"
+            className="group relative block aspect-video w-full overflow-hidden rounded-2xl bg-brand-gray"
           >
             <AnimatePresence mode="popLayout">
               <motion.div
