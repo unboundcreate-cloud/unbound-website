@@ -31,7 +31,16 @@ export default async function Home() {
         </div>
       </div>
       <HomeInsight />
-      <HomeShowcase works={works} />
+      {/* 두 번째 이미지 브레이크 — 첫 번째와 동일 sticky 구동, Beyond Production이 위로 올라옴 */}
+      <div className="relative">
+        <div className="sticky top-0 z-0">
+          <HomeImageBreak image="/image-break-2.webp" />
+        </div>
+        <div className="relative z-10 bg-brand-black">
+          <div className="h-16 bg-gradient-to-b from-transparent to-brand-black -mt-16" />
+          <HomeShowcase works={works} />
+        </div>
+      </div>
       {/* 하단부(배너~로고~Contact)를 하나의 연속 배경으로 묶어 이음새 제거 */}
       <div className="relative overflow-hidden bg-brand-black">
         <div className="relative">
