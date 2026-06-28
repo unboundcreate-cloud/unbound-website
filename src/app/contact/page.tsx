@@ -48,6 +48,17 @@ export default function ContactPage() {
                   </a>
                 </div>
               </FadeIn>
+              <FadeIn delay={0.18}>
+                <div>
+                  <p className="label-text mb-0.5">Phone</p>
+                  <a
+                    href="tel:07080802827"
+                    className="text-lg text-white hover:text-brand-accent"
+                  >
+                    070-8080-2827
+                  </a>
+                </div>
+              </FadeIn>
               <FadeIn delay={0.22}>
                 <div>
                   <p className="label-text mb-0.5">Hours</p>
