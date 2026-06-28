@@ -5,7 +5,7 @@ const LINE2 = "이야기를 살리는 영상제작스튜디오 Unbound Studio.";
 
 export function HomeBanner() {
   return (
-    <section className="section-padding py-20 md:py-36">
+    <section className="section-padding py-24 md:py-32">
       <div className="text-center font-display text-xl text-white md:text-2xl">
         <CharReveal text={LINE1} charDelay={30} />
         <CharReveal

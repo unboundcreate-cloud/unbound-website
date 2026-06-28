@@ -3,7 +3,7 @@ import { SpotlightText } from "@/components/ui/SpotlightText";
 
 export function HomeIntro() {
   return (
-    <section className="section-padding bg-brand-black py-28 md:py-40">
+    <section className="section-padding bg-brand-black py-24 md:py-32">
       <div className="flex flex-col gap-10 md:flex-row md:items-start md:gap-16">
         <FadeIn>
           <SpotlightText className="shrink-0 font-display text-3xl uppercase leading-[0.95] tracking-tight text-white md:text-4xl lg:text-5xl">
