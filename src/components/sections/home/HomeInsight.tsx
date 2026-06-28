@@ -30,7 +30,7 @@ export function HomeInsight() {
   const goNext = () => setFeatured((f) => (f + 1) % insights.length);
 
   return (
-    <section className="relative overflow-hidden bg-brand-black py-24 md:py-32">
+    <section className="relative overflow-hidden bg-brand-black pt-24 pb-32 md:pt-32 md:pb-44">
       <div className="section-padding relative">
         {/* 섹션 라벨 + 전체 보기 */}
         <div className="mb-12 flex items-end justify-between gap-4">

@@ -42,7 +42,7 @@ export function InsightGallery() {
   return (
     <section className="section-padding pb-32">
       {/* ── 피처드 캐러셀 ─────────────────────────────── */}
-      <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-12">
+      <div className="grid grid-cols-1 items-stretch gap-8 md:grid-cols-2 md:gap-12">
         {/* 이미지 */}
         <Link
           href={`/insight/${featuredPost.slug}`}
@@ -79,8 +79,8 @@ export function InsightGallery() {
         </Link>
 
         {/* 내용 */}
-        <div>
-          {/* 점 인디케이터 */}
+        <div className="flex h-full flex-col">
+          {/* 점 인디케이터 (상단 고정) */}
           <div className="mb-7 flex gap-2">
             {insights.map((p, i) => (
               <button
@@ -94,6 +94,8 @@ export function InsightGallery() {
             ))}
           </div>
 
+          {/* 가변 텍스트 — 상·하단 고정을 위해 가운데 영역에 배치 */}
+          <div className="min-h-0 flex-1 overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={featuredPost.slug}
@@ -102,21 +104,22 @@ export function InsightGallery() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
-              <p className="font-mono text-[12px] uppercase tracking-[0.2em] text-brand-accent">
+              <p className="font-mono text-[13px] uppercase tracking-[0.2em] text-brand-accent">
                 {featuredPost.category} · {featuredPost.date}
               </p>
               <Link href={`/insight/${featuredPost.slug}`}>
-                <h2 className="mt-3 font-display text-3xl leading-tight text-white transition-colors hover:text-brand-accent md:text-4xl">
+                <h2 className="mt-4 font-display text-4xl leading-[1.1] text-white transition-colors hover:text-brand-accent md:text-5xl lg:text-[3.25rem]">
                   {featuredPost.title}
                 </h2>
               </Link>
-              <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/60 md:text-base">
-                {featuredPost.summary}
+              <p className="mt-6 max-w-xl text-[15px] leading-relaxed text-white/65 md:text-base">
+                {featuredPost.lead}
               </p>
             </motion.div>
           </AnimatePresence>
+          </div>
 
-          {/* 화살표 */}
+          {/* 화살표 (하단 고정) */}
           <div className="mt-8 flex gap-3">
             <button
               onClick={goPrev}
