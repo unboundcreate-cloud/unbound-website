@@ -11,6 +11,7 @@ import { IntroAnimation } from "@/components/ui/IntroAnimation";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { ChatBot } from "@/components/ui/ChatBot";
 import { MobileCTABar } from "@/components/layout/MobileCTABar";
+import { ScrollDepthTracker } from "@/components/layout/ScrollDepthTracker";
 
 export function Chrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -96,6 +97,7 @@ export function Chrome({ children }: { children: React.ReactNode }) {
       <CustomCursor />
       <ChatBot />
       <MobileCTABar />
+      <ScrollDepthTracker />
       <SmoothScrollProvider>
         <Header />
         <main>{children}</main>

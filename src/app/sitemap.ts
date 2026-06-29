@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { works } from "@/data/works";
 import { insights } from "@/data/insights";
+import { services } from "@/data/services";
 
 const SITE_URL = "https://www.unboundstudio.co.kr";
 
@@ -31,5 +32,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...workRoutes, ...insightRoutes];
+  const serviceRoutes: MetadataRoute.Sitemap = services.map((s) => ({
+    url: `${SITE_URL}/services/${s.slug}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.75,
+  }));
+
+  return [...staticRoutes, ...workRoutes, ...insightRoutes, ...serviceRoutes];
 }

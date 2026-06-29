@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useInView } from "framer-motion";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { SpotlightText } from "@/components/ui/SpotlightText";
+import { trackEvent } from "@/lib/gtag";
 
 type Category = { label: string; sub: string; video: string; poster: string; href: string };
 
@@ -122,6 +123,7 @@ function ShowcaseCategoryCard({ category, index }: { category: Category; index: 
       href={category.href}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
+      onClick={() => trackEvent("select_content", { content_type: "showcase_category", item_id: category.label })}
       className="group relative block aspect-video w-full overflow-hidden rounded-lg bg-brand-gray"
     >
       {/* 기본 썸네일 — 항상 표시(영상이 그 위로 페이드인) */}

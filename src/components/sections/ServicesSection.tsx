@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { services as servicesData } from "@/data/services";
 
@@ -8,6 +9,7 @@ type Svc = {
   number: string;
   title: string;
   subtitle?: string;
+  slug?: string;
   description: string;
   images?: string[];
 };
@@ -79,6 +81,15 @@ export function ServicesSection({
                     <p key={li}>{line}</p>
                   ))}
                 </div>
+                {service.slug && (
+                  <Link
+                    href={`/services/${service.slug}`}
+                    className="group/link mt-5 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white transition-colors hover:text-brand-accent"
+                  >
+                    자세히 보기
+                    <span className="transition-transform group-hover/link:translate-x-1">›</span>
+                  </Link>
+                )}
               </motion.div>
             ))}
           </div>

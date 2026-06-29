@@ -5,6 +5,7 @@ import Link from "next/link";
 import { insights, getInsight } from "@/data/insights";
 import { Tag } from "@/components/ui/Tag";
 import { FadeIn } from "@/components/ui/FadeIn";
+import { TrackOnMount } from "@/components/ui/TrackOnMount";
 
 export function generateStaticParams() {
   return insights.map((p) => ({ slug: p.slug }));
@@ -46,6 +47,10 @@ export default async function InsightDetailPage({
 
   return (
     <article className="min-h-screen bg-brand-black">
+      <TrackOnMount
+        event="insight_view"
+        params={{ item_id: post.slug, item_name: post.title, item_category: post.category }}
+      />
       {/* 헤더 */}
       <header className="section-padding pb-10 pt-36 md:pt-44">
         <FadeIn>
