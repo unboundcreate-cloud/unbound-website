@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useInView } from "framer-motion";
@@ -76,6 +76,7 @@ export function HomeShowcase() {
 }
 
 function ShowcaseCategoryCard({ category, index }: { category: Category; index: number }) {
+  const cardRef = useRef<HTMLAnchorElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [showVideo, setShowVideo] = useState(false);
 
@@ -92,8 +93,32 @@ function ShowcaseCategoryCard({ category, index }: { category: Category; index: 
     if (v) v.pause();
   };
 
+  // 터치 기기(hover 없음): 카드가 화면에 들어오면 음소거 자동재생, 벗어나면 정지.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!window.matchMedia("(hover: none)").matches) return; // 데스크톱은 hover 사용
+    const el = cardRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        const v = videoRef.current;
+        if (!v) return;
+        if (e.isIntersecting && e.intersectionRatio >= 0.6) {
+          void v.play().catch(() => {});
+        } else {
+          v.pause();
+          setShowVideo(false);
+        }
+      },
+      { threshold: [0, 0.6] },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
     <Link
+      ref={cardRef}
       href={category.href}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}

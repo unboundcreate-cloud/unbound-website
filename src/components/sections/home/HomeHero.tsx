@@ -13,6 +13,7 @@ export function HomeHero() {
   const [revealed, setRevealed] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(true);
   const [src, setSrc] = useState<string>();
+  const [hintDismissed, setHintDismissed] = useState(false);
   const started = useRef(false);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const loopCount = useRef(0); // 완료된 재생 횟수
@@ -67,6 +68,12 @@ export function HomeHero() {
     setSrc(mobile ? "/hero-reel-mobile.mp4" : "/hero-reel.mp4");
   }, []);
 
+  // 소리 켜기 힌트는 9초 뒤 자동으로 사라짐(계속 거슬리지 않게)
+  useEffect(() => {
+    const t = setTimeout(() => setHintDismissed(true), 9000);
+    return () => clearTimeout(t);
+  }, []);
+
   // 인트로("unbound.")가 끝난 뒤 영상을 처음부터 재생 — 앞부분이 안 잘리도록.
   // 소리 켜진 채 재생 시도, 브라우저가 막으면 무음으로 폴백.
   useEffect(() => {
@@ -105,6 +112,7 @@ export function HomeHero() {
   }, []);
 
   function toggleSound() {
+    setHintDismissed(true);
     const v = videoRef.current;
     if (!v) return;
     const next = !v.muted;
@@ -120,6 +128,7 @@ export function HomeHero() {
   }
 
   function changeVolume(value: number) {
+    setHintDismissed(true);
     const v = videoRef.current;
     if (!v) return;
     v.volume = value;
@@ -191,6 +200,21 @@ export function HomeHero() {
               className="h-1 w-16 cursor-pointer appearance-none rounded-full bg-white/25 accent-white md:w-24"
             />
           </div>
+
+          {/* 소리 켜기 힌트 — 음소거 상태 + 미해제 시에만 (자동 음소거 후 재등장 방지) */}
+          {muted && !hintDismissed && (
+            <button
+              onClick={toggleSound}
+              aria-label="소리 켜기"
+              className="absolute left-1/2 top-24 z-20 flex -translate-x-1/2 animate-pulse items-center gap-2 rounded-full border border-white/25 bg-black/40 px-4 py-2 text-xs font-medium text-white/90 backdrop-blur-sm transition-colors hover:bg-black/60 md:top-28"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-4 w-4">
+                <path d="M11 5L6 9H2v6h4l5 4V5z" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              탭하여 소리 켜기
+            </button>
+          )}
 
           <div className="section-padding absolute inset-x-0 bottom-0 flex flex-col gap-6 pb-8 md:flex-row md:items-end md:justify-between md:pb-12">
             <div>
