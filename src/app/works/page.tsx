@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: "Unbound Studio의 모션그래픽, 방송, 광고 영상 포트폴리오.",
 };
 
-const VALID = ["drama", "promo", "b2b", "ai", "public"];
+const VALID = ["drama", "promo", "b2b", "ai", "public", "shortform"];
 
 export default async function WorksPage({
   searchParams,

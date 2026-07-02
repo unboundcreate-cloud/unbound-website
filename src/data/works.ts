@@ -1,4 +1,4 @@
-export type WorkCategory = "drama" | "promo" | "b2b" | "ai" | "public";
+export type WorkCategory = "drama" | "promo" | "b2b" | "ai" | "public" | "shortform";
 
 export interface Work {
   id: string;

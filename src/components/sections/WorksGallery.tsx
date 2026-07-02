@@ -14,6 +14,7 @@ const FILTERS: { label: string; value: FilterValue }[] = [
   { label: "B2B", value: "b2b" },
   { label: "광고 & 홍보", value: "promo" },
   { label: "드라마 & 예능", value: "drama" },
+  { label: "숏폼", value: "shortform" },
 ];
 
 function FilterButton({

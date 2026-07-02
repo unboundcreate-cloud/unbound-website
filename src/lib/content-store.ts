@@ -17,11 +17,27 @@ const HIDDEN_SLUGS = new Set<string>([
   "runforyou-opening-title", // = tvchosun-runforyou-opening 중복
 ]);
 
+// 세로(비 16:9) 숏폼 영상 — 카테고리를 shortform으로 강제(YouTube Shorts로 올린 것들).
+const SHORTFORM_SLUGS = new Set<string>([
+  "apt-shortform",
+  "katcher-shortform",
+  "dsm-firmenich-running",
+  "kt-wis-shorts-ep01",
+  "kt-wis-shorts-ep03",
+  "hanwha-lifeplus-nyc",
+]);
+
 // 코드로 추가한 신규 작품(extraWorks)을 기존 목록에 병합. slug 중복은 기존(관리자/기본) 우선.
 function mergeExtra(base: Work[]): Work[] {
   const slugs = new Set(base.map((w) => w.slug));
-  const merged = [...base, ...extraWorks.filter((w) => !slugs.has(w.slug))];
-  return merged.filter((w) => !HIDDEN_SLUGS.has(w.slug));
+  const merged = [...base, ...extraWorks.filter((w) => !slugs.has(w.slug))].filter(
+    (w) => !HIDDEN_SLUGS.has(w.slug),
+  );
+  return merged.map((w) =>
+    SHORTFORM_SLUGS.has(w.slug)
+      ? { ...w, category: "shortform" as const, categoryLabel: "숏폼" }
+      : w,
+  );
 }
 
 export async function getWorks(): Promise<Work[]> {
