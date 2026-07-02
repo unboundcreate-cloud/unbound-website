@@ -97,29 +97,31 @@ export function HomeInsight() {
               ))}
             </div>
 
-            {/* 가변 텍스트 — 상·하단 고정을 위해 가운데 영역에 배치 */}
-            <div className="min-h-0 flex-1 overflow-hidden">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={post.slug}
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-              >
-                <p className="font-mono text-[13px] uppercase tracking-[0.2em] text-brand-accent">
-                  {post.category} · {post.date}
-                </p>
-                <Link href={`/insight/${post.slug}`}>
-                  <h2 className="mt-4 whitespace-pre-line font-display text-4xl leading-[1.1] text-white transition-colors hover:text-brand-accent md:text-5xl lg:text-[3.25rem]">
-                    {post.title}
-                  </h2>
-                </Link>
-                <p className="mt-6 max-w-xl text-base leading-relaxed text-white/70 md:text-lg">
-                  {post.lead}
-                </p>
-              </motion.div>
-            </AnimatePresence>
+            {/* 가변 텍스트 — 모든 슬라이드를 겹쳐 렌더해 높이를 '가장 긴 슬라이드' 기준으로 고정(전환 시 흔들림 방지) */}
+            <div className="relative grid min-h-0 flex-1">
+              {insights.map((p, i) => (
+                <motion.div
+                  key={p.slug}
+                  className="col-start-1 row-start-1"
+                  initial={false}
+                  animate={{ opacity: i === featured ? 1 : 0, y: i === featured ? 0 : 12 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  aria-hidden={i !== featured}
+                  style={{ pointerEvents: i === featured ? "auto" : "none" }}
+                >
+                  <p className="font-mono text-[13px] uppercase tracking-[0.2em] text-brand-accent">
+                    {p.category} · {p.date}
+                  </p>
+                  <Link href={`/insight/${p.slug}`} tabIndex={i === featured ? 0 : -1}>
+                    <h2 className="mt-4 whitespace-pre-line font-display text-4xl leading-[1.1] text-white transition-colors hover:text-brand-accent md:text-5xl lg:text-[3.25rem]">
+                      {p.title}
+                    </h2>
+                  </Link>
+                  <p className="mt-6 max-w-xl text-base leading-relaxed text-white/70 md:text-lg">
+                    {p.lead}
+                  </p>
+                </motion.div>
+              ))}
             </div>
 
             {/* 화살표 (하단 고정) */}

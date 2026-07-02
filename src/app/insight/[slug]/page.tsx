@@ -127,9 +127,14 @@ export default async function InsightDetailPage({
                   <h2 className="font-display text-xl leading-snug text-white md:text-2xl">
                     {s.heading}
                   </h2>
-                  <p className="mt-4 whitespace-pre-line text-[15px] leading-[1.9] text-white/65 md:text-base">
-                    {s.body}
-                  </p>
+                  {/* 모바일 가독성 — \n\n 기준으로 문단을 분리해 문단 간 여백을 확보(문단 내 줄바꿈은 유지) */}
+                  <div className="mt-5 space-y-5 text-[15px] leading-[1.85] text-white/70 md:mt-4 md:text-base md:leading-[1.9]">
+                    {s.body.split(/\n{2,}/).map((para, pi) => (
+                      <p key={pi} className="whitespace-pre-line">
+                        {para}
+                      </p>
+                    ))}
+                  </div>
                 </section>
               </FadeIn>
             ))}

@@ -1,6 +1,7 @@
 import { faqs } from "@/data/faq";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { SpotlightText } from "@/components/ui/SpotlightText";
+import { FaqList } from "./FaqList";
 
 // FAQ 섹션 + FAQPage 구조화데이터(JSON-LD) — 구글 FAQ 리치결과 노출 대상.
 export function FaqSection() {
@@ -26,23 +27,7 @@ export function FaqSection() {
           <SpotlightText>자주 묻는 질문</SpotlightText>
         </h2>
       </FadeIn>
-      <div className="border-t border-white/10">
-        {faqs.map((f, i) => (
-          <FadeIn key={i} delay={Math.min(i * 0.05, 0.3)}>
-            <details className="group border-b border-white/10 py-5">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-medium text-white transition-colors hover:text-brand-accent md:text-lg">
-                {f.q}
-                <span className="flex-shrink-0 text-xl text-brand-accent transition-transform duration-300 group-open:rotate-45">
-                  +
-                </span>
-              </summary>
-              <p className="mt-4 max-w-3xl text-sm leading-relaxed text-white/60 md:text-base">
-                {f.a}
-              </p>
-            </details>
-          </FadeIn>
-        ))}
-      </div>
+      <FaqList />
     </section>
   );
 }
