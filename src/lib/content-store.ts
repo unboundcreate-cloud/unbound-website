@@ -10,10 +10,18 @@ function getRedis() {
   return new Redis({ url, token });
 }
 
+// 중복으로 남은(KV에 baked된) 항목을 코드에서 강제로 숨김.
+const HIDDEN_SLUGS = new Set<string>([
+  "kdhc-recruitment-video", // = kdhc-recruit-2026 중복
+  "hanwha-lifeplus-newyork", // = hanwha-lifeplus-nyc 중복
+  "runforyou-opening-title", // = tvchosun-runforyou-opening 중복
+]);
+
 // 코드로 추가한 신규 작품(extraWorks)을 기존 목록에 병합. slug 중복은 기존(관리자/기본) 우선.
 function mergeExtra(base: Work[]): Work[] {
   const slugs = new Set(base.map((w) => w.slug));
-  return [...base, ...extraWorks.filter((w) => !slugs.has(w.slug))];
+  const merged = [...base, ...extraWorks.filter((w) => !slugs.has(w.slug))];
+  return merged.filter((w) => !HIDDEN_SLUGS.has(w.slug));
 }
 
 export async function getWorks(): Promise<Work[]> {
