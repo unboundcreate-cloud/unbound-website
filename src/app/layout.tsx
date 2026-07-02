@@ -16,19 +16,19 @@ const SITE_URL = "https://www.unboundstudio.co.kr";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Unbound Studio 언바운드 스튜디오 | 모션그래픽·영상제작 외주 스튜디오",
+  title: "Unbound Studio 언바운드 스튜디오 | 모션그래픽·영상 제작 스튜디오",
   description:
-    "Unbound Studio(언바운드 스튜디오)는 모션그래픽·영상편집·홍보영상 외주제작 전문 크리에이티브 스튜디오입니다. 기획부터 촬영, 편집, 모션그래픽, 색보정, 사운드까지 영상 제작 전 과정을 원스톱으로 진행합니다. 기업 홍보영상, 광고영상, 브랜드필름 외주는 Unbound Studio.",
+    "Unbound Studio(언바운드 스튜디오)는 모션그래픽·영상편집·홍보영상 제작 전문 크리에이티브 스튜디오입니다. 기획부터 촬영, 편집, 모션그래픽, 색보정, 사운드까지 영상 제작 전 과정을 원스톱으로 진행합니다. 기업 홍보영상, 광고영상, 브랜드필름은 Unbound Studio.",
   keywords: [
     "Unbound Studio",
     "언바운드 스튜디오",
-    "영상외주",
-    "영상 외주제작",
-    "영상제작 외주",
+    "영상 제작",
+    "영상 제작 전문",
+    "영상 콘텐츠 제작",
     "모션그래픽",
-    "모션그래픽 외주",
+    "모션그래픽 제작",
     "영상 편집",
-    "영상편집 외주",
+    "영상 편집 전문",
     "홍보영상 제작",
     "기업 홍보영상",
     "광고 영상",
@@ -52,8 +52,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Unbound Studio 언바운드 스튜디오 | 모션그래픽·영상제작 외주 스튜디오",
-    description: "모션그래픽·영상편집·홍보영상 외주제작 전문. 경계를 넘는 모션과 영상으로 브랜드의 이야기를 움직입니다.",
+    title: "Unbound Studio 언바운드 스튜디오 | 모션그래픽·영상 제작 스튜디오",
+    description: "모션그래픽·영상편집·홍보영상 제작 전문. 경계를 넘는 모션과 영상으로 브랜드의 이야기를 움직입니다.",
     url: SITE_URL,
     siteName: "Unbound Studio",
     type: "website",
@@ -69,8 +69,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Unbound Studio | 모션그래픽·영상제작 외주 스튜디오",
-    description: "모션그래픽·영상편집·홍보영상 외주제작 전문 크리에이티브 스튜디오.",
+    title: "Unbound Studio | 모션그래픽·영상 제작 스튜디오",
+    description: "모션그래픽·영상편집·홍보영상 제작 전문 크리에이티브 스튜디오.",
     images: [`${SITE_URL}/hero-reel-poster.jpg`],
   },
   verification: {
@@ -94,10 +94,10 @@ const jsonLd = {
   image: `${SITE_URL}/hero-reel-poster.jpg`,
   email: studio.email,
   description:
-    "Unbound Studio(언바운드 스튜디오)는 모션그래픽·영상편집·홍보영상 외주제작 전문 포스트프로덕션 스튜디오입니다. 기업 홍보영상, 광고영상, 브랜드필름을 기획부터 납품까지 원스톱으로 제작합니다.",
+    "Unbound Studio(언바운드 스튜디오)는 모션그래픽·영상편집·홍보영상 제작 전문 포스트프로덕션 스튜디오입니다. 기업 홍보영상, 광고영상, 브랜드필름을 기획부터 납품까지 원스톱으로 제작합니다.",
   areaServed: { "@type": "Country", name: "대한민국" },
   knowsAbout: [
-    "영상 외주제작",
+    "영상 콘텐츠 제작",
     "모션그래픽",
     "영상 편집",
     "홍보영상 제작",

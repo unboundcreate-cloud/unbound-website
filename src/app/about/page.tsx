@@ -5,9 +5,9 @@ import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { SpotlightText } from "@/components/ui/SpotlightText";
 
 export const metadata: Metadata = {
-  title: "About | 모션그래픽·영상제작 외주 스튜디오 Unbound Studio",
+  title: "About | 모션그래픽·영상 제작 스튜디오 Unbound Studio",
   description:
-    "Unbound Studio는 모션그래픽, 영상편집, 홍보영상, 브랜드필름, 광고영상을 전문으로 외주제작하는 크리에이티브 포스트프로덕션 스튜디오입니다. 기획부터 납품까지 원스톱으로 제공합니다.",
+    "Unbound Studio는 모션그래픽, 영상편집, 홍보영상, 브랜드필름, 광고영상을 전문으로 제작하는 크리에이티브 포스트프로덕션 스튜디오입니다. 기획부터 납품까지 원스톱으로 제공합니다.",
 };
 
 const STRENGTHS = [

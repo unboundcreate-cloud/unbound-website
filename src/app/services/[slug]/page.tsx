@@ -15,28 +15,28 @@ export function generateStaticParams() {
 // 서비스별 SEO 메타 — 한글 키워드 중심
 const SEO: Record<string, { title: string; keywords: string[] }> = {
   "ai-content": {
-    title: "AI 영상 제작·AI 콘텐츠 외주",
-    keywords: ["AI 영상 제작", "AI 콘텐츠 외주", "AI 영상 외주", "생성형 AI 영상"],
+    title: "AI 영상 제작·AI 콘텐츠",
+    keywords: ["AI 영상 제작", "AI 콘텐츠 제작", "생성형 AI 영상", "AI 모션그래픽"],
   },
   "broadcast-drama": {
-    title: "방송·드라마 타이틀 제작 외주",
-    keywords: ["방송 타이틀 제작", "드라마 오프닝 외주", "예능 타이틀 외주", "OAP 제작", "타이틀 시퀀스"],
+    title: "방송·드라마 타이틀 제작",
+    keywords: ["방송 타이틀 제작", "드라마 오프닝 제작", "예능 타이틀 제작", "OAP 제작", "타이틀 시퀀스"],
   },
   "public-institutional": {
     title: "공공기관·기업 홍보영상 제작",
-    keywords: ["공공기관 영상 제작", "기관 홍보영상 외주", "채용영상 제작", "캠페인 영상"],
+    keywords: ["공공기관 영상 제작", "기관 홍보영상 제작", "채용영상 제작", "캠페인 영상"],
   },
   "advertising-pr": {
-    title: "광고·홍보영상 제작 외주",
-    keywords: ["광고영상 제작", "홍보영상 외주", "브랜드필름 제작", "TVCF 제작", "디지털 광고"],
+    title: "광고·홍보영상 제작",
+    keywords: ["광고영상 제작", "홍보영상 제작", "브랜드필름 제작", "TVCF 제작", "디지털 광고"],
   },
   "b2b-film": {
-    title: "B2B 기업영상 제작 외주",
-    keywords: ["B2B 영상 제작", "기업 홍보영상 외주", "제품 소개영상 제작", "솔루션 영상"],
+    title: "B2B 기업영상 제작",
+    keywords: ["B2B 영상 제작", "기업 홍보영상 제작", "제품 소개영상 제작", "솔루션 영상"],
   },
   "motion-graphic": {
-    title: "모션그래픽 외주 제작",
-    keywords: ["모션그래픽 외주", "모션그래픽 제작", "인포그래픽 영상 제작", "2D 애니메이션"],
+    title: "모션그래픽 제작",
+    keywords: ["모션그래픽 제작", "인포그래픽 영상 제작", "2D 애니메이션", "타이틀 모션그래픽"],
   },
 };
 
