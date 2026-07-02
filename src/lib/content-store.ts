@@ -1,5 +1,5 @@
 import { Redis } from "@upstash/redis";
-import { works as defaultWorks, type Work } from "@/data/works";
+import { works as defaultWorks, extraWorks, type Work } from "@/data/works";
 import { services as defaultServices, type Service } from "@/data/services";
 import { clients as defaultLogos, type Client } from "@/data/clients";
 
@@ -10,13 +10,19 @@ function getRedis() {
   return new Redis({ url, token });
 }
 
+// 코드로 추가한 신규 작품(extraWorks)을 기존 목록에 병합. slug 중복은 기존(관리자/기본) 우선.
+function mergeExtra(base: Work[]): Work[] {
+  const slugs = new Set(base.map((w) => w.slug));
+  return [...base, ...extraWorks.filter((w) => !slugs.has(w.slug))];
+}
+
 export async function getWorks(): Promise<Work[]> {
   const redis = getRedis();
-  if (!redis) return defaultWorks;
+  if (!redis) return mergeExtra(defaultWorks);
   try {
     const stored = await redis.get<Work[]>("content:works");
-    return stored ?? defaultWorks;
-  } catch { return defaultWorks; }
+    return mergeExtra(stored ?? defaultWorks);
+  } catch { return mergeExtra(defaultWorks); }
 }
 
 export async function saveWorks(works: Work[]): Promise<void> {
