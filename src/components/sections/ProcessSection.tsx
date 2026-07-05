@@ -35,7 +35,7 @@ export function ProcessSection({
               key={`${step.korTitle}-${i}`}
               initial={{ opacity: 0, scale: 0.85 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: false, amount: 0.3 }}
               transition={{ duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
               className="group relative flex aspect-square w-[82vw] max-w-[340px] flex-col items-center rounded-full px-6 text-center transition-transform duration-500 hover:scale-[1.04] sm:w-[44vw] sm:max-w-[290px] lg:w-[30%] lg:max-w-[300px] xl:w-[21%] xl:max-w-none xl:-ml-6 xl:first:ml-0"
               style={{

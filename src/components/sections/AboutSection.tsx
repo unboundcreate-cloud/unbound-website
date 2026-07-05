@@ -18,7 +18,7 @@ export function AboutSection({ about }: { about: AboutConfig }) {
       variants={fadeUpVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.4 }}
+      viewport={{ once: false, amount: 0.4 }}
       className="font-display text-[12vw] leading-[0.85] sm:text-6xl md:text-7xl lg:text-8xl"
     >
       {about.headlineLine1}
@@ -34,7 +34,7 @@ export function AboutSection({ about }: { about: AboutConfig }) {
         variants={fadeUpVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.4 }}
+        viewport={{ once: false, amount: 0.4 }}
         className="max-w-3xl text-white/70"
         style={{ fontSize: about.bodyFontPx, lineHeight: about.bodyLineHeight }}
       >
@@ -49,7 +49,7 @@ export function AboutSection({ about }: { about: AboutConfig }) {
               key={`${s.label}-${i}`}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ delay: i * 0.1 }}
             >
               <p

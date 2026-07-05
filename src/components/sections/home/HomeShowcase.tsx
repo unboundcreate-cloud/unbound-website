@@ -23,7 +23,7 @@ const CATEGORIES: Category[] = [
 
 export function HomeShowcase() {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-20px" });
+  const inView = useInView(ref, { once: false, margin: "-20px" });
 
   return (
     <section className="relative overflow-hidden bg-brand-black py-24 md:py-32">

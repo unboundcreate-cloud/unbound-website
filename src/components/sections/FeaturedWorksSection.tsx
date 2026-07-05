@@ -23,7 +23,7 @@ export function FeaturedWorksSection({
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           className="label-text"
         >
           {label}

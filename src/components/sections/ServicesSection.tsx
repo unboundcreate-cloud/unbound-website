@@ -32,7 +32,7 @@ export function ServicesSection({
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             className="label-text mb-14"
           >
             {label}
@@ -46,7 +46,7 @@ export function ServicesSection({
                 key={`${service.title}-${i}`}
                 initial={{ opacity: 0, y: 44 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-20px" }}
+                viewport={{ once: false, margin: "-20px" }}
                 transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: (i % 2) * 0.12 }}
                 className="group"
               >
@@ -100,7 +100,7 @@ export function ServicesSection({
                 key={`${service.title}-${i}`}
                 initial={{ opacity: 0, y: 44 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-20px" }}
+                viewport={{ once: false, margin: "-20px" }}
                 transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: (i % 4) * 0.1 }}
                 className="group border-t border-white/15 pt-6"
               >

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ContactForm } from "@/components/sections/ContactForm";
 import { SocialLinks } from "@/components/ui/SocialLinks";
 import { FadeIn } from "@/components/ui/FadeIn";
+import { RevealScope } from "@/components/ui/RevealContext";
 import { SpotlightText } from "@/components/ui/SpotlightText";
 import { studio } from "@/data/clients";
 
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
+    <RevealScope>
     <div className="min-h-screen bg-brand-black">
       {/* 헤더 */}
       <header className="section-padding pb-10 pt-36 md:pt-44">
@@ -83,5 +85,6 @@ export default function ContactPage() {
         </div>
       </section>
     </div>
+    </RevealScope>
   );
 }
