@@ -36,11 +36,19 @@ function FilterButton({
     c.style.top = `${e.clientY - rect.top}px`;
   };
 
+  // 호버 지원 기기(마우스)에서만 원형 확장 실행 — 모바일 터치에서 흰 원이 고착돼 글씨가 안 보이던 문제 방지.
+  const canHover = () =>
+    typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches;
+
   const onEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!canHover()) return;
     setPos(e);
     circleRef.current?.style.setProperty("transform", "translate(-50%,-50%) scale(1)");
   };
-  const onMove = (e: React.MouseEvent<HTMLButtonElement>) => setPos(e);
+  const onMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!canHover()) return;
+    setPos(e);
+  };
   const onLeave = () =>
     circleRef.current?.style.setProperty("transform", "translate(-50%,-50%) scale(0)");
 
@@ -90,9 +98,11 @@ export function WorksGallery({
   const [active, setActive] = useState<FilterValue>(initialCategory);
   const source = works ?? worksOrdered;
 
+  // ALL = 16:9 퀄리티 릴만(드라마 & 예능 + 광고 & 홍보). 숏폼·B2B·공공·AI는 각 탭에서만 노출.
+  const ALL_CATEGORIES: WorkCategory[] = ["drama", "promo"];
   const filtered =
     active === "all"
-      ? source
+      ? source.filter((w) => ALL_CATEGORIES.includes(w.category))
       : source.filter((w) => w.category === active);
 
   return (
