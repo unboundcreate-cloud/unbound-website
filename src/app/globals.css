@@ -136,6 +136,7 @@ p {
   font-size: 1rem;        /* 16px */
   font-weight: 400;
   line-height: 1.6;
+  text-wrap: pretty;      /* 마지막 줄 고아 단어 방지 + 줄바꿈 위치 최적화 */
 }
 
 /* --- 강조 --- */

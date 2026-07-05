@@ -35,14 +35,14 @@ export function HomeShowcase() {
                 <SpotlightText>
                   Beyond Production —
                   <br />
-                  Creative, Intelligent, <span className="text-brand-accent">Unbound</span>.
+                  Creative, Intelligent, Unbound.
                 </SpotlightText>
               </h2>
               <p className="mt-6 max-w-2xl text-sm leading-relaxed text-white/60 md:text-base">
-                최첨단 <span className="text-brand-accent">AI</span>와 모션그래픽으로 영상 제작의 새로운 기준을 제시합니다.
+                최첨단 AI와 모션그래픽으로 영상 제작의 새로운&nbsp;기준을&nbsp;제시합니다.
               </p>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/60 md:text-base">
-                단순한 제작을 넘어, 브랜드의 메시지를 가장 강렬하게 전달하는 한 편의 <span className="text-brand-accent">이야기</span>를 완성합니다.
+                단순한 제작을 넘어, 브랜드의 메시지를 가장 강렬하게 전달하는 한 편의 이야기를 완성합니다.
               </p>
             </div>
             <Link href="/works" className="group/link block shrink-0 md:mt-2">
