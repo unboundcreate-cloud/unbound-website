@@ -225,7 +225,7 @@ export function HomeHero() {
                 className="font-display text-[24vw] uppercase leading-[0.95] text-white sm:text-[9rem] md:text-[11.25rem] lg:text-[13.5rem]"
               >
                 <SpotlightText>
-                  Move Without Limits
+                  Move Without <span className="text-brand-accent">Limits</span>
                   <br />
                   Creative Studio
                 </SpotlightText>

@@ -7,12 +7,13 @@ export function HomeBanner() {
   return (
     <section className="section-padding py-24 md:py-32">
       <div className="text-center font-display text-xl text-white md:text-2xl">
-        <CharReveal text={LINE1} charDelay={30} />
+        <CharReveal text={LINE1} charDelay={30} highlight="창의성" />
         <CharReveal
           text={LINE2}
           className="mt-3 md:mt-4"
           charDelay={30}
           delay={LINE1.length * 30 * 0.55}
+          highlight="이야기"
         />
       </div>
     </section>

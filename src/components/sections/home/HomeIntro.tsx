@@ -7,7 +7,7 @@ export function HomeIntro() {
       <div className="flex flex-col gap-10 md:flex-row md:items-start md:gap-16">
         <FadeIn>
           <SpotlightText className="shrink-0 font-display text-3xl uppercase leading-[0.95] tracking-tight text-white md:text-4xl lg:text-5xl">
-            Unbound
+            <span className="text-brand-accent">Unbound</span>
             <br />
             Studio
           </SpotlightText>
@@ -15,22 +15,22 @@ export function HomeIntro() {
         <div className="space-y-2 text-2xl font-normal leading-snug text-white/80 md:text-3xl">
           <FadeIn delay={0.05}>
             <p>
-              Unbound Studio는 모션 그래픽과 포스트 프로덕션을 중심으로 최고의 영상 콘텐츠를 제작하는 크리에이티브 영상 스튜디오입니다.
+              Unbound Studio는 모션 그래픽과 포스트 프로덕션을 중심으로 최고의 영상 콘텐츠를 제작하는 <span className="text-brand-accent">크리에이티브</span> 영상 스튜디오입니다.
             </p>
           </FadeIn>
           <FadeIn delay={0.15}>
             <p>
-              방송, OTT 드라마 타이틀부터 브랜드 필름, 광고, AI 기반 영상까지 —
+              방송, OTT 드라마 타이틀부터 브랜드 필름, 광고, <span className="text-brand-accent">AI</span> 기반 영상까지 —
             </p>
           </FadeIn>
           <FadeIn delay={0.25}>
             <p>
-              기획, 촬영, 편집, VFX, 색보정, 납품의 전 과정을 원스톱으로 책임집니다.
+              기획, 촬영, 편집, VFX, 색보정, 납품의 전 과정을 <span className="text-brand-accent">원스톱</span>으로 책임집니다.
             </p>
           </FadeIn>
           <FadeIn delay={0.35}>
             <p>
-              우리만의 감각과 새로운 문법으로 영상의 기준을 만들어 갑니다.
+              우리만의 감각과 새로운 문법으로 영상의 <span className="text-brand-accent">기준</span>을 만들어 갑니다.
             </p>
           </FadeIn>
         </div>

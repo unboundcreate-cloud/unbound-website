@@ -6,13 +6,23 @@ const ITEMS = [
   {
     heading: ["Take the", "First Step"],
     label: "About",
-    desc: "우리가 만드는 영상에는 이유가 있습니다.\n언바운드 스튜디오의 철학과 제작 방식, 그리고 우리가 추구하는 가치를 소개합니다.",
+    desc: (
+      <>
+        우리가 만드는 영상에는 <span className="text-brand-accent">이유</span>가 있습니다.{"\n"}
+        언바운드 스튜디오의 철학과 제작 방식, 그리고 우리가 추구하는 가치를 소개합니다.
+      </>
+    ),
     href: "/about",
   },
   {
     heading: ["In Your", "Adventure"],
     label: "Services",
-    desc: "기획부터 제작, 후반 작업까지 언바운드 스튜디오의 전문적인 제작 과정을 확인해 보세요.",
+    desc: (
+      <>
+        기획부터 제작, 후반 작업까지 언바운드 스튜디오의{" "}
+        <span className="text-brand-accent">전문적인</span> 제작 과정을 확인해 보세요.
+      </>
+    ),
     href: "/services",
   },
 ];
@@ -28,7 +38,7 @@ export function HomeAdventure() {
                 <SpotlightText>
                   {it.heading[0]}
                   <br />
-                  {it.heading[1]}
+                  <span className="text-brand-accent">{it.heading[1]}</span>
                 </SpotlightText>
               </h2>
               <div className="relative mt-8 h-px w-full bg-white/25">
