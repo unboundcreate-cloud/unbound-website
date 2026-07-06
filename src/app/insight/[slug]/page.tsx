@@ -96,7 +96,7 @@ export default async function InsightDetailPage({
         <div className="mx-auto max-w-3xl">
           {/* 리드 */}
           <FadeIn>
-            <p className="border-l-2 border-brand-accent pl-6 text-lg leading-relaxed text-white/85 md:text-xl">
+            <p className="whitespace-pre-line border-l-2 border-brand-accent pl-6 text-lg leading-relaxed text-white/85 md:text-xl">
               {post.lead}
             </p>
           </FadeIn>

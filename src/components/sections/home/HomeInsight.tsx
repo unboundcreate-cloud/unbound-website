@@ -117,7 +117,7 @@ export function HomeInsight() {
                       {p.title}
                     </h2>
                   </Link>
-                  <p className="mt-6 max-w-xl text-base leading-relaxed text-white/70 md:text-lg">
+                  <p className="mt-6 max-w-xl whitespace-pre-line text-base leading-relaxed text-white/70 md:text-lg">
                     {p.lead}
                   </p>
                 </motion.div>
