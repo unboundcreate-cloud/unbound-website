@@ -50,6 +50,16 @@
   100% { transform: translateX(-50%); }
 }
 
+@keyframes scrolldown {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(300%); }
+}
+
+@keyframes progressbar {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
 /* ===== Base ===== */
 :root {
   --cursor-size: 8px;

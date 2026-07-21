@@ -8,6 +8,7 @@ export function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const [mode, setMode] = useState<CursorMode>("default");
+  const [label, setLabel] = useState("");
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -46,10 +47,20 @@ export function CustomCursor() {
       ) as HTMLElement | null;
       if (!t) {
         setMode("default");
+        setLabel("");
         return;
       }
       const c = t.getAttribute("data-cursor");
-      setMode(c === "play" ? "play" : "hover");
+      if (c === "play") {
+        setMode("play");
+        setLabel("PLAY");
+      } else if (c) {
+        setMode("hover");
+        setLabel(c.toUpperCase());
+      } else {
+        setMode("hover");
+        setLabel("");
+      }
     };
 
     const onLeave = () => setVisible(false);
@@ -92,7 +103,7 @@ export function CustomCursor() {
           color: mode === "play" ? "#000" : "#fff",
         }}
       >
-        {mode === "play" ? "PLAY" : ""}
+        {mode === "play" ? "PLAY" : label}
       </div>
     </div>
   );

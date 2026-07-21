@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { SpotlightText } from "@/components/ui/SpotlightText";
 import { Magnetic } from "@/components/ui/Magnetic";
@@ -16,6 +16,14 @@ export function HomeHero() {
   const [src, setSrc] = useState<string>();
   const [hintDismissed, setHintDismissed] = useState(false);
   const started = useRef(false);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const darken = useTransform(scrollYProgress, [0, 1], [0, 0.7]);
+  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
+  const hintOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const loopCount = useRef(0); // 완료된 재생 횟수
   const autoMuted = useRef(false); // 2회 후 자동 음소거 했는지
@@ -143,16 +151,18 @@ export function HomeHero() {
     <section className="bg-brand-black pt-28 md:pt-32">
       <div>
         <div
+          ref={heroRef}
           onMouseMove={showControls}
           onPointerDown={showControls}
           className="relative h-[calc(100svh-7rem)] min-h-[480px] w-full overflow-hidden bg-brand-black md:h-[calc(100svh-8rem)]"
         >
-          {/* 배경 영상 — 2회 재생 후 자동 음소거 · 클릭 시 음소거 토글 */}
-          <video
+          {/* 배경 영상 — 스크롤 시 살짝 줌 + 어두워지며 다음 섹션으로 연결 */}
+          <motion.video
             ref={videoRef}
             onClick={toggleSound}
             onEnded={handleEnded}
             onTimeUpdate={handleTimeUpdate}
+            style={{ scale: heroScale }}
             className={`absolute inset-0 h-full w-full cursor-pointer object-cover transition-opacity duration-[1200ms] ease-out ${
               revealed ? "opacity-100" : "opacity-0"
             }`}
@@ -162,6 +172,24 @@ export function HomeHero() {
             playsInline
             preload="auto"
           />
+          {/* 스크롤 시 어두워지는 오버레이 */}
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-brand-black"
+            style={{ opacity: darken }}
+          />
+
+          {/* 스크롤 다운 인디케이터 (데스크톱) */}
+          <motion.div
+            aria-hidden
+            style={{ opacity: hintOpacity }}
+            className="pointer-events-none absolute bottom-7 left-1/2 z-20 hidden -translate-x-1/2 flex-col items-center gap-2 text-white/70 md:flex"
+          >
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em]">Scroll</span>
+            <span className="relative block h-9 w-px overflow-hidden bg-white/20">
+              <span className="absolute left-0 top-0 block h-3 w-px animate-[scrolldown_1.7s_ease-in-out_infinite] bg-brand-accent" />
+            </span>
+          </motion.div>
 
           {/* 가독성용 어두운 오버레이 */}
           <div className="pointer-events-none absolute inset-0 bg-black/20" />

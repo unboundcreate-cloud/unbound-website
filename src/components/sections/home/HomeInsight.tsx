@@ -16,14 +16,14 @@ const CAT_STYLE: Record<InsightCategory, string> = {
 export function HomeInsight() {
   const [featured, setFeatured] = useState(0);
 
-  // 피처드 캐러셀 자동 전환
+  // 피처드 캐러셀 자동 전환 — featured가 바뀔 때마다 타이머 리셋(진행바와 동기화)
   useEffect(() => {
     const id = setInterval(
       () => setFeatured((f) => (f + 1) % insights.length),
       6000,
     );
     return () => clearInterval(id);
-  }, []);
+  }, [featured]);
 
   const post = insights[featured];
   const goPrev = () => setFeatured((f) => (f - 1 + insights.length) % insights.length);
@@ -45,8 +45,17 @@ export function HomeInsight() {
           </Link>
         </div>
 
-        {/* ── 피처드 캐러셀 ─────────────────────────────── */}
-        <div className="grid grid-cols-1 items-stretch gap-8 md:grid-cols-2 md:gap-12">
+        {/* ── 피처드 캐러셀 (좌우 드래그/스와이프로 전환) ── */}
+        <motion.div
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.12}
+          onDragEnd={(_, info) => {
+            if (info.offset.x < -60) goNext();
+            else if (info.offset.x > 60) goPrev();
+          }}
+          className="grid grid-cols-1 items-stretch gap-8 md:grid-cols-2 md:gap-12"
+        >
           {/* 이미지 */}
           <Link
             href={`/insight/${post.slug}`}
@@ -84,7 +93,7 @@ export function HomeInsight() {
           {/* 내용 */}
           <div className="flex h-full flex-col">
             {/* 점 인디케이터 (상단 고정) */}
-            <div className="mb-7 flex gap-2">
+            <div className="mb-4 flex gap-2">
               {insights.map((p, i) => (
                 <button
                   key={p.slug}
@@ -95,6 +104,15 @@ export function HomeInsight() {
                   }`}
                 />
               ))}
+            </div>
+
+            {/* 자동 전환 진행바 */}
+            <div aria-hidden className="mb-7 h-px w-full max-w-[220px] overflow-hidden bg-white/12">
+              <div
+                key={featured}
+                className="h-full bg-brand-accent"
+                style={{ animation: "progressbar 6s linear forwards" }}
+              />
             </div>
 
             {/* 가변 텍스트 — 모든 슬라이드를 겹쳐 렌더해 높이를 '가장 긴 슬라이드' 기준으로 고정(전환 시 흔들림 방지) */}
@@ -146,7 +164,7 @@ export function HomeInsight() {
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

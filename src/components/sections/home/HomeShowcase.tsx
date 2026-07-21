@@ -122,6 +122,7 @@ function ShowcaseCategoryCard({ category, index }: { category: Category; index: 
     <Link
       ref={cardRef}
       href={category.href}
+      data-cursor="view"
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
       onClick={() => trackEvent("select_content", { content_type: "showcase_category", item_id: category.label })}
