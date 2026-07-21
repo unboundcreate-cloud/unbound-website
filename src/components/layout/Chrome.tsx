@@ -12,6 +12,7 @@ import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { ChatBot } from "@/components/ui/ChatBot";
 import { MobileCTABar } from "@/components/layout/MobileCTABar";
 import { ScrollDepthTracker } from "@/components/layout/ScrollDepthTracker";
+import { GrainOverlay } from "@/components/ui/GrainOverlay";
 
 export function Chrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -65,6 +66,7 @@ export function Chrome({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="has-custom-cursor">
+      <GrainOverlay />
       <ScrollProgress />
       {pathname === "/" && <IntroAnimation />}
 

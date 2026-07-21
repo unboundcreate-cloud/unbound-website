@@ -1,17 +1,18 @@
 import { FadeIn } from "@/components/ui/FadeIn";
+import { MaskReveal } from "@/components/ui/MaskReveal";
 import { SpotlightText } from "@/components/ui/SpotlightText";
 
 export function HomeIntro() {
   return (
     <section className="section-padding bg-brand-black py-24 md:py-32">
       <div className="flex flex-col gap-10 md:flex-row md:items-start md:gap-16">
-        <FadeIn>
-          <SpotlightText className="shrink-0 font-display text-3xl uppercase leading-[0.95] tracking-tight text-white md:text-4xl lg:text-5xl">
+        <MaskReveal className="shrink-0">
+          <SpotlightText className="font-display text-3xl uppercase leading-[0.95] tracking-tight text-white md:text-4xl lg:text-5xl">
             Unbound
             <br />
             Studio
           </SpotlightText>
-        </FadeIn>
+        </MaskReveal>
         <div className="space-y-2 text-2xl font-normal leading-snug text-white/80 md:text-3xl">
           <FadeIn delay={0.05}>
             <p>

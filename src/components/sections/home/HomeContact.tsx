@@ -1,5 +1,7 @@
 import { LiquidButton } from "@/components/ui/LiquidButton";
 import { FadeIn } from "@/components/ui/FadeIn";
+import { MaskReveal } from "@/components/ui/MaskReveal";
+import { Magnetic } from "@/components/ui/Magnetic";
 
 export function HomeContact() {
   return (
@@ -7,16 +9,18 @@ export function HomeContact() {
       <FadeIn>
         <div className="section-padding flex flex-col gap-12 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 className="font-display text-5xl uppercase leading-none text-white md:text-7xl lg:text-8xl">
+            <MaskReveal as="h2" className="font-display text-5xl uppercase leading-none text-white md:text-7xl lg:text-8xl">
               Contact Us
-            </h2>
+            </MaskReveal>
             <p className="mt-6 text-sm leading-relaxed text-white/60 md:whitespace-nowrap md:text-base">
               프로젝트의 시작부터 완성까지, UNBOUND&nbsp;STUDIO가&nbsp;함께합니다.
             </p>
             <div className="mt-8">
-              <LiquidButton href="/contact">
-                문의하기
-              </LiquidButton>
+              <Magnetic strength={0.4}>
+                <LiquidButton href="/contact">
+                  문의하기
+                </LiquidButton>
+              </Magnetic>
             </div>
           </div>
           <div className="text-right font-display text-lg uppercase leading-snug text-white/80 sm:text-2xl md:text-3xl lg:text-4xl">

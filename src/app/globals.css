@@ -179,6 +179,35 @@ input, textarea, select {
   p    { font-size: 0.875rem; }
 }
 
+/* ===== 접근성 — 모션 최소화 요청 시 애니메이션 무력화 ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===== 링크 밑줄 드로우 (왼→오 그려지는 호버) ===== */
+.link-underline { position: relative; }
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (hover: hover) {
+  .link-underline:hover::after,
+  .group\/link:hover .link-underline::after { transform: scaleX(1); }
+}
+
 /* ===== 스크롤바 ===== */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: #0a0a0a; }

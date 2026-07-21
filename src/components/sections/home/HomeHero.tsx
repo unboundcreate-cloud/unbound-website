@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { SpotlightText } from "@/components/ui/SpotlightText";
+import { Magnetic } from "@/components/ui/Magnetic";
 import { onIntroDone } from "@/lib/intro-signal";
 
 export function HomeHero() {
@@ -232,9 +233,11 @@ export function HomeHero() {
               </motion.h1>
             </div>
 
-            <Button href="/works" className="self-start text-white md:self-end">
-              View Works
-            </Button>
+            <Magnetic strength={0.4} className="self-start md:self-end">
+              <Button href="/works" className="text-white">
+                View Works
+              </Button>
+            </Magnetic>
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FadeIn } from "@/components/ui/FadeIn";
+import { MaskReveal } from "@/components/ui/MaskReveal";
 import { SpotlightText } from "@/components/ui/SpotlightText";
 
 const ITEMS = [
@@ -24,13 +25,13 @@ export function HomeAdventure() {
         {ITEMS.map((it, i) => (
           <FadeIn key={it.label} delay={i * 0.15}>
             <div className="group/card">
-              <h2 className="font-display text-3xl uppercase leading-[0.95] text-white md:text-4xl lg:text-5xl">
+              <MaskReveal as="h2" delay={i * 0.05} className="font-display text-3xl uppercase leading-[0.95] text-white md:text-4xl lg:text-5xl">
                 <SpotlightText>
                   {it.heading[0]}
                   <br />
                   {it.heading[1]}
                 </SpotlightText>
-              </h2>
+              </MaskReveal>
               <div className="relative mt-8 h-px w-full bg-white/25">
                 <div className="absolute inset-y-0 left-0 w-0 bg-brand-accent transition-[width] duration-[1200ms] ease-[cubic-bezier(0.37,0,0.63,1)] [@media(hover:hover)]:group-hover/card:w-full" />
               </div>

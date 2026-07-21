@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useInView } from "framer-motion";
 import { FadeIn } from "@/components/ui/FadeIn";
+import { MaskReveal } from "@/components/ui/MaskReveal";
 import { SpotlightText } from "@/components/ui/SpotlightText";
 import { trackEvent } from "@/lib/gtag";
 
@@ -31,13 +32,13 @@ export function HomeShowcase() {
         <FadeIn>
           <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
             <div>
-              <h2 className="font-display text-3xl leading-tight text-white md:text-4xl lg:text-5xl">
+              <MaskReveal as="h2" className="font-display text-3xl leading-tight text-white md:text-4xl lg:text-5xl">
                 <SpotlightText>
                   Beyond Production —
                   <br />
                   Creative, Intelligent, Unbound.
                 </SpotlightText>
-              </h2>
+              </MaskReveal>
               <p className="mt-6 max-w-2xl text-sm leading-relaxed text-white/60 md:text-base">
                 최첨단 AI와 모션그래픽으로 영상 제작의 새로운&nbsp;기준을&nbsp;제시합니다.
               </p>
